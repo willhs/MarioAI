@@ -25,7 +25,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ch.idsia.agents.examples;
+package ch.idsia.agents.impl.examples;
 
 import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.IAgent;

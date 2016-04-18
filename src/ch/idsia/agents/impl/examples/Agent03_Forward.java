@@ -1,4 +1,4 @@
-package ch.idsia.agents.examples;
+package ch.idsia.agents.impl.examples;
 
 import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.IAgent;
@@ -22,16 +22,16 @@ public class Agent03_Forward extends MarioHijackAIBase implements IAgent {
 
 	private boolean enemyAhead() {
 		return
-				   e.danger(1, 0) || e.danger(1, -1) 
-				|| e.danger(2, 0) || e.danger(2, -1)
-				|| e.danger(3, 0) || e.danger(2, -1);
+				   entities.danger(1, 0) || entities.danger(1, -1)
+				|| entities.danger(2, 0) || entities.danger(2, -1)
+				|| entities.danger(3, 0) || entities.danger(2, -1);
 	}
 	
 	private boolean brickAhead() {
 		return
-				   t.brick(1, 0) || t.brick(1, -1) 
-				|| t.brick(2, 0) || t.brick(2, -1)
-				|| t.brick(3, 0) || t.brick(3, -1);
+				   tiles.brick(1, 0) || tiles.brick(1, -1)
+				|| tiles.brick(2, 0) || tiles.brick(2, -1)
+				|| tiles.brick(3, 0) || tiles.brick(3, -1);
 	}
 
 	public MarioInput actionSelectionAI() {
@@ -49,7 +49,9 @@ public class Agent03_Forward extends MarioHijackAIBase implements IAgent {
 		if (!mario.onGround) {
 			action.press(MarioKey.JUMP);
 		}
-		
+
+		//System.out.println();
+
 		return action;
 	}
 	
@@ -59,9 +61,9 @@ public class Agent03_Forward extends MarioHijackAIBase implements IAgent {
 		MarioSimulator simulator = new MarioSimulator(options);
 		
 		IAgent agent = new Agent03_Forward();
-		
+
 		simulator.run(agent);
-		
+
 		System.exit(0);
 	}
 }

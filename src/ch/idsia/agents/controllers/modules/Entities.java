@@ -1,7 +1,9 @@
 package ch.idsia.agents.controllers.modules;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.idsia.agents.AgentOptions;
 import ch.idsia.benchmark.mario.engine.generalization.Entity;
@@ -139,6 +141,21 @@ public class Entities {
 			}
 		}		
 		return false;
+	}
+
+	/**
+	 * @return binary field of entities - true if entity occupies space, false otherwise
+     */
+	public boolean[][] binaryEntities() {
+		return Arrays.stream(entityField)
+				.map(entityRow -> {
+					return Arrays.stream(entityRow)
+							.map(entityList -> {
+								return entityList.isEmpty() ? false : true;
+							});
+				})
+				.collect(Collectors.toList())
+				.toArray(new boolean[entityField.length][entityField[0].length]);
 	}
 	
 }

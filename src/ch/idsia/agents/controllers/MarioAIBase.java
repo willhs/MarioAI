@@ -34,6 +34,7 @@ import ch.idsia.agents.controllers.modules.Tiles;
 import ch.idsia.benchmark.mario.engine.generalization.MarioEntity;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
+import ch.idsia.tools.EvaluationInfo;
 
 /**
  * Abstract class that serves as a basis for implementing new Mario-AI agents. 
@@ -59,9 +60,13 @@ public abstract class MarioAIBase extends MarioAgentBase {
 	 */
 	protected MarioInput action = new MarioInput();
 	
-	protected Entities e = new Entities();
+	protected Entities entities = new Entities();
 	
-	protected Tiles t = new Tiles();
+	protected Tiles tiles = new Tiles();
+
+	protected EvaluationInfo info = new EvaluationInfo();
+
+	protected int highestFitness;
 	
 	public MarioAIBase() {
 		super("MarioAIBase");
@@ -76,8 +81,10 @@ public abstract class MarioAIBase extends MarioAgentBase {
 	public void reset(AgentOptions options) {
 		super.reset(options);
 		action.reset();
-		e.reset(options);
-		t.reset(options);
+		entities.reset(options);
+		tiles.reset(options);
+		info.reset();
+		highestFitness = 0;
 	}
 
 	@Override
@@ -86,13 +93,16 @@ public abstract class MarioAIBase extends MarioAgentBase {
 	}
 	
 	public void observe(IEnvironment environment) {
-		mario         = environment.getMario();		
-		t.tileField   = environment.getTileField();
-		e.entityField = environment.getEntityField();
-		e.entities    = environment.getEntities();
-	}
+		mario = environment.getMario();
+		tiles.tileField = environment.getTileField();
+		entities.entityField = environment.getEntityField();
+		entities.entities = environment.getEntities();
+		info = environment.getEvaluationInfo();
 
-	public void receiveReward(float intermediateReward) {
+		int fitness = info.computeBasicFitness();
+		if (fitness > highestFitness) {
+			highestFitness = fitness;
+		}
 	}
 
 }

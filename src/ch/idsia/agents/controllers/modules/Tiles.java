@@ -4,6 +4,9 @@ import ch.idsia.agents.AgentOptions;
 import ch.idsia.benchmark.mario.engine.generalization.MarioEntity;
 import ch.idsia.benchmark.mario.engine.generalization.Tile;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class Tiles {
 
 	private MarioEntity mario;
@@ -54,5 +57,21 @@ public class Tiles {
 		}
 		return false;
 	}
+
+	/**
+	 * @return binary field of tiles - true if entity occupies space, false otherwise
+	 */
+	public boolean[][] binaryTiles() {
+		return Arrays.stream(tileField)
+				.map(entityRow -> {
+					return Arrays.stream(entityRow)
+							.map(tile -> {
+								return tile == Tile.NOTHING ? false : true;
+							});
+				})
+				.collect(Collectors.toList())
+				.toArray(new boolean[tileField.length][tileField[0].length]);
+	}
+
 	
 }
