@@ -52,3 +52,6 @@ fabric.properties
 ### Project specific
 
 /lib
+/tmp
+/db
+/nevt
