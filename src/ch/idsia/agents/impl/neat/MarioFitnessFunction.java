@@ -44,8 +44,8 @@ public class MarioFitnessFunction implements BulkFitnessFunction, Configurable {
 
     private int evaluate(Chromosome chromosome) {
         String options = ""
-//                + FastOpts.VIS_OFF
-                + FastOpts.VIS_ON_2X
+                + FastOpts.VIS_OFF
+//                + FastOpts.VIS_ON_2X
                 //+ " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
 //                + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
@@ -69,7 +69,7 @@ public class MarioFitnessFunction implements BulkFitnessFunction, Configurable {
 
     @Override
     public int getMaxFitnessValue() {
-        return 6000;
+        return 6200;
     }
 
     public static void main(String[] args) throws Throwable {

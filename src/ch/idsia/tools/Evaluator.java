@@ -50,7 +50,7 @@ private List<EvaluationInfo> evaluationSummary = new ArrayList<EvaluationInfo>()
 
 //    private void evaluateServerMode()
 //    {
-//        Server server = new Server(evaluationOptions.getServerAgentPort(), Environment.numberOfObservationElements, Environment.numberOfKeys);
+//        Server server = new Server(evaluationOptions.getServerAgentPort(), MarioEnvironment.numberOfObservationElements, MarioEnvironment.numberOfKeys);
 //        evaluationOptions.setAgent(new ServerAgent(server));
 //
 //        Simulation simulator = new BasicSimulator(evaluationOptions.getSimulationOptionsCopy());
