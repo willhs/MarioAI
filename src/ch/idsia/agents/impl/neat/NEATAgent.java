@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
  */
 public class NEATAgent extends MarioAIBase {
 
-    private Chromosome chromosome;
+    private final Activator activator;
 
-    public NEATAgent(Chromosome chromosome) {
-        this.chromosome = chromosome;
+    public NEATAgent(Activator activator) {
+        this.activator = activator;
     }
 
     @Override
@@ -30,21 +30,14 @@ public class NEATAgent extends MarioAIBase {
         super.reset(options);
     }
 
-    public MarioInput actionSelectionAI() {
-        // make decision
-        ActivatorTranscriber factory = new ActivatorTranscriber();
-        Activator activator = null;
-        try {
-            activator = factory.newActivator(chromosome);
-        } catch (TranscriberException e) {
-            e.printStackTrace();
-        }
-
-        // convert tiles to binary representation (tile or no tile).
+    @Override
+    public MarioInput actionSelection() {
+        // convert 2d tiles to 1d array with binary representation (tile or no tile).
         double[] tiles = Arrays.stream(this.tiles.tileField)
                 .flatMap(tileRow -> {
                     return Arrays.stream(tileRow)
                         .map(tile -> {
+                            // represent unique tiles
                             //return tile.ordinal();
                             return tile == Tile.NOTHING ? 0 : 1;
                         });
@@ -52,12 +45,17 @@ public class NEATAgent extends MarioAIBase {
                 .mapToDouble(i->i)
                 .toArray();
 
+
+        // put tiles through the neural network to receive game inputs
         // 1 or 0 for each of the game inputs: [left,right,down,jump,speed/attack,up(useless)]
         double[] networkOutput = activator.next(tiles);
 
+//        System.out.println("networkInput: " + Arrays.toString(tiles));
+//        System.out.println("networkOutput: " + Arrays.toString(networkOutput));
+
         for (int i = 0; i < networkOutput.length; i++) {
             // output >= 0 == press key, <= 0 == don't press
-            action.set(MarioKey.getMarioKey(i), networkOutput[i] >= 0);
+            action.set(MarioKey.getMarioKey(i), networkOutput[i] >= 0.5);
         }
         return action;
     }

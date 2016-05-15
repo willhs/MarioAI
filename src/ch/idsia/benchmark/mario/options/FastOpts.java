@@ -348,7 +348,7 @@ public class FastOpts {
 	/**
 	 * Whether to visualize receptive field around Mario.
 	 * @param mode
-	 * @return
+	 * @retur
 	 */
 	public static String VIS_FIELD(ReceptiveFieldMode mode) {
 		if (mode == null) return "";
