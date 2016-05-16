@@ -34,10 +34,10 @@ public class BinaryGridEnvironment implements GridEnvironment{
 
         // add the last action as a neurons
         // one input for each different key
-//        MarioKey.getKeys().forEach(key -> {
-//            int pressed  = lastInput.getPressed().contains(key) ? 1 : 0;
-//            inputNeurons.add((double)pressed);
-//        });
+        MarioKey.getKeys().forEach(key -> {
+            int pressed  = lastInput.getPressed().contains(key) ? 1 : 0;
+            inputNeurons.add((double)pressed);
+        });
 
         return inputNeurons.stream()
             .mapToDouble(d -> d)

@@ -67,24 +67,25 @@ public class NEATAgent extends MarioAIBase2 {
 
     public static void main(String[] args) throws Exception {
         String propertiesFile = "mario.properties";
-        String chromosomeId = "109204";
+        String chromosomeId = "99894";
 
         Properties props = new Properties(propertiesFile);
 
-        // initialise NEAT properties from properties file
+        // initialise NEAT properties from mario.properties file
         Persistence db = (Persistence) props.
                 singletonObjectProperty( Persistence.PERSISTENCE_CLASS_KEY );
-
-        Configuration config = new DummyConfiguration();
-
-        Chromosome chromosome  = db.loadChromosome(chromosomeId, config);
 
         ActivatorTranscriber activatorFactory = (ActivatorTranscriber) props
                 .singletonObjectProperty( ActivatorTranscriber.class );
 
+        Configuration config = new DummyConfiguration();
+
+        // load chromosome (network) and give it to this agent
+        Chromosome chromosome  = db.loadChromosome(chromosomeId, config);
+
         Activator activator = activatorFactory.newActivator(chromosome);
 
-        // USE FLAT LEVEL WITHOUT ENEMIES
+        // Choose level properties
         String options = "" +
                 FastOpts.VIS_ON_2X +
                 FastOpts.LEVEL_02_JUMPING;
