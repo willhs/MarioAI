@@ -3,9 +3,12 @@ package ch.idsia.neat.environment;
 import ch.idsia.agents.controllers.modules.Tiles;
 import ch.idsia.benchmark.mario.engine.generalization.Tile;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
+import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Will on 15/05/2016.
@@ -17,17 +20,27 @@ public class BinaryGridEnvironment implements GridEnvironment{
     @Override
     public double[] getInputNeurons(IEnvironment environment, MarioInput lastInput) {
         // convert 2d tiles to input neurons
-        double[] neurons = Arrays.stream(environment.getTileField())
+        List<Double> inputNeurons = Arrays.stream(environment.getTileField())
                 .flatMap(tileRow -> {
                     return Arrays.stream(tileRow)
                             .map(tile -> {
-                                // represent unique tiles
+                                // 0 if nothing in tile or 1 if something
                                 return tile == Tile.NOTHING ? 0 : 1;
                             });
                 })
                 .mapToDouble(i->i)
-                .toArray();
+                .boxed()
+                .collect(Collectors.toList());
 
-        return neurons;
+        // add the last action as a neurons
+        // one input for each different key
+//        MarioKey.getKeys().forEach(key -> {
+//            int pressed  = lastInput.getPressed().contains(key) ? 1 : 0;
+//            inputNeurons.add((double)pressed);
+//        });
+
+        return inputNeurons.stream()
+            .mapToDouble(d -> d)
+            .toArray();
     }
 }

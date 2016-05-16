@@ -1,6 +1,8 @@
 package ch.idsia.benchmark.mario.engine.input;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.idsia.benchmark.mario.engine.generalization.MarioEntity;
@@ -79,5 +81,9 @@ public class MarioKey {
 	public String toString() {
 		return name;
 	}
-	
+
+	public static List<MarioKey> getKeys() {
+		return new ArrayList<>(marioKeys.values());
+	}
+
 }

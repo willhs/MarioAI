@@ -46,7 +46,7 @@ import ch.idsia.tools.EvaluationInfo;
 public abstract class MarioAIBase2 extends MarioAgentBase {
 
 	protected IEnvironment environment;
-	protected MarioInput lastInput;
+	protected MarioInput lastInput = new MarioInput();
 	protected int highestFitness;
 
 	public MarioAIBase2() {
