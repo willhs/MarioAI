@@ -1,19 +1,47 @@
 package ch.idsia.neat.pso;
 
+import com.anji.neat.Evolver;
 import pso.Problem;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
-import com.anji.util.Properties;
+import java.util.Properties;
 
 /**
  * Created by Will on 16/05/2016.
  */
 public class MarioProblem extends Problem {
+
+    private final Evolver evolver;
+    private final Properties props;
+
+    public MarioProblem() {
+
+        // load default (taken from double pole balancing) properties from the file
+        props = new Properties();
+
+        try {
+            props.load(new FileReader("properties" + File.separator + "mario.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // how many generations will be needed per trial
+        props.setProperty("num.generations", "" + 40);
+
+        evolver = new Evolver();
+        try {
+            evolver.init( new com.anji.util.Properties(props) );
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public double fitness(List<Double> position) {
-        Properties props = new Properties();
-
-        // evolution
         props.setProperty("add.connection.mutation.rate", "" + position.get(0));
         props.setProperty("remove.connection.mutation.rate", "" + position.get(1));
         props.setProperty("remove.connection.max.weight", "" + position.get(2));
@@ -32,20 +60,17 @@ public class MarioProblem extends Problem {
         props.setProperty("chrom.compat.common.coeff", "" + position.get(13));
         props.setProperty("speciation.threshold", "" + position.get(14));
 
-/*        add.connection.mutation.rate=0.02
-        remove.connection.mutation.rate=0.01
-        remove.connection.max.weight=100
-        add.neuron.mutation.rate=0.01
-        prune.mutation.rate=1.0
-        weight.mutation.rate=0.75
-        weight.mutation.std.dev=1.5
-        weight.max=500.0
-        weight.min=-500.0
-        survival.rate=0.2
-        chrom.compat.excess.coeff=1.0
-        chrom.compat.disjoint.coeff=1.0
-        chrom.compat.common.coeff=0.04
-        speciation.threshold=0.2
-        */
+
+        try {
+            evolver.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return evolver.getChamp().getFitnessValue();
+    }
+
+    public Properties getProps() {
+        return props;
     }
 }

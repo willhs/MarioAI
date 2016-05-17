@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pso;
+package ch.idsia.neat.pso;
 
 import ch.idsia.neat.pso.Position;
 
@@ -37,10 +37,10 @@ public class WillParticle {
         _personal_position.clear();
         _neighborhood_position.clear();
         for (int i = 0; i < size; ++i) {
-            _position.add(0.0);
+            _position.add(new Position(0));
             _velocity.add(0.0);
-            _personal_position.add(0.0);
-            _neighborhood_position.add(0.0);
+            _personal_position.add(new Position(0));
+            _neighborhood_position.add(new Position(0));
         }
     }
 
@@ -49,14 +49,14 @@ public class WillParticle {
     }
 
     public void setPosition(int index, double value) {
-        this._position.set(index, value);
+        this._position.get(index).setValue(value);
     }
 
     public double getPosition(int index) {
-        return _position.get(index);
+        return _position.get(index).getVal();
     }
 
-    public List<Double> getPosition() {
+    public List<Position> getPosition() {
         return _position;
     }
 
@@ -77,11 +77,11 @@ public class WillParticle {
     }
 
     public void setPersonalPosition(int index, double value) {
-        _personal_position.set(index, value);
+        _personal_position.get(index).setValue(value);
     }
 
     public double getPersonalPosition(int index) {
-        return _personal_position.get(index);
+        return _personal_position.get(index).getVal();
     }
 
     public double getPersonalFitness() {
@@ -93,11 +93,11 @@ public class WillParticle {
     }
 
     public void setNeighborhoodPosition(int index, double value) {
-        this._neighborhood_position.set(index, value);
+        this._neighborhood_position.get(index).setValue(value);
     }
 
     public double getNeighborhoodPosition(int index) {
-        return _neighborhood_position.get(index);
+        return _neighborhood_position.get(index).getVal();
     }
 
     public double getNeighborhoodFitness() {
