@@ -165,10 +165,10 @@ public enum EntityType {
 
 	private int[] zLevels;
 	
-	private EntityType(String debug, int code, int... zLevels) {
+	private EntityType(String debug, int spriteCode, int... zLevels) {
 		this.debug = debug;
-		this.code = code;
-		this.zLevels = zLevels;		
+		this.code = spriteCode;
+		this.zLevels = zLevels;
 	}
 	
 	public String getDebug() {

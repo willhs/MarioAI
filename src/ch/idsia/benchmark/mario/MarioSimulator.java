@@ -106,6 +106,11 @@ public class MarioSimulator {
 			environment.performAction(actions);
 			// NOTIFY AGENT ABOUT CURRENT INTERMEDIATE REWARD
 			agent.receiveReward(environment.getIntermediateReward());
+
+			if (agent.sucks()) {
+				//System.out.println("agent sucks, so breaking out of loop");
+				break;
+			}
 		}
 		
 		//System.out.println("[MarioSimulator] SIMULATION ENDED!");

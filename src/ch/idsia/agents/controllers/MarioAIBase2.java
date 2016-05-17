@@ -49,6 +49,11 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	protected MarioInput lastInput = new MarioInput();
 	protected int highestFitness;
 
+	// fields to help determine if mario has moved much
+	private int lastCell = -1;
+	private int framesInSameCell = 0;
+	private int staysStillThreshold = 100;
+
 	public MarioAIBase2() {
 		super("MarioAIBase");
 		name = getClass().getSimpleName();
@@ -75,6 +80,31 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 		if (fitness > highestFitness) {
 			highestFitness = fitness;
 		}
+
+		// if this agent shows no promise at this stage, acknowledge that it sucks
+		if (doesSuck()) {
+			sucks = true;
+		}
+	}
+
+	private boolean doesSuck() {
+		// determine whether mario has moved significantly
+		if (environment.getEvaluationInfo().distancePassedCells == lastCell) {
+			framesInSameCell++;
+			if (framesInSameCell >= staysStillThreshold) {
+				return true;
+			}
+		} else {
+			framesInSameCell = 0;
+		}
+
+		lastCell = environment.getEvaluationInfo().distancePassedCells;
+
+		return false;
+	}
+
+	public float getFitness() {
+		return highestFitness + intermediateReward;
 	}
 
 }

@@ -1,6 +1,7 @@
 package ch.idsia.neat.environment;
 
 import ch.idsia.agents.controllers.modules.Tiles;
+import ch.idsia.benchmark.mario.engine.generalization.EntityType;
 import ch.idsia.benchmark.mario.engine.generalization.Tile;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
@@ -25,13 +26,28 @@ public class ValueGridEnvironment implements GridEnvironment{
                     return Arrays.stream(tileRow)
                             .map(tile -> {
                                 // represent unique tiles
-                                return tile == Tile.NOTHING ? Integer.MIN_VALUE : tile.ordinal();
+                                return tile == Tile.NOTHING ? -1 : tile.ordinal();
                             });
                 })
                 .mapToDouble(i->i)
                 .boxed()
                 .collect(Collectors.toList());
 
+/*        // add entities
+        inputNeurons.addAll(Arrays.stream(environment.getEntityField())
+                .flatMap(entityRow -> {
+                    return Arrays.stream(entityRow)
+                            .map(entities -> {
+                                // -1 if tile has no entities, otherwise unique number for each type
+                                return entities.isEmpty() ||
+                                        entities.stream().allMatch(entity -> entity.type == EntityType.NOTHING)
+                                        ? -1 : entities.get(0).type.ordinal();
+                            });
+                })
+                .mapToDouble(i->i)
+                .boxed()
+                .collect(Collectors.toList())
+        );*/
         // add the last action as a neurons
         // one input for each different key
         MarioKey.getKeys().forEach(key -> {

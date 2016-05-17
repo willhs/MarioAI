@@ -1,9 +1,7 @@
 package ch.idsia.agents.impl.neat;
 
 import ch.idsia.benchmark.mario.MarioSimulator;
-import ch.idsia.benchmark.mario.engine.SimulatorOptions;
 import ch.idsia.benchmark.mario.options.FastOpts;
-import ch.idsia.benchmark.mario.options.MarioOptions;
 import com.anji.integration.Activator;
 import com.anji.integration.ActivatorTranscriber;
 import com.anji.integration.TranscriberException;
@@ -49,7 +47,7 @@ public class MarioFitnessFunction implements BulkFitnessFunction, Configurable {
                 //+ " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
 //                + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
-                + FastOpts.LEVEL_02_JUMPING;
+                + FastOpts.LEVEL_03_COLLECTING;
 
         Activator activator = null;
         try {
@@ -58,7 +56,7 @@ public class MarioFitnessFunction implements BulkFitnessFunction, Configurable {
             e.printStackTrace();
         }
 
-        NEATAgent agent = new NEATAgent(activator);
+        EnvironmentOnly agent = new EnvironmentOnly(activator);
 
         MarioSimulator simulator = new MarioSimulator(options);
         simulator.run(agent);
@@ -69,12 +67,16 @@ public class MarioFitnessFunction implements BulkFitnessFunction, Configurable {
 
     @Override
     public int getMaxFitnessValue() {
-        return 6200;
+        return 8000;
     }
 
     public static void main(String[] args) throws Throwable {
-        String propertiesFilename = "mario.properties";
-        Evolver.main(new String[]{ propertiesFilename });
+        if (args.length >= 1) {
+            Evolver.main(args);
+        } else {
+            String propertiesFilename = "mario.properties";
+            Evolver.main(new String[]{ propertiesFilename });
+        }
     }
 
 }

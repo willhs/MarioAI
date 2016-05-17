@@ -1,6 +1,7 @@
 package ch.idsia.neat.environment;
 
 import ch.idsia.agents.controllers.modules.Tiles;
+import ch.idsia.benchmark.mario.engine.generalization.EntityType;
 import ch.idsia.benchmark.mario.engine.generalization.Tile;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
@@ -31,6 +32,22 @@ public class BinaryGridEnvironment implements GridEnvironment{
                 .mapToDouble(i->i)
                 .boxed()
                 .collect(Collectors.toList());
+
+        // add entities
+        inputNeurons.addAll(Arrays.stream(environment.getEntityField())
+                .flatMap(entityRow -> {
+                    return Arrays.stream(entityRow)
+                            .map(entities -> {
+                                // 0 if tile has no entities, 1 if it does
+                                return entities.isEmpty() ||
+                                    entities.stream().allMatch(entity -> entity.type == EntityType.NOTHING)
+                                        ? 0 : 1;
+                            });
+                })
+                .mapToDouble(i->i)
+                .boxed()
+                .collect(Collectors.toList())
+        );
 
         // add the last action as a neurons
         // one input for each different key

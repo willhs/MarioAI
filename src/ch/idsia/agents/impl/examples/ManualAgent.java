@@ -4,6 +4,7 @@ import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.IAgent;
 import ch.idsia.agents.controllers.MarioHijackAIBase;
 import ch.idsia.benchmark.mario.MarioSimulator;
+import ch.idsia.benchmark.mario.engine.SimulatorOptions;
 import ch.idsia.benchmark.mario.engine.generalization.Enemy;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
@@ -26,7 +27,7 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 	}
 
 	public MarioInput actionSelectionAI() {
-//		System.out.println(info.computeBasicFitness());
+		System.out.println(info.computeBasicFitness());
 		return action;
 	}
 
@@ -34,9 +35,11 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 		// IMPLEMENTS END-LESS RUNS
 		while (true) {
 			String options = FastOpts.VIS_ON_2X +
-					FastOpts.LEVEL_02_JUMPING;
+					FastOpts.LEVEL_04_BLOCKS +
+					FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID_TILES)
 //					FastOpts.L_ENEMY(Enemy.GOOMBA, Enemy.SPIKY) +
 //					FastOpts.L_TUBES_ON + FastOpts.L_RANDOMIZE;
+			;
 			
 			MarioSimulator simulator = new MarioSimulator(options);
 			

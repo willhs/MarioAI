@@ -48,6 +48,13 @@ public abstract class MarioAgentBase implements IAgent {
 	
 	protected String name;
 
+	/**
+	 * Does this agent suck? I.e. should it just finish the run early
+	 */
+	protected boolean sucks = false;
+	protected float intermediateReward;
+
+
 	public MarioAgentBase(String agentName) {
 		this.name = agentName;
 	}	
@@ -67,9 +74,15 @@ public abstract class MarioAgentBase implements IAgent {
 
 	@Override
 	public abstract MarioInput actionSelection();
-	
+
 	@Override
 	public void receiveReward(float intermediateReward) {
+		this.intermediateReward = intermediateReward;
 	}
-	
+
+	@Override
+	public boolean sucks() {
+		return sucks;
+	}
+
 }

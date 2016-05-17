@@ -83,7 +83,8 @@ public class MarioKey {
 	}
 
 	public static List<MarioKey> getKeys() {
-		return new ArrayList<>(marioKeys.values());
+		// only the default keys (cheat keys are sometimes added)
+		return new ArrayList<>(marioKeys.values()).subList(0, 6);
 	}
 
 }

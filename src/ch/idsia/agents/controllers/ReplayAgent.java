@@ -92,5 +92,10 @@ public class ReplayAgent implements IAgent {
 	@Override
 	public void receiveReward(final float intermediateReward) {
 	}
-	
+
+
+	@Override
+	public boolean sucks() {
+		return false;
+	}
 }
