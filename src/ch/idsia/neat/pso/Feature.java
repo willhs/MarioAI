@@ -25,11 +25,13 @@ public class Feature {
 
         // calculate starting value and velocity (random)
         // use same calculations as the pso code
-        this.vel = pso.Math.Scale(0, 1, Math.random(), min, max);
-        this.val = pso.Math.Scale(0, 1, Math.random(),
-                1.0 / 5.0 * min,
-                1.0 / 5.0 * max
+        this.val = pso.Math.Scale(0, 1, Math.random(), min, max);
+        this.vel = pso.Math.Scale(0, 1, Math.random(),
+                1.0 / 5.0 * -(max-min),
+                1.0 / 5.0 * (max-min)
         );
+
+        System.out.println(name +" Val: " + this.val + ", Vel: " + this.vel);
 
     }
 
@@ -73,5 +75,14 @@ public class Feature {
 
     public void setVel(double vel) {
         this.vel = vel;
+    }
+
+    public void printDiffs() {
+        System.out.printf(
+//                "%s: %f, %4.2f%% difference%n",
+//                name, val, (((Math.abs(initialVal - val))/(Math.abs(max - min)))*100)
+                "%s: val: %4.2f, init: %4.2f, vel: %4.2f\n",
+                name, val, initialVal, vel
+        );
     }
 }

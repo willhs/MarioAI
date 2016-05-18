@@ -35,7 +35,7 @@ public class MarioProblem extends WillProblem {
         }
 
         // how many generations will be needed per trial
-        props.setProperty("num.generations", "" + 3);
+        props.setProperty("num.generations", "" + 2);
         props.remove("random.seed");
 
         // set default values and limits for each property that will be changed

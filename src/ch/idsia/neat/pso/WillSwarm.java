@@ -18,8 +18,15 @@ public class WillSwarm {
     private List<WillParticle> particles = new ArrayList<>();
     private Random _random = new Random();
 
+    // useful for printing
+    private final double inertia;
+    private final double c1, c2;
+
     public WillSwarm(MarioProblem problem, int numParticles, double c1, double c2, double inertia) {
         this.problem = problem;
+        this.inertia = inertia;
+        this.c1 = c1;
+        this.c2 = c2;
         // generate particles
         for (int p = 0; p < numParticles; p++) {
 
@@ -63,9 +70,9 @@ public class WillSwarm {
 
             int index = particles.indexOf(particle);
 
-            System.out.print("ID(" + index + ") fitness: " + newFitness + " == ");
+            System.out.println("ID(" + index + "), fitness: " + newFitness + " == ");
             for (Feature f : particle.getFeatures()) {
-                System.out.print(f.getValue() + ", ");
+//                System.out.print(f.getValue() + ", ");
             }
 
             //Check if new fitness is better than personal best...
@@ -74,24 +81,26 @@ public class WillSwarm {
                 for (int j = 0; j < particle.getSize(); ++j) {
                     particle.setPBestPosition(j, particle.getFeatures(j));
                 }
-                System.out.println("PFit+");
-                System.out.println();
+//                System.out.println("PFit+");
             } else {
-                System.out.println();
-                System.out.println("PFit<=");
+//                System.out.println();
+//                System.out.println("PFit<=");
             }
 
             // personal best
-            System.out.print("ID: " + index + ", Pbest: " + particle.getPBestFitness() + " ==");
+            System.out.println("ID(" + index + "), Pbest: " + particle.getPBestFitness() + " ==");
             for (int j = 0; j < particle.getSize(); j++) {
-                System.out.print(" " + particle.getPBestFeatures(j));
+//                System.out.print(" " + particle.getPBestFeatures(j));
             }
             // global best
-            System.out.println();
-            System.out.print("ID: " + index + ", Gbest: " + particle.getNeighborhoodFitness() + " ==");
+            System.out.println("ID(" + index + "), Gbest: " + particle.getNeighborhoodFitness() + " ==");
             for (int j = 0; j < particle.getSize(); j++) {
-                System.out.print(" " + particle.getNeighborhoodPosition(j));
+//                System.out.print(" " + particle.getNeighborhoodPosition(j));
             }
+            System.out.println();
+
+            particle.printDiffs();
+
             System.out.println("\n");
         }
 
@@ -113,6 +122,10 @@ public class WillSwarm {
 
     public List<WillParticle> getParticles() {
         return particles;
+    }
+
+    public double getInertia() {
+        return inertia;
     }
 }
 

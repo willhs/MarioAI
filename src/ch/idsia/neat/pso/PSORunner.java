@@ -1,5 +1,7 @@
 package ch.idsia.neat.pso;
 
+import java.util.Arrays;
+
 /**
  * Created by Will on 18/05/2016.
  * Runs PSO with a specially created MarioProblem.
@@ -30,6 +32,8 @@ public class PSORunner {
             System.out.println();
             System.out.println("-------------------------------------");
             System.out.println("PSO Generation  " + i);
+
+
 //            System.out.println("BEST=" + s.getParticle(11).getPBestFitness());
 //            System.out.println("Average=" + Math.Average(s));
 
@@ -38,13 +42,17 @@ public class PSORunner {
             double globalbest_fitness = swarm.getProblem().getWorstFitness();
 
             for (int j = 0; j < swarm.numberOfParticles(); ++j) {
-                if (swarm.getProblem().isBetter(swarm.getParticle(j).getPBestFitness(), globalbest_fitness)) {
+                WillParticle particle = swarm.getParticle(j);
+                if (swarm.getProblem().isBetter(particle.getPBestFitness(), globalbest_fitness)) {
                     System.out.println("beaten");
                     globalbest_particle = swarm.getParticle(j);
                     globalbest_fitness = globalbest_particle.getPBestFitness();
                 }
                 System.out.println("not beaten");
+                System.out.println("velocities: " + Arrays.toString(particle.getFeatures().stream().map(f -> f.getVel()).toArray()));
             }
+
+            System.out.println(": " + swarm.getInertia());
 
             System.out.println("Global best fitness: " + globalbest_fitness);
         }

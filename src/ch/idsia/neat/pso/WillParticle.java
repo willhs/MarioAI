@@ -135,8 +135,12 @@ public class WillParticle {
     public void updateVelocity() {
         for (int i = 0; i < getSize(); ++i) {
             double v_i = getInertia() * getVelocity(i);
-            v_i += getC1() * getR1().nextDouble() * (getPBestFeatures(i) - getFeatures(i));
-            v_i += getC2() * getR2().nextDouble() * (getNeighborhoodPosition(i) - getFeatures(i));
+            double firstMult = getC1() * getR1().nextDouble() * (getPBestFeatures(i) - getFeatures(i));
+            double secondMult = getC2() * getR2().nextDouble() * (getNeighborhoodPosition(i) - getFeatures(i));
+            v_i += firstMult;
+            v_i += secondMult;
+
+            System.out.printf("first mult: %4.2f, second: %4.2f", firstMult, secondMult);
 
             setVelocity(i, v_i);
         }
@@ -166,6 +170,12 @@ public class WillParticle {
             return p.getFeatures().equals(p.getFeatures());
         }
         return false;
+    }
+
+    public void printDiffs() {
+        features.forEach(f -> {
+            f.printDiffs();
+        });
     }
 }
 
