@@ -52,7 +52,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	// fields to help determine if mario has moved much
 	private int lastCell = -1;
 	private int framesInSameCell = 0;
-	private int staysStillThreshold = 100;
+	private int staysStillThreshold = 24;
 
 	public MarioAIBase2() {
 		super("MarioAIBase");

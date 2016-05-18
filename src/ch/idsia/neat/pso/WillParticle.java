@@ -4,11 +4,12 @@
  */
 package ch.idsia.neat.pso;
 
-import ch.idsia.neat.pso.Position;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -16,168 +17,155 @@ import java.util.Random;
  */
 public class WillParticle {
 
-    private List<Position> _position = new ArrayList<>();
-    private List<Double> _velocity = new ArrayList<Double>();
-    private double _fitness;
-    private List<Position> _personal_position = new ArrayList<>();
-    private double _personal_fitness;
-    private List<Position> _neighborhood_position = new ArrayList<>();
-    private double _neighborhood_fitness;
-    private double _inertia;
-    private double _c1,  _c2;
-    private Random _r1 = new Random(),  _r2 = new Random();
-    private double _max_position,  _min_position;
+    private List<Feature> features = new ArrayList<>();
+    private double fitness; // current fitness
+    private List<Double> pBestFeatures = new ArrayList<>();
+    private double pBestFitness; // personal best fitness
+    private List<Feature> neighborhood_feature = new ArrayList<>();
+    private double neighborhood_fitness;
+    private double inertia;
+    private double c1,  c2;
+    private Random r1 = new Random(),  r2 = new Random();
 
-    public WillParticle() {
-    }
+    public WillParticle(List<Feature> features) {
+        this.features = features;
 
-    public void setSize(int size) {
-        _position.clear();
-        _velocity.clear();
-        _personal_position.clear();
-        _neighborhood_position.clear();
-        for (int i = 0; i < size; ++i) {
-            _position.add(new Position(0));
-            _velocity.add(0.0);
-            _personal_position.add(new Position(0));
-            _neighborhood_position.add(new Position(0));
+        for (Feature f : features) {
+            // add dummy features (just until old code is understood)
+            this.pBestFeatures.add(0.0);
+            this.neighborhood_feature.add(new Feature(0));
         }
     }
 
     public int getSize() {
-        return _position.size();
+        return features.size();
     }
 
     public void setPosition(int index, double value) {
-        this._position.get(index).setValue(value);
+        this.features.get(index).setValue(value);
     }
 
-    public double getPosition(int index) {
-        return _position.get(index).getVal();
+    public double getFeatures(int index) {
+        return features.get(index).getValue();
     }
 
-    public List<Position> getPosition() {
-        return _position;
+    public List<Feature> getFeatures() {
+        return features;
     }
 
     public void setVelocity(int index, double value) {
-        _velocity.set(index, value);
+        features.get(index).setVel(value);
     }
 
     public double getVelocity(int index) {
-        return _velocity.get(index);
+        return features.get(index).getVel();
     }
 
     public double getFitness() {
-        return _fitness;
+        return fitness;
     }
 
     public void setFitness(double fitness) {
-        this._fitness = fitness;
+        this.fitness = fitness;
     }
 
-    public void setPersonalPosition(int index, double value) {
-        _personal_position.get(index).setValue(value);
+    public void setPBestPosition(int index, double value) {
+        pBestFeatures.set(index, value);
     }
 
-    public double getPersonalPosition(int index) {
-        return _personal_position.get(index).getVal();
+    public double getPBestFeatures(int index) {
+        return pBestFeatures.get(index);
     }
 
-    public double getPersonalFitness() {
-        return _personal_fitness;
+    public double getPBestFitness() {
+        return pBestFitness;
     }
 
-    public void setPersonalFitness(double fitness_best_personal) {
-        _personal_fitness = fitness_best_personal;
+    public void setPBestFitness(double fitness_best_personal) {
+        pBestFitness = fitness_best_personal;
     }
 
     public void setNeighborhoodPosition(int index, double value) {
-        this._neighborhood_position.get(index).setValue(value);
+        this.neighborhood_feature.get(index).setValue(value);
     }
 
     public double getNeighborhoodPosition(int index) {
-        return _neighborhood_position.get(index).getVal();
+        return neighborhood_feature.get(index).getValue();
     }
 
     public double getNeighborhoodFitness() {
-        return _neighborhood_fitness;
+        return neighborhood_fitness;
     }
 
     public void setNeighborhoodFitness(double fitness_best_neighbor) {
-        this._neighborhood_fitness = fitness_best_neighbor;
+        this.neighborhood_fitness = fitness_best_neighbor;
     }
 
     public double getInertia() {
-        return _inertia;
+        return inertia;
     }
 
     public void setInertia(double inertia) {
-        this._inertia = inertia;
+        this.inertia = inertia;
     }
 
     public double getC1() {
-        return _c1;
+        return c1;
     }
 
     public void setC1(double c1) {
-        this._c1 = c1;
+        this.c1 = c1;
     }
 
     public double getC2() {
-        return _c2;
+        return c2;
     }
 
     public void setC2(double c2) {
-        this._c2 = c2;
+        this.c2 = c2;
     }
 
     public Random getR1() {
-        return _r1;
+        return r1;
     }
 
     public Random getR2() {
-        return _r2;
+        return r2;
     }
-
-    public double getMaxPosition() {
-        return _max_position;
-    }
-
-    public void setMaxPosition(double max_position) {
-        this._max_position = max_position;
-    }
-
-    public double getMinPosition() {
-        return _min_position;
-    }
-
-    public void setMinPosition(double min_position) {
-        this._min_position = min_position;
-    }
-
     public void updateVelocity() {
         for (int i = 0; i < getSize(); ++i) {
             double v_i = getInertia() * getVelocity(i);
-            v_i += getC1() * getR1().nextDouble() * (getPersonalPosition(i) - getPosition(i));
-            v_i += getC2() * getR2().nextDouble() * (getNeighborhoodPosition(i) - getPosition(i));
+            v_i += getC1() * getR1().nextDouble() * (getPBestFeatures(i) - getFeatures(i));
+            v_i += getC2() * getR2().nextDouble() * (getNeighborhoodPosition(i) - getFeatures(i));
 
             setVelocity(i, v_i);
         }
     }
 
     public void updatePosition() {
-        for (int i = 0; i < getSize(); ++i) {
-            double p_i = getPosition(i) + getVelocity(i);
-            if (p_i > getMaxPosition()){
-                p_i = getMaxPosition();
+        for (Feature f : features) {
+            double newVal = f.getValue() + f.getVel();
+
+            // clamp
+            if (newVal > f.getMax()){
+                newVal = f.getMax();
             }
-            if (p_i < getMinPosition()){
-                p_i = getMinPosition();
+            if (newVal < f.getMin()){
+                newVal = f.getMin();
             }
 
-            setPosition(i, p_i);
+            f.setValue(newVal);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof WillParticle) {
+            WillParticle p = (WillParticle) o;
+
+            return p.getFeatures().equals(p.getFeatures());
+        }
+        return false;
     }
 }
 
