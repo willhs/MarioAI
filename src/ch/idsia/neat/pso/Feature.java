@@ -22,7 +22,9 @@ public class Feature {
         this.initialVal = initialVal;
         this.max = max;
         this.min = min;
+    }
 
+    public void generateInitialVals() {
         // calculate starting value and velocity (random)
         // use same calculations as the pso code
         this.val = pso.Math.Scale(0, 1, Math.random(), min, max);
@@ -30,10 +32,8 @@ public class Feature {
                 1.0 / 5.0 * -(max-min),
                 1.0 / 5.0 * (max-min)
         );
-
-        System.out.println(name +" Val: " + this.val + ", Vel: " + this.vel);
-
     }
+
 
     public double getInitialVal() {
         return initialVal;
@@ -84,5 +84,16 @@ public class Feature {
                 "%s: val: %4.2f, init: %4.2f, vel: %4.2f\n",
                 name, val, initialVal, vel
         );
+    }
+
+    public String toString(){
+        return String.format(
+        "%s: val, init: (%4.2f, %4.2f), vel: %4.2f",
+                name, val, initialVal, vel
+        );
+    }
+
+    public Feature clone() {
+        return new Feature(name, initialVal, max, min);
     }
 }

@@ -20,35 +20,36 @@ public class WillRingTopology extends WillTopology {
 
     public void share(WillSwarm s) {
 
-        for (WillParticle particle : s.getParticles()) {
+        for (int p = 0; p < s.getParticles().size(); p++) {
 
-            int index = s.getParticles().indexOf(particle);
+            WillParticle particle = s.getParticle(p);
 
-//            System.out.println("getNeighbors()" + getNeighbors());
-            System.out.println("");
-//            if (i == 7) {
-            System.out.print("i  " + index + "  NNN  ");
+            System.out.println("* Setting neighbourhood bests for particle(" + p + "):");
 
-            WillParticle best_neighbor = null;
-            double best_fitness = s.getProblem().getWorstFitness();
+            WillParticle bestNeighbour = null;
+            double bestNeighbourFitness = s.getProblem().getWorstFitness();
 
             for (int j = -getNeighbors() / 2; j <= getNeighbors() / 2; ++j) {
-
-                System.out.print("  " + Math.ModEuclidean(index + j, s.numberOfParticles()));
-
-                if (s.getProblem().isBetter(s.getParticle(Math.ModEuclidean(index + j, s.numberOfParticles())).getPBestFitness(), best_fitness)) {
-                    best_neighbor = s.getParticle(Math.ModEuclidean(index + j, s.numberOfParticles()));
-                    best_fitness = best_neighbor.getPBestFitness();
+                // n = index of neighbour particle we are comparing with best so far
+                int n = Math.ModEuclidean(p + j, s.numberOfParticles());
+                if (s.getProblem().isBetter(s.getParticle(n).getPBestFitness(), bestNeighbourFitness)) {
+                    bestNeighbour = s.getParticle(Math.ModEuclidean(p + j, s.numberOfParticles()));
+                    bestNeighbourFitness = bestNeighbour.getPBestFitness();
+                    System.out.println("particle(" + n + ") has new best fitness: " + s.getParticle(n).getPBestFitness());
+                } else {
+                    System.out.println("particle(" + n + ") does not have best fitness: " + s.getParticle(n).getPBestFitness());
                 }
             }
+            System.out.println("pBest fitness: \t\t" + particle.getPBestFitness());
+            System.out.println("pBest :\t\t" + particle.getPBestFeatures());
+            System.out.println("best_neighbor fitness:\t\t" + bestNeighbourFitness);
+            System.out.println("best_neighbor:\t\t" + bestNeighbour.getFeatures());
             System.out.println();
-            System.out.println("best_neighbor: " + best_neighbor.getFeatures());
-            System.out.println("best_fitness:  " + best_fitness);
 
-            particle.setNeighborhoodFitness(best_fitness);
+            particle.setNeighborhoodFitness(bestNeighbourFitness);
 
             for (int n = 0; n < particle.getSize(); ++n) {
-                particle.setNeighborhoodPosition(n, best_neighbor.getPBestFeatures(n));
+                particle.setNeighborhoodPosition(n, bestNeighbour.getPBestFeatures(n));
             }
 
 //            for (int n = 0; n < p_i.getSize(); ++n) {

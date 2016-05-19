@@ -21,19 +21,20 @@ public class WillParticle {
     private double fitness; // current fitness
     private List<Double> pBestFeatures = new ArrayList<>();
     private double pBestFitness; // personal best fitness
-    private List<Feature> neighborhood_feature = new ArrayList<>();
+    private List<Double> neighborhood_feature = new ArrayList<>();
     private double neighborhood_fitness;
     private double inertia;
     private double c1,  c2;
     private Random r1 = new Random(),  r2 = new Random();
 
     public WillParticle(List<Feature> features) {
-        this.features = features;
+        this.features = features.stream().map(f -> f.clone()).collect(Collectors.toList());
 
-        for (Feature f : features) {
+        for (Feature f : this.features) {
             // add dummy features (just until old code is understood)
+            f.generateInitialVals();
             this.pBestFeatures.add(0.0);
-            this.neighborhood_feature.add(new Feature(0));
+            this.neighborhood_feature.add(0.0);
         }
     }
 
@@ -77,6 +78,10 @@ public class WillParticle {
         return pBestFeatures.get(index);
     }
 
+    public List<Double> getPBestFeatures() {
+        return pBestFeatures;
+    }
+
     public double getPBestFitness() {
         return pBestFitness;
     }
@@ -86,11 +91,11 @@ public class WillParticle {
     }
 
     public void setNeighborhoodPosition(int index, double value) {
-        this.neighborhood_feature.get(index).setValue(value);
+        this.neighborhood_feature.set(index, value);
     }
 
     public double getNeighborhoodPosition(int index) {
-        return neighborhood_feature.get(index).getValue();
+        return neighborhood_feature.get(index);
     }
 
     public double getNeighborhoodFitness() {
@@ -135,12 +140,21 @@ public class WillParticle {
     public void updateVelocity() {
         for (int i = 0; i < getSize(); ++i) {
             double v_i = getInertia() * getVelocity(i);
-            double firstMult = getC1() * getR1().nextDouble() * (getPBestFeatures(i) - getFeatures(i));
-            double secondMult = getC2() * getR2().nextDouble() * (getNeighborhoodPosition(i) - getFeatures(i));
+            double distToPBest = getPBestFeatures(i) - getFeatures(i);
+            double distToNeighBest = getNeighborhoodPosition(i) - getFeatures(i);
+            double firstMult = getC1() * getR1().nextDouble() * distToPBest;
+            double secondMult = getC2() * getR2().nextDouble() * distToNeighBest;
             v_i += firstMult;
             v_i += secondMult;
 
-            System.out.printf("first mult: %4.2f, second: %4.2f", firstMult, secondMult);
+            System.out.println("--- updating " + i + "th feature ----");
+            System.out.println(getFeatures().get(i));
+            System.out.printf("vel: %4.2f, after inertia: %4.2f\n", getVelocity(i), (getVelocity(i) * getInertia()));
+            System.out.println("distToPBest: " + distToPBest + ", distToNeighBest: " + distToNeighBest);
+            System.out.println("pBest: " + getPBestFeatures(i) + " nBest: " + getNeighborhoodPosition(i));
+            System.out.printf("first mult: %4.2f, second: %4.2f \n", firstMult, secondMult);
+            System.out.printf("final vel: %4.2f\n", v_i);
+            System.out.println("----------------------------------");
 
             setVelocity(i, v_i);
         }
@@ -176,6 +190,12 @@ public class WillParticle {
         features.forEach(f -> {
             f.printDiffs();
         });
+    }
+
+    public String toString() {
+        return "Particle. PBest: " + pBestFitness + ", NBest: " + neighborhood_fitness
+                + "\nPBest position: " + pBestFeatures
+                + "\nNBest position: " + neighborhood_feature;
     }
 }
 
