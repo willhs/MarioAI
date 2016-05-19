@@ -1,5 +1,8 @@
 package ch.idsia.neat.pso;
 
+import java.io.*;
+import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 /**
@@ -25,34 +28,52 @@ public class PSORunner {
                 inertia
         );
 
+        File file = new File("db" + File.separator + "particles" + File.separator + "particle-" + System.currentTimeMillis());
+
         swarm.setTopology(new WillRingTopology(4));  //   Generation  2999          3.9968028886505635E-15
 
-        for (int i = 0; i < number_of_iterations; ++i) {
+        for (int gen = 0; gen < number_of_iterations; ++gen) {
             System.out.println("--------------------");
-            System.out.println("Iterating over swarm (" + i + ")");
+            System.out.println("Iterating over swarm (" + gen + ")");
             System.out.println("--------------------");
             swarm.iterate();
             System.out.println();
             System.out.println("-------------------------------------");
-            System.out.println("PSO Generation  " + i);
+            System.out.println("PSO Generation  " + gen);
             System.out.println("-------------------------------------");
 
             // get best fitness in every iterate for different topology except star
             WillParticle globalbest_particle = null;
             double globalbest_fitness = swarm.getProblem().getWorstFitness();
 
-            for (int j = 0; j < swarm.numberOfParticles(); ++j) {
-                WillParticle particle = swarm.getParticle(j);
+            for (int p = 0; p < swarm.numberOfParticles(); ++p) {
+                WillParticle particle = swarm.getParticle(p);
                 if (swarm.getProblem().isBetter(particle.getPBestFitness(), globalbest_fitness)) {
-                    System.out.println("particle " + j + " beat global best");
-                    particle.printDiffs();
-                    globalbest_particle = swarm.getParticle(j);
+                    globalbest_particle = swarm.getParticle(p);
                     globalbest_fitness = globalbest_particle.getPBestFitness();
+                    writeToFile(file, particle, gen);
+                    System.out.println("particle " + p + " beat global best");
+                    System.out.println(particle);
                 }
 //                System.out.println("velocities: " + Arrays.toString(particle.getFeatures().stream().map(f -> f.getVel()).toArray()));
             }
 
             System.out.println("Global best fitness: " + globalbest_fitness);
+        }
+
+    }
+
+    private static void writeToFile(File file, WillParticle particle, int generation) {
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file)))){
+            particle.getPBestFeatures().forEach(p ->  {
+                writer.println("Best particles from gen " + generation + ":");
+                writer.println(particle.getFeatures());
+                writer.println(particle.getFitness());
+                writer.println();
+            } );
+            System.out.println("Written to file");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

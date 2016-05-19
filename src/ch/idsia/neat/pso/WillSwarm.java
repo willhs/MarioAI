@@ -99,8 +99,8 @@ public class WillSwarm {
 
         for (WillParticle p : particles) {
             int index = particles.indexOf(p);
-            System.out.println("====== Updating vel and position for particle: " + index);
-            System.out.println(p);
+//            System.out.println("====== Updating vel and position for particle: " + index);
+//            System.out.println(p);
             p.updateVelocity();
             p.updatePosition();
         }

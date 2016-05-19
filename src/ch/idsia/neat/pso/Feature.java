@@ -17,7 +17,7 @@ public class Feature {
         this.initialVal = initialVal;
     }
 
-    public Feature(String name, double initialVal, double max, double min) {
+    public Feature(String name, double initialVal, double min, double max) {
         this.name = name;
         this.initialVal = initialVal;
         this.max = max;
@@ -94,6 +94,6 @@ public class Feature {
     }
 
     public Feature clone() {
-        return new Feature(name, initialVal, max, min);
+        return new Feature(name, initialVal, min, max);
     }
 }

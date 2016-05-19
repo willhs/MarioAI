@@ -35,29 +35,29 @@ public class MarioProblem extends WillProblem {
         }
 
         // how many generations will be needed per trial
-        props.setProperty("num.generations", "" + 2);
+        props.setProperty("num.generations", "" + 10);
         props.remove("random.seed");
 
         // set default values and limits for each property that will be changed
         features = new ArrayList<>();
 
         // feature: (name, starting val, min, max)
-        features.add(new Feature("add.connection.mutation.rate", 0.02, 0.0001, 0.5));
+        features.add(new Feature("add.connection.mutation.rate", 0.38, 0.0001, 0.5));
         features.add(new Feature("remove.connection.mutation.rate", 0.01, 0.01, 0.3));
-        features.add(new Feature("remove.connection.max.weight", 100, 1, 500));
-        features.add(new Feature("add.neuron.mutation.rate", 0.01, 0.0001, 0.5));
-        features.add(new Feature("prune.mutation.rate", 1, 0.5, 1.5)); // lacking experimentation
-        features.add(new Feature("weight.mutation.rate", 0.75, 0.5, 0.8));
-        features.add(new Feature("weight.mutation.std.dev", 1.5, 1, 2));
-        features.add(new Feature("weight.max", 500, 1, 500));
-        features.add(new Feature("weight.min", -500, -500, -1));
-        features.add(new Feature("survival.rate", 0.2, 0.1, 0.5));
+        features.add(new Feature("remove.connection.max.weight", 192, 1, 500));
+        features.add(new Feature("add.neuron.mutation.rate", 0.001, 0.0001, 0.5));
+        features.add(new Feature("prune.mutation.rate", 1.4, 0.5, 1.5)); // lacking experimentation
+        features.add(new Feature("weight.mutation.rate", 0.76, 0.5, 0.8));
+        features.add(new Feature("weight.mutation.std.dev", 1.65, 1, 2));
+        features.add(new Feature("weight.max", 1, 1, 500));
+        features.add(new Feature("weight.min", -57, -500, -1));
+        features.add(new Feature("survival.rate", 0.13, 0.1, 0.5));
 
         // speciation
-        features.add(new Feature("chrom.compat.excess.coeff", 1, 0, 1)); // lacking exp
-        features.add(new Feature("chrom.compat.disjoint.coeff", 1, 0, 1)); // lacking exp
-        features.add(new Feature("chrom.compat.common.coeff", 0.04, 0, 1)); // lacking exp
-        features.add(new Feature("speciation.threshold", 0.2, 0.1, 1));
+        features.add(new Feature("chrom.compat.excess.coeff", 0.42, 0, 1)); // lacking exp
+        features.add(new Feature("chrom.compat.disjoint.coeff", 0.43, 0, 1)); // lacking exp
+        features.add(new Feature("chrom.compat.common.coeff", 0.87, 0, 1)); // lacking exp
+        features.add(new Feature("speciation.threshold", 0.177, 0.1, 1));
     }
 
     @Override

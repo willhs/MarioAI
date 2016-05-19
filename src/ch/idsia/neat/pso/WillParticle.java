@@ -147,14 +147,14 @@ public class WillParticle {
             v_i += firstMult;
             v_i += secondMult;
 
-            System.out.println("--- updating " + i + "th feature ----");
+/*            System.out.println("--- updating " + i + "th feature ----");
             System.out.println(getFeatures().get(i));
             System.out.printf("vel: %4.2f, after inertia: %4.2f\n", getVelocity(i), (getVelocity(i) * getInertia()));
             System.out.println("distToPBest: " + distToPBest + ", distToNeighBest: " + distToNeighBest);
             System.out.println("pBest: " + getPBestFeatures(i) + " nBest: " + getNeighborhoodPosition(i));
             System.out.printf("first mult: %4.2f, second: %4.2f \n", firstMult, secondMult);
             System.out.printf("final vel: %4.2f\n", v_i);
-            System.out.println("----------------------------------");
+            System.out.println("----------------------------------");*/
 
             setVelocity(i, v_i);
         }
