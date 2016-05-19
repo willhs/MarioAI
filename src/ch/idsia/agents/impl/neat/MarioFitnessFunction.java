@@ -2,18 +2,28 @@ package ch.idsia.agents.impl.neat;
 
 import ch.idsia.benchmark.mario.MarioSimulator;
 import ch.idsia.benchmark.mario.options.FastOpts;
+import com.anji.integration.Activator;
+import com.anji.integration.ActivatorTranscriber;
+import com.anji.integration.TranscriberException;
 import com.anji.neat.Evolver;
+import com.anji.util.Configurable;
+import com.anji.util.Properties;
 import org.jgap.BulkFitnessFunction;
 import org.jgap.Chromosome;
 
 import java.util.List;
-
 /**
  * Created by Will on 17/04/2016.
  */
-public class MarioFitnessFunction implements BulkFitnessFunction {
+public class MarioFitnessFunction implements BulkFitnessFunction, Configurable {
 
     private float highScore;
+    private ActivatorTranscriber factory;
+
+    @Override
+    public void init(Properties props) {
+        factory = (ActivatorTranscriber) props.singletonObjectProperty( ActivatorTranscriber.class );
+     }
 
     @Override
     public void evaluate(List chromosomes) {
@@ -31,9 +41,23 @@ public class MarioFitnessFunction implements BulkFitnessFunction {
     }
 
     private int evaluate(Chromosome chromosome) {
-        String options = FastOpts.VIS_OFF + FastOpts.LEVEL_02_JUMPING /* + FastOpts.L_ENEMY(Enemy.GOOMBA) */;
+        String options = ""
+                + FastOpts.VIS_OFF
+//                + FastOpts.VIS_ON_2X
+                //+ " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
+//                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
+//                + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
+                + FastOpts.LEVEL_03_COLLECTING
+                + FastOpts.S_TIME_LIMIT_200;
 
-        NEATAgent agent = new NEATAgent(chromosome);
+        Activator activator = null;
+        try {
+            activator = factory.newActivator(chromosome);
+        } catch (TranscriberException e) {
+            e.printStackTrace();
+        }
+
+        EnvironmentOnly agent = new EnvironmentOnly(activator);
 
         MarioSimulator simulator = new MarioSimulator(options);
         simulator.run(agent);
@@ -44,12 +68,16 @@ public class MarioFitnessFunction implements BulkFitnessFunction {
 
     @Override
     public int getMaxFitnessValue() {
-        return (int)highScore;
+        return 8000;
     }
 
     public static void main(String[] args) throws Throwable {
-        String propertiesFilename = "mario.properties";
-        Evolver.main(new String[]{ propertiesFilename });
+        if (args.length >= 1) {
+            Evolver.main(args);
+        } else {
+            String propertiesFilename = "mario.properties";
+            Evolver.main(new String[]{ propertiesFilename });
+        }
     }
 
 }

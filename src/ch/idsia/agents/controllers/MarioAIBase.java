@@ -105,4 +105,9 @@ public abstract class MarioAIBase extends MarioAgentBase {
 		}
 	}
 
+	@Override
+	public boolean sucks(){
+		return false;
+	}
+
 }

@@ -78,4 +78,5 @@ public interface IAgent {
 	 */
 	void receiveReward(float intermediateReward);
 
+	boolean sucks();
 }

@@ -207,8 +207,8 @@ public class ParameterContainer {
 			defaultOptionsHashMap.put("-lt", "0"); // defaultOptionsHashMap.put("-levelType","1");
 			defaultOptionsHashMap.put("-fps", "24");
 			defaultOptionsHashMap.put("-mm", "2"); // Mario Mode
-			defaultOptionsHashMap.put("-mix", "32"); // Mario Initial physical Position
-			defaultOptionsHashMap.put("-miy", "32"); // Mario Initial physical Position
+			defaultOptionsHashMap.put("-mix", "32"); // Mario Initial physical Feature
+			defaultOptionsHashMap.put("-miy", "32"); // Mario Initial physical Feature
 			defaultOptionsHashMap.put("-pr", "off"); // defaultOptionsHashMap.put("-powerRestoration","off");
 			defaultOptionsHashMap.put("-rfh", "19");
 			defaultOptionsHashMap.put("-rfw", "19");

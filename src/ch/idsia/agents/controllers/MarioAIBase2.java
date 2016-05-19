@@ -27,75 +27,84 @@
 
 package ch.idsia.agents.controllers;
 
-import java.io.IOException;
-
 import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.IAgent;
-import ch.idsia.benchmark.mario.engine.Replayer;
+import ch.idsia.agents.controllers.modules.Entities;
+import ch.idsia.agents.controllers.modules.Tiles;
+import ch.idsia.benchmark.mario.engine.generalization.MarioEntity;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
+import ch.idsia.tools.EvaluationInfo;
 
 /**
- * Created by IntelliJ IDEA. 
- * User: Sergey Karakovskiy, sergey.karakovskiy@gmail.com 
- * Date: Oct 9, 2010 
- * Time: 2:08:47 AM 
- * Package: ch.ch.idsia.agents.controllers
- * 
- * @author Sergey Karakovskiy, sergey.karakovskiy@gmail.com
- * @author Jakub 'Jimmy' Gemrot, gemrot@gamedev.cuni.cz
+ * Abstract class that serves as a basis for implementing new Mario-AI agents.
+ *
+ * Based on MarioAIBase class
+ *
+ * @author Will Hardwick-Smith
  */
-public class ReplayAgent implements IAgent {
+public abstract class MarioAIBase2 extends MarioAgentBase {
 
-	private Replayer replayer;
-	private MarioInput keys;
-	private String name;
+	protected IEnvironment environment;
+	protected MarioInput lastInput = new MarioInput();
+	protected int highestFitness;
 
-	public ReplayAgent(String name) {
-		setName("Replay<" + name + ">");
+	// fields to help determine if mario has moved much
+	private int lastCell = -1;
+	private int framesInSameCell = 0;
+	private int staysStillThreshold = 24;
+
+	public MarioAIBase2() {
+		super("MarioAIBase");
+		name = getClass().getSimpleName();
 	}
+
+	public MarioAIBase2(String agentName) {
+		super(agentName);
+	}	
 	
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	public void setReplayer(Replayer replayer) {
-		this.replayer = replayer;
-	}
-
-	@Override
 	public void reset(AgentOptions options) {
-	}
-
-	@Override
-	public MarioInput actionSelection() {
-		// handle the "Out of time" case
-		try {
-			keys.reset();
-			replayer.readAction(keys);
-		} catch (IOException e) {
-			System.err.println("[Mario AI Exception] : ReplayAgent is not able to read next action");
-			e.printStackTrace();
+		super.reset(options);
+		if (environment != null) {
+			environment.reset();
 		}
-		return keys;
+		highestFitness = 0;
 	}
 
 	@Override
-	public void observe(final IEnvironment environment) {
+	public void observe(IEnvironment environment) {
+		this.environment = environment;
+
+		int fitness = environment.getEvaluationInfo().computeBasicFitness();
+		if (fitness > highestFitness) {
+			highestFitness = fitness;
+		}
+
+		// if this agent shows no promise at this stage, acknowledge that it sucks
+		if (doesSuck()) {
+			sucks = true;
+		}
 	}
 
-	@Override
-	public void receiveReward(final float intermediateReward) {
-	}
+	private boolean doesSuck() {
+		// determine whether mario has moved significantly
+		if (environment.getEvaluationInfo().distancePassedCells == lastCell) {
+			framesInSameCell++;
+			if (framesInSameCell >= staysStillThreshold) {
+				return true;
+			}
+		} else {
+			framesInSameCell = 0;
+		}
 
+		lastCell = environment.getEvaluationInfo().distancePassedCells;
 
-	@Override
-	public boolean sucks() {
 		return false;
 	}
+
+	public float getFitness() {
+		return highestFitness + intermediateReward;
+	}
+
 }
