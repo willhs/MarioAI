@@ -3,9 +3,12 @@ package ch.idsia.neat.pso;/*
  * and open the template in the editor.
  */
 
+import pso.Particle;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -41,6 +44,11 @@ public class WillSwarm {
 
             particles.add(particle);
         }
+
+        System.out.println("new particles: ");
+        for (WillParticle p : particles) {
+            System.out.println(p.getFeatures().stream().map(f -> f.getValue()).collect(Collectors.toList()));
+        }
     }
 
     public MarioProblem getProblem() {
@@ -61,7 +69,7 @@ public class WillSwarm {
 
     public void iterate() {
 
-        // update fitness
+        // update fitness for particles
         for (WillParticle particle : particles) {
 
             // evaluate fitness
@@ -99,7 +107,7 @@ public class WillSwarm {
             }
             System.out.println();
 
-            particle.printDiffs();
+//            particle.printDiffs();
 
             System.out.println("\n");
         }
@@ -107,6 +115,8 @@ public class WillSwarm {
         getTopology().share(this);
 
         for (WillParticle p : particles) {
+            System.out.println("====== Updating vel and position for following particle:");
+            System.out.println("====== " + p);
             p.updateVelocity();
             p.updatePosition();
         }
