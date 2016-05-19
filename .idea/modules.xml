@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Infinite-Mario-AI.iml" filepath="$PROJECT_DIR$/Infinite-Mario-AI.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lib/anji_2_01/anji.iml" filepath="$PROJECT_DIR$/lib/anji_2_01/anji.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lib/pso/pso.iml" filepath="$PROJECT_DIR$/lib/pso/pso.iml" />
     </modules>
   </component>
 </project>
