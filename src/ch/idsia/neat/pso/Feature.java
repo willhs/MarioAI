@@ -88,8 +88,8 @@ public class Feature {
 
     public String toString(){
         return String.format(
-        "%s: val, init: (%4.2f, %4.2f), vel: %4.2f",
-                name, val, initialVal, vel
+        "%s: [%f - %f] val, init: (%4.2f, %f), vel: %4.2f",
+                 name, min, max, val, initialVal, vel
         );
     }
 

@@ -28,14 +28,14 @@ public class PSORunner {
         swarm.setTopology(new WillRingTopology(4));  //   Generation  2999          3.9968028886505635E-15
 
         for (int i = 0; i < number_of_iterations; ++i) {
+            System.out.println("--------------------");
+            System.out.println("Iterating over swarm (" + i + ")");
+            System.out.println("--------------------");
             swarm.iterate();
             System.out.println();
             System.out.println("-------------------------------------");
             System.out.println("PSO Generation  " + i);
-
-
-//            System.out.println("BEST=" + s.getParticle(11).getPBestFitness());
-//            System.out.println("Average=" + Math.Average(s));
+            System.out.println("-------------------------------------");
 
             // get best fitness in every iterate for different topology except star
             WillParticle globalbest_particle = null;
@@ -44,15 +44,13 @@ public class PSORunner {
             for (int j = 0; j < swarm.numberOfParticles(); ++j) {
                 WillParticle particle = swarm.getParticle(j);
                 if (swarm.getProblem().isBetter(particle.getPBestFitness(), globalbest_fitness)) {
-                    System.out.println("beaten");
+                    System.out.println("particle " + j + " beat global best");
+                    particle.printDiffs();
                     globalbest_particle = swarm.getParticle(j);
                     globalbest_fitness = globalbest_particle.getPBestFitness();
                 }
-                System.out.println("not beaten");
-                System.out.println("velocities: " + Arrays.toString(particle.getFeatures().stream().map(f -> f.getVel()).toArray()));
+//                System.out.println("velocities: " + Arrays.toString(particle.getFeatures().stream().map(f -> f.getVel()).toArray()));
             }
-
-            System.out.println(": " + swarm.getInertia());
 
             System.out.println("Global best fitness: " + globalbest_fitness);
         }

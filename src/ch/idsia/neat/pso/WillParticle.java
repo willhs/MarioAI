@@ -181,7 +181,7 @@ public class WillParticle {
         if (o instanceof WillParticle) {
             WillParticle p = (WillParticle) o;
 
-            return p.getFeatures().equals(p.getFeatures());
+            return features.equals(p.getFeatures());
         }
         return false;
     }
@@ -195,7 +195,8 @@ public class WillParticle {
     public String toString() {
         return "Particle. PBest: " + pBestFitness + ", NBest: " + neighborhood_fitness
                 + "\nPBest position: " + pBestFeatures
-                + "\nNBest position: " + neighborhood_feature;
+                + "\nNBest position: " + neighborhood_feature
+                + "\nCurr. position: " + features.stream().map(f->f.getValue()).collect(Collectors.toList());
     }
 }
 

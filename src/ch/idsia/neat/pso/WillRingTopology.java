@@ -24,7 +24,7 @@ public class WillRingTopology extends WillTopology {
 
             WillParticle particle = s.getParticle(p);
 
-            System.out.println("* Setting neighbourhood bests for particle(" + p + "):");
+//            System.out.println("* Setting neighbourhood bests for particle(" + p + "):");
 
             WillParticle bestNeighbour = null;
             double bestNeighbourFitness = s.getProblem().getWorstFitness();
@@ -35,16 +35,16 @@ public class WillRingTopology extends WillTopology {
                 if (s.getProblem().isBetter(s.getParticle(n).getPBestFitness(), bestNeighbourFitness)) {
                     bestNeighbour = s.getParticle(Math.ModEuclidean(p + j, s.numberOfParticles()));
                     bestNeighbourFitness = bestNeighbour.getPBestFitness();
-                    System.out.println("particle(" + n + ") has new best fitness: " + s.getParticle(n).getPBestFitness());
+//                    System.out.println("particle(" + n + ") has new best fitness: " + s.getParticle(n).getPBestFitness());
                 } else {
-                    System.out.println("particle(" + n + ") does not have best fitness: " + s.getParticle(n).getPBestFitness());
+//                    System.out.println("particle(" + n + ") does not have best fitness: " + s.getParticle(n).getPBestFitness());
                 }
             }
-            System.out.println("pBest fitness: \t\t" + particle.getPBestFitness());
-            System.out.println("pBest :\t\t" + particle.getPBestFeatures());
-            System.out.println("best_neighbor fitness:\t\t" + bestNeighbourFitness);
-            System.out.println("best_neighbor:\t\t" + bestNeighbour.getFeatures());
-            System.out.println();
+//            System.out.println("pBest fitness: \t\t" + particle.getPBestFitness());
+//            System.out.println("pBest :\t\t" + particle.getPBestFeatures());
+//            System.out.println("best_neighbor fitness:\t\t" + bestNeighbourFitness);
+//            System.out.println("best_neighbor:\t\t" + bestNeighbour.getFeatures());
+//            System.out.println();
 
             particle.setNeighborhoodFitness(bestNeighbourFitness);
 

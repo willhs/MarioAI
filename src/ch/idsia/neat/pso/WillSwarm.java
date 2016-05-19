@@ -44,11 +44,6 @@ public class WillSwarm {
 
             particles.add(particle);
         }
-
-        System.out.println("new particles: ");
-        for (WillParticle p : particles) {
-            System.out.println(p.getFeatures().stream().map(f -> f.getValue()).collect(Collectors.toList()));
-        }
     }
 
     public MarioProblem getProblem() {
@@ -72,13 +67,15 @@ public class WillSwarm {
         // update fitness for particles
         for (WillParticle particle : particles) {
 
-            // evaluate fitness
-            double newFitness = getProblem().fitness(particle.getFeatures());
-            particle.setFitness(newFitness);
-
             int index = particles.indexOf(particle);
 
-            System.out.println("ID(" + index + "), fitness: " + newFitness + " == ");
+            // evaluate fitness
+            System.out.println("Getting fitness for particle: " + index + "...");
+            double newFitness = getProblem().fitness(particle.getFeatures());
+            particle.setFitness(newFitness);
+            System.out.println("Fitness gotten");
+
+            System.out.println("Particle " + index + " fitness: " + newFitness);
             for (Feature f : particle.getFeatures()) {
 //                System.out.print(f.getValue() + ", ");
             }
@@ -95,28 +92,15 @@ public class WillSwarm {
 //                System.out.println("PFit<=");
             }
 
-            // personal best
-            System.out.println("ID(" + index + "), Pbest: " + particle.getPBestFitness() + " ==");
-            for (int j = 0; j < particle.getSize(); j++) {
-//                System.out.print(" " + particle.getPBestFeatures(j));
-            }
-            // global best
-            System.out.println("ID(" + index + "), Gbest: " + particle.getNeighborhoodFitness() + " ==");
-            for (int j = 0; j < particle.getSize(); j++) {
-//                System.out.print(" " + particle.getNeighborhoodPosition(j));
-            }
-            System.out.println();
-
-//            particle.printDiffs();
-
-            System.out.println("\n");
+//            System.out.println("\n");
         }
 
         getTopology().share(this);
 
         for (WillParticle p : particles) {
-            System.out.println("====== Updating vel and position for following particle:");
-            System.out.println("====== " + p);
+            int index = particles.indexOf(p);
+            System.out.println("====== Updating vel and position for particle: " + index);
+            System.out.println(p);
             p.updateVelocity();
             p.updatePosition();
         }
