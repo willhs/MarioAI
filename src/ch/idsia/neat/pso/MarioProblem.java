@@ -35,7 +35,7 @@ public class MarioProblem extends WillProblem {
         }
 
         // how many generations will be needed per trial
-        props.setProperty("num.generations", "" + 2);
+        props.setProperty("num.generations", "" + 15);
         props.remove("random.seed");
 
         // set default values and limits for each property that will be changed
@@ -65,14 +65,20 @@ public class MarioProblem extends WillProblem {
         features.forEach(f -> props.setProperty(f.getName(), "" + f.getValue()));
 
         Evolver evolver = new Evolver();
-        try {
-            evolver.init(new com.anji.util.Properties(props));
-            evolver.run();
-        } catch (Exception e) {
-            e.printStackTrace();
+        int NUM_TRIALS = 5;
+        double total = 0;
+        for (int t = 0; t < NUM_TRIALS; t++) {
+            try {
+                evolver.init(new com.anji.util.Properties(props));
+                evolver.run();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            total += evolver.getChamp().getFitnessValue();
         }
+        double averageFitness = total / NUM_TRIALS;
 
-        return evolver.getChamp().getFitnessValue();
+        return averageFitness;
     }
 
     public List<Feature> getFeatures() {

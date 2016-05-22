@@ -108,7 +108,6 @@ public class MarioSimulator {
 			agent.receiveReward(environment.getIntermediateReward());
 
 			if (agent.sucks()) {
-				//System.out.println("agent sucks, so breaking out of loop");
 				break;
 			}
 		}
