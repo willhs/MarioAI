@@ -83,7 +83,8 @@ public class WillSwarm {
                 for (int j = 0; j < particle.getSize(); ++j) {
                     particle.setPBestPosition(j, particle.getFeatures(j));
                 }
-//                System.out.println("PFit+");
+                System.out.println("Particle " + index + " bet pBest. New pBest: " + newFitness);
+                System.out.println("Features: " + particle.getFeatures());
             } else {
 //                System.out.println();
 //                System.out.println("PFit<=");

@@ -47,7 +47,7 @@ public class MarioFitnessFunction implements BulkFitnessFunction, Configurable {
                 //+ " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
 //                + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
-                + FastOpts.LEVEL_03_COLLECTING
+                + FastOpts.LEVEL_04_BLOCKS
                 + FastOpts.S_TIME_LIMIT_200;
 
         Activator activator = null;

@@ -48,9 +48,9 @@ public class PSORunner {
                 if (swarm.getProblem().isBetter(particle.getPBestFitness(), globalbest_fitness)) {
                     globalbest_particle = swarm.getParticle(p);
                     globalbest_fitness = globalbest_particle.getPBestFitness();
-                    writeToFile(file, particle, gen);
                     System.out.println("particle " + p + " beat global best");
                     System.out.println(particle);
+                    writeToFile(file, particle, gen);
                 }
 //                System.out.println("velocities: " + Arrays.toString(particle.getFeatures().stream().map(f -> f.getVel()).toArray()));
             }
@@ -67,6 +67,7 @@ public class PSORunner {
                 writer.println(particle.getFeatures());
                 writer.println(particle.getFitness());
                 writer.println();
+                writer.close();
             } );
             System.out.println("Written to file");
         } catch (IOException e) {
