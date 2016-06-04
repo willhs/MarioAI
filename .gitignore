@@ -51,6 +51,7 @@ fabric.properties
 
 ### Project specific
 
+/target
 /lib
 /tmp
 /db
