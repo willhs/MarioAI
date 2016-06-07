@@ -37,10 +37,18 @@ public class WillSwarm {
             particle.setInertia(inertia);
 
             particle.setPBestFitness(getProblem().getWorstFitness());
-            particle.setNeighborhoodFitness(getProblem().getWorstFitness());
+            particle.setNBestFitness(getProblem().getWorstFitness());
 
             particles.add(particle);
         }
+    }
+
+    public WillSwarm(MarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
+        this.problem = problem;
+        this.particles = particles;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.inertia = inertia;
     }
 
     public MarioProblem getProblem() {
@@ -73,9 +81,6 @@ public class WillSwarm {
             System.out.println("Fitness gotten");
 
             System.out.println("Particle " + index + " fitness: " + newFitness);
-            for (Feature f : particle.getFeatures()) {
-//                System.out.print(f.getValue() + ", ");
-            }
 
             //Check if new fitness is better than personal best...
             if (getProblem().isBetter(newFitness, particle.getPBestFitness())) {
@@ -118,6 +123,31 @@ public class WillSwarm {
 
     public double getInertia() {
         return inertia;
+    }
+
+    public String toString() {
+        return particles.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof WillSwarm) {
+            WillSwarm other = (WillSwarm) o;
+            return particles.equals(other.getParticles())
+                    && c1 == other.getC1()
+                    && c2 == other.getC2()
+                    && inertia == other.getInertia();
+        } else {
+            return false;
+        }
+    }
+
+    public double getC1() {
+        return c1;
+    }
+
+    public double getC2() {
+        return c2;
     }
 }
 

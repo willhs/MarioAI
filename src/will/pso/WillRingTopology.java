@@ -46,14 +46,14 @@ public class WillRingTopology extends WillTopology {
 //            System.out.println("best_neighbor:\t\t" + bestNeighbour.getFeatures());
 //            System.out.println();
 
-            particle.setNeighborhoodFitness(bestNeighbourFitness);
+            particle.setNBestFitness(bestNeighbourFitness);
 
             for (int n = 0; n < particle.getSize(); ++n) {
-                particle.setNeighborhoodPosition(n, bestNeighbour.getPBestFeatures(n));
+                particle.setNBestFeats(n, bestNeighbour.getPBestFeatures(n));
             }
 
 //            for (int n = 0; n < p_i.getSize(); ++n) {
-////                p_i.setNeighborhoodPosition(n, best_neighbor.getNeighborhoodPosition(n));
+////                p_i.setNBestFeats(n, best_neighbor.getNBestFeat(n));
 //                System.out.print(best_neighbor.getPBestFeatures(n));
 //                System.out.println("");
 //

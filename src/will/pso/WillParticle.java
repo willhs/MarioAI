@@ -16,11 +16,13 @@ import java.util.stream.Collectors;
 public class WillParticle {
 
     private List<Feature> features = new ArrayList<>();
+    private List<Double> pBestFeats = new ArrayList<>();
+    private List<Double> nBestFeats = new ArrayList<>();
+
     private double fitness; // current fitness
-    private List<Double> pBestFeatures = new ArrayList<>();
     private double pBestFitness; // personal best fitness
-    private List<Double> neighborhood_feature = new ArrayList<>();
-    private double neighborhood_fitness;
+    private double nBestFitness;
+
     private double inertia;
     private double c1,  c2;
     private Random r1 = new Random(),  r2 = new Random();
@@ -31,9 +33,25 @@ public class WillParticle {
         for (Feature f : this.features) {
             // add dummy features (just until old code is understood)
             f.generateInitialVals();
-            this.pBestFeatures.add(0.0);
-            this.neighborhood_feature.add(0.0);
+            this.pBestFeats.add(0.0);
+            this.nBestFeats.add(0.0);
         }
+    }
+
+    public WillParticle(List<Feature> features, List<Double> pBestFeats, List<Double> nBestFeats,
+                        double fitness, double pBestFitness, double nBestFitness,
+                        double c1, double c2, double inertia) {
+        this.features = features;
+        this.pBestFeats = pBestFeats;
+        this.nBestFeats = nBestFeats;
+
+        this.fitness = fitness;
+        this.pBestFitness = pBestFitness;
+        this.nBestFitness = nBestFitness;
+
+        this.c1 = c1;
+        this.c2 = c2;
+        this.inertia = inertia;
     }
 
     public int getSize() {
@@ -69,15 +87,15 @@ public class WillParticle {
     }
 
     public void setPBestPosition(int index, double value) {
-        pBestFeatures.set(index, value);
+        pBestFeats.set(index, value);
     }
 
     public double getPBestFeatures(int index) {
-        return pBestFeatures.get(index);
+        return pBestFeats.get(index);
     }
 
     public List<Double> getPBestFeatures() {
-        return pBestFeatures;
+        return pBestFeats;
     }
 
     public double getPBestFitness() {
@@ -88,20 +106,24 @@ public class WillParticle {
         pBestFitness = fitness_best_personal;
     }
 
-    public void setNeighborhoodPosition(int index, double value) {
-        this.neighborhood_feature.set(index, value);
+    public void setNBestFeats(int index, double value) {
+        this.nBestFeats.set(index, value);
     }
 
-    public double getNeighborhoodPosition(int index) {
-        return neighborhood_feature.get(index);
+    public double getNBestFeat(int index) {
+        return nBestFeats.get(index);
     }
 
-    public double getNeighborhoodFitness() {
-        return neighborhood_fitness;
+    public List<Double> getNBestFeatures() {
+        return nBestFeats;
     }
 
-    public void setNeighborhoodFitness(double fitness_best_neighbor) {
-        this.neighborhood_fitness = fitness_best_neighbor;
+    public double getNBestFitness() {
+        return nBestFitness;
+    }
+
+    public void setNBestFitness(double nBest) {
+        this.nBestFitness = nBest;
     }
 
     public double getInertia() {
@@ -139,7 +161,7 @@ public class WillParticle {
         for (int i = 0; i < getSize(); ++i) {
             double v_i = getInertia() * getVelocity(i);
             double distToPBest = getPBestFeatures(i) - getFeatures(i);
-            double distToNeighBest = getNeighborhoodPosition(i) - getFeatures(i);
+            double distToNeighBest = getNBestFeat(i) - getFeatures(i);
             double firstMult = getC1() * getR1().nextDouble() * distToPBest;
             double secondMult = getC2() * getR2().nextDouble() * distToNeighBest;
             v_i += firstMult;
@@ -149,7 +171,7 @@ public class WillParticle {
             System.out.println(getFeatures().get(i));
             System.out.printf("vel: %4.2f, after inertia: %4.2f\n", getVelocity(i), (getVelocity(i) * getInertia()));
             System.out.println("distToPBest: " + distToPBest + ", distToNeighBest: " + distToNeighBest);
-            System.out.println("pBest: " + getPBestFeatures(i) + " nBest: " + getNeighborhoodPosition(i));
+            System.out.println("pBest: " + getPBestFeatures(i) + " nBest: " + getNBestFeat(i));
             System.out.printf("first mult: %4.2f, second: %4.2f \n", firstMult, secondMult);
             System.out.printf("final vel: %4.2f\n", v_i);
             System.out.println("----------------------------------");*/
@@ -174,16 +196,9 @@ public class WillParticle {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof WillParticle) {
-            WillParticle p = (WillParticle) o;
-
-            return features.equals(p.getFeatures());
-        }
-        return false;
-    }
-
+    /**
+     * prints the differences between each feature's initial and current value
+     */
     public void printDiffs() {
         features.forEach(f -> {
             f.printDiffs();
@@ -191,10 +206,28 @@ public class WillParticle {
     }
 
     public String toString() {
-        return "Particle. PBest: " + pBestFitness + ", NBest: " + neighborhood_fitness
-                + "\nPBest position: " + pBestFeatures
-                + "\nNBest position: " + neighborhood_feature
+        return "Particle. PBest: " + pBestFitness + ", NBest: " + nBestFitness
+                + "\nPBest position: " + pBestFeats
+                + "\nNBest position: " + nBestFeats
                 + "\nCurr. position: " + features.stream().map(f->f.getValue()).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof WillParticle) {
+            WillParticle other = (WillParticle) o;
+            return features.equals(other.getFeatures())
+                    && pBestFeats.equals(other.getPBestFeatures())
+                    && nBestFeats.equals(other.getNBestFeatures())
+                    && fitness == other.fitness
+                    && pBestFitness == other.getPBestFitness()
+                    && nBestFitness == other.getNBestFitness()
+                    && c1 == other.getC1()
+                    && c2 == other.getC2()
+                    && inertia == other.getInertia();
+        } else {
+            return false;
+        }
     }
 }
 

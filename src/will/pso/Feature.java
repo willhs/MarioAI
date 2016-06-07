@@ -24,6 +24,15 @@ public class Feature {
         this.min = min;
     }
 
+    public Feature(String name, double val, double vel, double min, double max, double initialVal) {
+        this.name = name;
+        this.val = val;
+        this.vel = vel;
+        this.min = min;
+        this.max = max;
+        this.initialVal = initialVal;
+    };
+
     public void generateInitialVals() {
         // calculate starting value and velocity (random)
         // use same calculations as the vuw.pso code
@@ -68,7 +77,11 @@ public class Feature {
         if (o instanceof Feature) {
             Feature f = (Feature) o;
             return f.getValue() == this.val
-                    && f.getName().equals(this.name);
+                    && f.getName().equals(this.name)
+                    && f.getVel() == f.getVel()
+                    && f.getInitialVal() == f.getInitialVal()
+                    && f.getMin() == f.getMin()
+                    && f.getMax() == f.getMax();
         }
         return false;
     }

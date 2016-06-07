@@ -23,9 +23,9 @@ public class MarioProblem extends WillProblem {
         // we are aiming for the HIGHEST score, not lowest
         setMinimization(false);
 
-        // load default (taken from double pole balancing) properties from the file
         props = new Properties();
 
+        // load some default props (taken from double pole balancing)
         try {
             props.load(new FileReader("properties" + File.separator + "mario.properties"));
         } catch (IOException e) {
@@ -33,8 +33,11 @@ public class MarioProblem extends WillProblem {
         }
 
         // how many generations will be needed per trial
-        props.setProperty("num.generations", "" + 15);
+        props.setProperty("num.generations", "" + 20);
+        // prevent the same thing happening each time
         props.remove("random.seed");
+
+        props.setProperty("popul.size", "" + 200);
 
         // set default values and limits for each property that will be changed
         features = new ArrayList<>();
@@ -47,8 +50,8 @@ public class MarioProblem extends WillProblem {
         features.add(new Feature("prune.mutation.rate", 1, 0.5, 1.5)); // lacking experimentation
         features.add(new Feature("weight.mutation.rate", 0.75, 0.5, 0.8));
         features.add(new Feature("weight.mutation.std.dev", 1.5, 1, 2));
-        features.add(new Feature("weight.max", 500, 1, 500));
-        features.add(new Feature("weight.min", -500, -500, -1));
+        features.add(new Feature("weight.max", 100, 0, 500));
+        features.add(new Feature("weight.min", -100, -500, -1));
         features.add(new Feature("survival.rate", 0.2, 0.1, 0.5));
 
         // speciation
@@ -63,7 +66,7 @@ public class MarioProblem extends WillProblem {
         features.forEach(f -> props.setProperty(f.getName(), "" + f.getValue()));
 
         Evolver evolver = new Evolver();
-        int NUM_TRIALS = 5;
+        int NUM_TRIALS = 10;
         double total = 0;
         for (int t = 0; t < NUM_TRIALS; t++) {
             try {

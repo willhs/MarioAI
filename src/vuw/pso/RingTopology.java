@@ -56,7 +56,7 @@ public class RingTopology extends Topology {
             }
 
 //            for (int n = 0; n < p_i.getSize(); ++n) {
-////                p_i.setNeighborhoodPosition(n, best_neighbor.getNeighborhoodPosition(n));
+////                p_i.setNBestFeats(n, best_neighbor.getNBestFeat(n));
 //                System.out.print(best_neighbor.getPersonalPosition(n));
 //                System.out.println("");
 //
