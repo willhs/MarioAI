@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MarioAI.iml" filepath="$PROJECT_DIR$/MarioAI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/anji_2_01/anji_2_01.iml" filepath="$PROJECT_DIR$/anji_2_01/anji_2_01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/neuroph-neat/neuroph-neat.iml" filepath="$PROJECT_DIR$/neuroph-neat/neuroph-neat.iml" />
     </modules>
   </component>
 </project>

@@ -28,13 +28,8 @@
 package ch.idsia.agents.controllers;
 
 import ch.idsia.agents.AgentOptions;
-import ch.idsia.agents.IAgent;
-import ch.idsia.agents.controllers.modules.Entities;
-import ch.idsia.agents.controllers.modules.Tiles;
-import ch.idsia.benchmark.mario.engine.generalization.MarioEntity;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
-import ch.idsia.tools.EvaluationInfo;
 
 /**
  * Abstract class that serves as a basis for implementing new Mario-AI agents.
@@ -52,7 +47,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	// fields to help determine if mario has moved much
 	private int lastCell = -1;
 	private int framesInSameCell = 0;
-	private int staysStillThreshold = 24;
+	private int FRAMES_THRESHOLD = 36; // 1.5 seconds
 
 	public MarioAIBase2() {
 		super("MarioAIBase");
@@ -91,7 +86,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 		// determine whether mario has moved significantly
 		if (environment.getEvaluationInfo().distancePassedCells == lastCell) {
 			framesInSameCell++;
-			if (framesInSameCell >= staysStillThreshold) {
+			if (framesInSameCell >= FRAMES_THRESHOLD) {
 				return true;
 			}
 		} else {

@@ -43,7 +43,7 @@ public class WillSwarm {
         }
     }
 
-    public WillSwarm(MarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
+    public WillSwarm(ANJIMarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
         this.problem = problem;
         this.particles = particles;
         this.c1 = c1;
@@ -51,7 +51,7 @@ public class WillSwarm {
         this.inertia = inertia;
     }
 
-    public MarioProblem getProblem() {
+    public ANJIMarioProblem getProblem() {
         return problem;
     }
 

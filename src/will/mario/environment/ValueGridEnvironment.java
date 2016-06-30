@@ -1,4 +1,4 @@
-package will.neat.environment;
+package will.mario.environment;
 
 import ch.idsia.benchmark.mario.engine.generalization.Tile;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
@@ -18,13 +18,14 @@ public class ValueGridEnvironment implements GridEnvironment{
 
     @Override
     public double[] getInputNeurons(IEnvironment environment, MarioInput lastInput) {
+        double VAL_MULTIPLIER = 25;
         // convert 2d tiles to input neurons
         List<Double> inputNeurons = Arrays.stream(environment.getTileField())
                 .flatMap(tileRow -> {
                     return Arrays.stream(tileRow)
                             .map(tile -> {
                                 // represent unique tiles
-                                return tile == Tile.NOTHING ? -1 : tile.ordinal();
+                                return tile == Tile.NOTHING ? -1000 : tile.ordinal() * VAL_MULTIPLIER;
                             });
                 })
                 .mapToDouble(i->i)

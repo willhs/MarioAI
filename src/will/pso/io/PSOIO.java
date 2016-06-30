@@ -30,7 +30,7 @@ import static will.pso.io.util.XMLUtil.asList;
  */
 public class PSOIO {
 
-    public static void writePSOIterationToFile(String filename, WillSwarm swarm, int iteration) {
+    public static void writePSOIterationToFile(String filename, WillSwarm swarm, int iteration, double gBestFitness) {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Document doc = null;
@@ -48,6 +48,7 @@ public class PSOIO {
             swarmElem.setAttribute("c1", c1 + "");
             swarmElem.setAttribute("c2", c2 + "");
             swarmElem.setAttribute("inertia", inertia + "");
+            swarmElem.setAttribute("gBestFitness", gBestFitness + "");
 
             Element particleElem = doc.createElement("particles");
 
@@ -67,7 +68,6 @@ public class PSOIO {
             tr.setOutputProperty(OutputKeys.INDENT, "yes");
             tr.setOutputProperty(OutputKeys.METHOD, "xml");
             tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            tr.setOutputProperty(OutputKeys.STANDALONE, "yes");
 //            tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "roles.dtd");
             tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
@@ -130,7 +130,7 @@ public class PSOIO {
         return featElem;
     }
 
-    public static WillSwarm parseSwarm(MarioProblem problem, String filename) {
+    public static WillSwarm parseSwarm(ANJIMarioProblem problem, String filename) {
         double c1 = -1;
         double c2 = -1;
         double inertia = -1;
@@ -209,5 +209,47 @@ public class PSOIO {
 
     private static double getDoubleAttr(Node node, String attrName) {
         return Double.parseDouble(node.getAttributes().getNamedItem(attrName).getNodeValue());
+    }
+
+    public static double parseBestFitness(String filename) {
+        DocumentBuilder builder = null;
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document doc = null;
+        try {
+            doc = builder.parse(new File(filename));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        doc.getDocumentElement().normalize();
+        Element swarm = (Element) doc.getElementsByTagName("swarm").item(0);
+
+        return Double.parseDouble(swarm.getAttribute("bestFitness"));
+    }
+
+    public static int parseStartingIter(String filename) {
+        DocumentBuilder builder = null;
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document doc = null;
+        try {
+            doc = builder.parse(new File(filename));
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        doc.getDocumentElement().normalize();
+        Element swarm = (Element) doc.getElementsByTagName("swarm").item(0);
+
+        return Integer.parseInt(swarm.getAttribute("iteration"));
     }
 }

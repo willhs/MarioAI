@@ -55,4 +55,5 @@ fabric.properties
 /db
 /nevt
 /target
-/particle/*
+/swarm/*
+/anji_2_01

@@ -23,7 +23,7 @@ public class FastOpts {
 	}
 	
 	// ==========
-	// AI OPTIONS
+	// AI options
 	// ==========
 	
 	/**
@@ -58,7 +58,7 @@ public class FastOpts {
 	public static final String AI_ZL_1_1 = AI_TILE_Z(1) + AI_ENTITY_Z(1);
 	
 	// =======================
-	// LEVEL GENERATOR OPTIONS
+	// LEVEL GENERATOR options
 	// =======================
 	
 	/**
@@ -255,7 +255,7 @@ public class FastOpts {
 	}
 	
 	// ==================
-	// SIMULATION OPTIONS
+	// SIMULATION options
 	// ==================
 	
 	/**
@@ -319,7 +319,7 @@ public class FastOpts {
 			+ " " + BoolOption.SIMULATION_GAMEPLAY_STOPPED.getParam() + " on";
 	
 	// =====================
-	// VISUALIZATION OPTIONS
+	// VISUALIZATION options
 	// =====================
 	
 	/**

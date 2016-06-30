@@ -4,11 +4,10 @@ import will.pso.io.PSOIO;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Created by Will on 18/05/2016.
- * Runs PSO with a specially created MarioProblem.
+ * Runs PSO with a specially created ANJIMarioProblem.
  * Copied main method from PSO main class as it has many magic numbers which seem important
  */
 public class PSORunner {
@@ -22,28 +21,28 @@ public class PSORunner {
     private static final int neighbours = 4;
 
     // generation to start on (only differs when continuing PSO runs)
-    private static int startingGen = 0;
+    private static int startingIter = 0;
 
     public static void main(String[] args) {
 
-        String particlesFilename = null;
+        String swarmFilename = null;
 
         // parse arguments
         if (args.length == 1) {
             if (args[0].equals("-l")) {
                 // arg is "continue last run"
-                File particlesDir = new File("particle");
-                File newest = Arrays.stream(particlesDir.listFiles())
+                File swarmDir = new File("swarm");
+                File newest = Arrays.stream(swarmDir.listFiles())
                         .filter(f -> {
                             // true if file has valid particle file naming convention
                             String[] parts = f.getName().split("-");
-                            boolean firstPart = parts[0].equals("particle");
+                            boolean firstPart = parts[0].equals("swarm");
                             try {
                                 Long.parseLong(parts[1]);
                             } catch (NumberFormatException e) {
                                 return false;
                             }
-                            return true;
+                            return firstPart;
                         })
                         .max((f1, f2) -> {
                             long timestamp1 = Long.parseLong(f1.getName().split("-")[1]);
@@ -51,20 +50,11 @@ public class PSORunner {
                             return Long.compare(timestamp1, timestamp2);
                         }).get();
 
-                particlesFilename = newest.getAbsolutePath();
+                swarmFilename = newest.getAbsolutePath();
                 System.out.println("Loading from latest run: ");
             } else {
                 // loading specific run
-                particlesFilename = args[0];
-                Scanner scan = null;
-                try {
-                    scan = new Scanner(new File(particlesFilename));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    new RuntimeException("Can't find particle file");
-                }
-                startingGen = scan.nextInt();
-                System.out.println("Loading from specific run: ");
+                swarmFilename = args[0];
             }
 
         } else if (args.length > 1) {
@@ -73,7 +63,9 @@ public class PSORunner {
 
         // initialise swarm
         WillSwarm swarm = null;
-        if (particlesFilename == null) {
+        double gBestFitness = -1;
+
+        if (swarmFilename == null) {
             // start new PSO run
             swarm = new WillSwarm(
                     new MarioProblem(),
@@ -82,34 +74,40 @@ public class PSORunner {
                     c2,
                     inertia
             );
+
+            gBestFitness = swarm.getProblem().getWorstFitness();
+
         } else {
             // previous run should be continued
             // read swarm from particle
-            swarm = PSOIO.parseSwarm(new MarioProblem(), particlesFilename);
+            swarm = PSOIO.parseSwarm(new ANJIMarioProblem(), swarmFilename);
+            // todo: replace ugly separate parsing methods
+            gBestFitness = PSOIO.parseBestFitness(swarmFilename);
+            startingIter = PSOIO.parseStartingIter(swarmFilename);
         }
 
-        String filename = particlesFilename == null ?
-                "particle" + File.separator + "particle-" + System.currentTimeMillis():
-                particlesFilename
+        String filename = swarmFilename == null ?
+                "swarm" + File.separator + "swarm-" + System.currentTimeMillis() :
+                swarmFilename
                 ;
 
         swarm.setTopology(new WillRingTopology(neighbours));  //   Generation  2999          3.9968028886505635E-15
 
-        for (int gen = startingGen; gen < numIterations; ++gen) {
+
+        for (int iter = startingIter; iter < numIterations; ++iter) {
             System.out.println("--------------------");
-            System.out.println("Iterating over swarm (" + gen + ")");
+            System.out.println("Iterating over swarm (" + iter + ")");
             System.out.println("--------------------");
 
             swarm.iterate();
 
             System.out.println();
             System.out.println("-------------------------------------");
-            System.out.println("PSO Generation  " + gen);
+            System.out.println("PSO Iteration " + iter);
             System.out.println("-------------------------------------");
 
             // get best fitness in every iterate for different topology except star
             WillParticle gBestParticle = null;
-            double gBestFitness = swarm.getProblem().getWorstFitness();
 
             for (int p = 0; p < swarm.numberOfParticles(); ++p) {
                 WillParticle particle = swarm.getParticle(p);
@@ -121,7 +119,7 @@ public class PSORunner {
                 }
             }
 
-            PSOIO.writePSOIterationToFile(filename, swarm, gen);
+            PSOIO.writePSOIterationToFile(filename, swarm, iter, gBestFitness);
             System.out.println("Iteration written to " + filename);
             System.out.println("Global best fitness: " + gBestFitness);
         }

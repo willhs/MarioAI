@@ -1,9 +1,6 @@
-package will.pso;
+package will.neat.neuroph;
 
-import org.neuroph.contrib.neat.gen.Evolver;
-import org.neuroph.contrib.neat.gen.NeuronGene;
-import org.neuroph.contrib.neat.gen.NeuronType;
-import org.neuroph.contrib.neat.gen.Organism;
+import org.neuroph.contrib.neat.gen.*;
 import org.neuroph.contrib.neat.gen.impl.SimpleNeatParameters;
 import org.neuroph.contrib.neat.gen.operations.MutationOperation;
 import org.neuroph.contrib.neat.gen.operations.mutation.AddConnectionMutationOperation;
@@ -12,35 +9,32 @@ import org.neuroph.contrib.neat.gen.operations.mutation.WeightMutationOperation;
 import org.neuroph.contrib.neat.gen.operations.selector.NaturalSelectionOrganismSelector;
 import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciator;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
-import vuw.pso.WillProblem;
-import will.neat.neuroph.MarioFitnessFunction;
+import org.neuroph.contrib.neat.gen.persistence.impl.DirectoryOutputPersistence;
+import org.neuroph.contrib.neat.gen.persistence.impl.xstream.XStreamSerializationDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Will on 1/07/2016.
+ * Created by Will on 28/06/2016.
  */
-public class MarioProblem extends WillProblem {
+public class MarioEvolver {
 
     private static final int NUM_INPUT_NEURONS = 367;
     private static final int NUM_OUTPUT_NEURONS = 4;
+    private static final String PERSISTANCE_DIR = "db/neuroph";
 
-    private SimpleNeatParameters params;
-
-    private List<NeuronGene> inputNeurons;
-    private List<NeuronGene> outputNeurons;
-
-    public MarioProblem() {
-        params = new SimpleNeatParameters();
+    public static void main(String[] args) {
+        // set up NEAT paramaters
+        SimpleNeatParameters params = new SimpleNeatParameters();
 
         params.setFitnessFunction(new MarioFitnessFunction());
-        params.setPopulationSize(100);
-        params.setMaximumFitness(8000);
-        params.setMaximumGenerations(50);
+        params.setPopulationSize(500);
+        params.setMaximumFitness(8500);
+        params.setMaximumGenerations(500);
 
         DynamicThresholdSpeciator speciator = new DynamicThresholdSpeciator();
-        speciator.setMaxSpecies(5);
+        speciator.setMaxSpecies(25);
         params.setSpeciator(speciator);
 
         NaturalSelectionOrganismSelector selector = (NaturalSelectionOrganismSelector) params
@@ -61,9 +55,15 @@ public class MarioProblem extends WillProblem {
 
         params.setMutationOperators(ops);
 
+//        String RUN_DIR = "run-" + System.currentTimeMillis();
+//        params.setPersistence(new DirectoryOutputPersistence(
+//                PERSISTANCE_DIR + File.separator + RUN_DIR,
+//                new XStreamSerializationDelegate(true))
+//        );
+
         // instantiate input and output neurons
-        inputNeurons = new ArrayList<>();
-        outputNeurons = new ArrayList<>();
+        List<NeuronGene> inputNeurons = new ArrayList<>();
+        List<NeuronGene> outputNeurons = new ArrayList<>();
 
         for (int input = 0; input < NUM_INPUT_NEURONS; input++) {
             inputNeurons.add(new NeuronGene(NeuronType.INPUT, params));
@@ -73,27 +73,14 @@ public class MarioProblem extends WillProblem {
             outputNeurons.add(new NeuronGene(NeuronType.OUTPUT, params));
         }
 
-    }
-
-    @Override
-    public double fitness(List<Feature> position) {
-
-        int NUM_TRIALS = 5;
-        double total = 0;
-
         Evolver evolver = Evolver.createNew(params, inputNeurons, outputNeurons);
-
-        for (int t = 0; t < NUM_TRIALS; t++) {
-            Organism best = null;
-            try {
-                best = evolver.evolve();
-            } catch (PersistenceException e) {
-                e.printStackTrace();
-            }
-//            total += best.;
+        try {
+            Organism best = evolver.evolve();
+            System.out.println("GAME!");
+            System.out.println("This game's winner: Organism " + best.getInnovationId());
+        } catch (PersistenceException e) {
+            System.err.println("Persistance error!");
+            e.printStackTrace();
         }
-        double averageFitness = total / NUM_TRIALS;
-
-        return averageFitness;
     }
 }

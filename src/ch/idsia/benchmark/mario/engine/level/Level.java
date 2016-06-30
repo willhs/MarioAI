@@ -187,10 +187,11 @@ public class Level implements Serializable {
 	 */
 	public void tick() {
 		// TODO:!!H! Optimize this!
-		for (int x = 0; x < length; x++)
-			for (int y = 0; y < height; y++)
-				if (data[x][y] > 0)
-					data[x][y]--;
+		// TODO: work out wtf this does. Will commented this
+//		for (int x = 0; x < length; x++)
+//			for (int y = 0; y < height; y++)
+//				if (data[x][y] > 0);
+//					data[x][y]--;
 	}
 
 	public byte getBlockCapped(int x, int y) {
