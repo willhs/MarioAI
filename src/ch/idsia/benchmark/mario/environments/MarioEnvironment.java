@@ -117,7 +117,6 @@ public final class MarioEnvironment implements IEnvironment {
 	}
 
 	private MarioEnvironment() {
-		System.out.println(SimulatorOptions.getBenchmarkName());
 		levelScene = new LevelScene();
 	}
 

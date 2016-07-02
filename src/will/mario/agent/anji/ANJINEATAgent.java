@@ -1,6 +1,6 @@
 package will.mario.agent.anji;
 
-import ch.idsia.agents.controllers.MarioAIBase2;
+import will.mario.agent.MarioAIBase2;
 import com.anji.integration.Activator;
 
 /**

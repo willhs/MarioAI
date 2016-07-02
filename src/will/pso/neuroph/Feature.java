@@ -1,13 +1,13 @@
-package will.pso;
+package will.pso.neuroph;
 
 /**
  * Created by Will on 18/05/2016.
  */
 public class Feature {
 
-    private final double initialVal;
+    private double initialVal;
 
-    private String name;
+    private MarioProblem.PARAMS feature;
     private double val;
     private double max;
     private double min;
@@ -17,15 +17,21 @@ public class Feature {
         this.initialVal = initialVal;
     }
 
-    public Feature(String name, double initialVal, double min, double max) {
-        this.name = name;
+    public Feature(MarioProblem.PARAMS feature, double min, double max) {
+        this.feature = feature;
+        this.max = max;
+        this.min = min;
+    }
+
+    public Feature(MarioProblem.PARAMS feature, double initialVal, double min, double max) {
+        this.feature = feature;
         this.initialVal = initialVal;
         this.max = max;
         this.min = min;
     }
 
-    public Feature(String name, double val, double vel, double min, double max, double initialVal) {
-        this.name = name;
+    public Feature(MarioProblem.PARAMS feature, double val, double vel, double min, double max, double initialVal) {
+        this.feature = feature;
         this.val = val;
         this.vel = vel;
         this.min = min;
@@ -64,8 +70,8 @@ public class Feature {
         return min;
     }
 
-    public String getName() {
-        return name;
+    public MarioProblem.PARAMS getFeature() {
+        return feature;
     }
 
     public double getVel() {
@@ -77,7 +83,7 @@ public class Feature {
         if (o instanceof Feature) {
             Feature f = (Feature) o;
             return f.getValue() == this.val
-                    && f.getName().equals(this.name)
+                    && f.getFeature().equals(this.feature)
                     && f.getVel() == f.getVel()
                     && f.getInitialVal() == f.getInitialVal()
                     && f.getMin() == f.getMin()
@@ -93,20 +99,21 @@ public class Feature {
     public void printDiffs() {
         System.out.printf(
 //                "%s: %f, %4.2f%% difference%n",
-//                name, val, (((Math.abs(initialVal - val))/(Math.abs(max - min)))*100)
+//                feature, val, (((Math.abs(initialVal - val))/(Math.abs(max - min)))*100)
                 "%s: val: %4.2f, init: %4.2f, vel: %4.2f\n",
-                name, val, initialVal, vel
+                feature.name(), val, initialVal, vel
         );
     }
 
     public String toString(){
         return String.format(
-        "%s: [%f - %f] val, init: (%4.2f, %f), vel: %4.2f",
-                 name, min, max, val, initialVal, vel
+                "%s: [%f - %f] val, init: (%4.2f, %f), vel: %4.2f",
+                feature, min, max, val, initialVal, vel
         );
     }
 
     public Feature clone() {
-        return new Feature(name, initialVal, min, max);
+        return new Feature(feature, initialVal, min, max);
     }
 }
+

@@ -173,14 +173,21 @@ public class FitnessScores implements Serializable {
 	 * @return the highest fitness value in this cache.
 	 */
 	public double getBestFitness() {
-		double max = Double.MIN_VALUE;
-
-		for (Double d : fitnessMap.values()) {
-			max = Math.max(d, max);
-		}
-
-		return max;
+		return fitnessMap.values().stream().max((f2,f1) -> {
+			return Double.compare(f1.doubleValue(), f2.doubleValue());
+		}).get();
 	}
+
+	/**
+	 * Returns the highest fitness value.
+	 *
+	 * @return the highest fitness value in this cache.
+	 */
+//	public Organism getBestOrganism() {
+//		return fitnessMap.values().stream().max((f2,f1) -> {
+//			return Double.compare(f1, f2.doubleValue());
+//		}).get();
+//	}
 
 	/**
 	 * Returns the <u>total</u> fitness for all of the <code>Organism</code>s in

@@ -3,6 +3,7 @@ package org.neuroph.contrib.neat.gen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,6 @@ import org.neuroph.contrib.neat.gen.operations.mutation.WeightMutationOperation;
 import org.neuroph.contrib.neat.gen.persistence.Persistence;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
 import org.neuroph.contrib.neat.gen.util.SpecieHelper;
-import org.neuroph.core.Weight;
 
 /**
  * Evolver is the main class that performs the NEAT evolutionary process.
@@ -26,15 +26,24 @@ import org.neuroph.core.Weight;
  * @author Aidan Morgan
  */
 public class Evolver {
-	private static Logger s_log = Logger.getLogger(Evolver.class
+	private static Logger logger = Logger.getLogger(Evolver.class
 			.getSimpleName());
 	private Generation currentGeneration;
 	private Innovations innovations;
 	private NeatParameters neatParameters;
 	private FitnessScores fitness;
 
+	public Evolver() {
+		Logger.getGlobal().setLevel(Level.OFF);
+		LogManager.getLogManager().reset();
+	}
+
 	public static Evolver createNew(NeatParameters params,
 			List<NeuronGene> inputLayer, List<NeuronGene> outputLayer) {
+
+		Logger.getGlobal().setLevel(Level.OFF);
+		LogManager.getLogManager().reset();
+
 		List<Specie> species = new ArrayList<Specie>();
 		List<Organism> organisms = new ArrayList<Organism>();
 		Innovations innovations = new Innovations();
@@ -69,7 +78,7 @@ public class Evolver {
 			List<Specie> species, List<Organism> organisms,
 			Innovations innovations) {
 		Specie originOfSpecies = new Specie(params);
-		Organism ref = new Organism(params, inputLayer, outputLayer, false);
+		Organism ref = new Organism(params, inputLayer, outputLayer, true);
 		organisms.add(ref);
 		
 		// we need to put these into the innovations map so we can reload them
@@ -163,14 +172,9 @@ public class Evolver {
 					currentGeneration, fitness);
 
 
-			//System.out.println("connections:" + organisms.stream().reduce());
-			System.out.println("connection numbers: " + organisms.stream().map(o ->
+			logger.info("connection numbers: " + organisms.stream().map(o ->
 				 o.getConnections().size()
 			).collect(Collectors.toList()));
-
-//			System.out.println("connection weights: " + organisms.stream().flatMap(o -> {
-//				return o.getConnections().stream().mapToDouble(c -> c.getWeight()).boxed();
-//			}).collect(Collectors.toList()));
 		}
 
 		return fitness.getFittestOrganism(organisms);
@@ -209,12 +213,12 @@ public class Evolver {
 		calculateFitness(params, fitnessScores, generation, generationNumber);
 		speciate(params, innovations, species, generation, fitnessScores, generationNumber);
 
-		if (s_log.isLoggable(Level.INFO)) {
-			s_log.info("Num species    : " + species.size()
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Num species    : " + species.size()
 					+ " Num Organisms: " + generation.size());
-			s_log.info("End generation : " + generationNumber);
-			s_log.info("Best fitness   : " + fitnessScores.getBestFitness());
-			s_log.info("Best Organism  : "
+			logger.info("End generation : " + generationNumber);
+			logger.info("Best fitness   : " + fitnessScores.getBestFitness());
+			logger.info("Best Organism  : "
 					+ fitnessScores.getFittestOrganism(generation)
 							.getInnovationId());
 		}
@@ -265,9 +269,9 @@ public class Evolver {
 
 			totalMutationOperationsPerformed += mutsPerformed;
 		}
-		System.out.println("total change weights performed:\t" + totalWeights);
-		System.out.println("total add connections performed:\t" + totalAddConns);
-		System.out.println("total add neurons performed:\t" + totalAddNeurons);
+		logger.info("total change weights performed:\t" + totalWeights);
+		logger.info("total add connections performed:\t" + totalAddConns);
+		logger.info("total add neurons performed:\t" + totalAddNeurons);
 		//System.out.println("total mutations performed: " + totalMutationOperationsPerformed);
 		notify(species, EvolutionEventType.END_MUTATION);
 	}
@@ -358,4 +362,9 @@ public class Evolver {
 	public FitnessScores getFitness() {
 		return fitness;
 	}
+
+	public double getBestFitness() {
+		return fitness.getBestFitness();
+	}
+
 }

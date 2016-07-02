@@ -25,9 +25,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ch.idsia.agents.controllers;
+package will.mario.agent;
 
 import ch.idsia.agents.AgentOptions;
+import ch.idsia.agents.controllers.MarioAgentBase;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
 
@@ -47,7 +48,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	// fields to help determine if mario has moved much
 	private int lastCell = -1;
 	private int framesInSameCell = 0;
-	private int FRAMES_THRESHOLD = 36; // 1.5 seconds
+	private int FRAMES_THRESHOLD = 24; // 1.5 seconds
 
 	public MarioAIBase2() {
 		super("MarioAIBase");

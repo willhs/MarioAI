@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package will.pso;
+package will.pso.anji;
+
+import will.pso.neuroph.Feature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +13,11 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author xuebing
+ * @author xuebing + Will
  */
-public class WillParticle {
+public class ANJIParticle {
 
-    private List<Feature> features = new ArrayList<>();
+    private List<ANJIFeature> features = new ArrayList<>();
     private List<Double> pBestFeats = new ArrayList<>();
     private List<Double> nBestFeats = new ArrayList<>();
 
@@ -27,10 +29,10 @@ public class WillParticle {
     private double c1,  c2;
     private Random r1 = new Random(),  r2 = new Random();
 
-    public WillParticle(List<Feature> features) {
+    public ANJIParticle(List<ANJIFeature> features) {
         this.features = features.stream().map(f -> f.clone()).collect(Collectors.toList());
 
-        for (Feature f : this.features) {
+        for (ANJIFeature f : this.features) {
             // add dummy features (just until old code is understood)
             f.generateInitialVals();
             this.pBestFeats.add(0.0);
@@ -38,7 +40,7 @@ public class WillParticle {
         }
     }
 
-    public WillParticle(List<Feature> features, List<Double> pBestFeats, List<Double> nBestFeats,
+    public ANJIParticle(List<ANJIFeature> features, List<Double> pBestFeats, List<Double> nBestFeats,
                         double fitness, double pBestFitness, double nBestFitness,
                         double c1, double c2, double inertia) {
         this.features = features;
@@ -66,7 +68,7 @@ public class WillParticle {
         return features.get(index).getValue();
     }
 
-    public List<Feature> getFeatures() {
+    public List<ANJIFeature> getFeatures() {
         return features;
     }
 
@@ -94,7 +96,7 @@ public class WillParticle {
         return pBestFeats.get(index);
     }
 
-    public List<Double> getPBestFeatures() {
+    public List<Double> getPBestfeatures() {
         return pBestFeats;
     }
 
@@ -114,7 +116,7 @@ public class WillParticle {
         return nBestFeats.get(index);
     }
 
-    public List<Double> getNBestFeatures() {
+    public List<Double> getNBestfeatures() {
         return nBestFeats;
     }
 
@@ -171,7 +173,7 @@ public class WillParticle {
             System.out.println(getFeatures().get(i));
             System.out.printf("vel: %4.2f, after inertia: %4.2f\n", getVelocity(i), (getVelocity(i) * getInertia()));
             System.out.println("distToPBest: " + distToPBest + ", distToNeighBest: " + distToNeighBest);
-            System.out.println("pBest: " + getPBestFeatures(i) + " nBest: " + getNBestFeat(i));
+            System.out.println("pBest: " + getPBestfeatures(i) + " nBest: " + getNBestFeat(i));
             System.out.printf("first mult: %4.2f, second: %4.2f \n", firstMult, secondMult);
             System.out.printf("final vel: %4.2f\n", v_i);
             System.out.println("----------------------------------");*/
@@ -181,7 +183,7 @@ public class WillParticle {
     }
 
     public void updatePosition() {
-        for (Feature f : features) {
+        for (ANJIFeature f : features) {
             double newVal = f.getValue() + f.getVel();
 
             // clamp
@@ -214,11 +216,11 @@ public class WillParticle {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof WillParticle) {
-            WillParticle other = (WillParticle) o;
+        if (o instanceof ANJIParticle) {
+            ANJIParticle other = (ANJIParticle) o;
             return features.equals(other.getFeatures())
-                    && pBestFeats.equals(other.getPBestFeatures())
-                    && nBestFeats.equals(other.getNBestFeatures())
+                    && pBestFeats.equals(other.getPBestfeatures())
+                    && nBestFeats.equals(other.getNBestfeatures())
                     && fitness == other.fitness
                     && pBestFitness == other.getPBestFitness()
                     && nBestFitness == other.getNBestFitness()

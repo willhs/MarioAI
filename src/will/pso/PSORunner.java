@@ -1,9 +1,18 @@
 package will.pso;
 
+import will.pso.anji.ANJIMarioProblem;
+import will.pso.anji.ANJIRingTopology;
+import will.pso.anji.ANJIWillSwarm;
+import will.pso.anji.ANJIParticle;
 import will.pso.io.PSOIO;
+import will.pso.neuroph.MarioProblem;
+import will.pso.neuroph.WillParticle;
+import will.pso.neuroph.WillRingTopology;
+import will.pso.neuroph.WillSwarm;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.logging.*;
 
 /**
  * Created by Will on 18/05/2016.
@@ -20,10 +29,29 @@ public class PSORunner {
     public static final double inertia = 0.7298;
     private static final int neighbours = 4;
 
+    private static Logger logger = Logger.getLogger(PSORunner.class
+            .getSimpleName());
+
     // generation to start on (only differs when continuing PSO runs)
     private static int startingIter = 0;
 
     public static void main(String[] args) {
+
+//        Logger globalLogger = Logger.getLogger("global");
+//        Handler[] handlers = globalLogger.getHandlers();
+//        for(Handler handler : handlers) {
+//            globalLogger.removeHandler(handler);
+//        }
+//
+//        Formatter fomatter = new Formatter() {
+//            @Override
+//            public String format(LogRecord record) {
+//                return null;
+//            }
+//        }
+//        globalLogger.addHandler(new ConsoleHandler(fomatter));
+//
+//        logger.config();
 
         String swarmFilename = null;
 
@@ -80,7 +108,7 @@ public class PSORunner {
         } else {
             // previous run should be continued
             // read swarm from particle
-            swarm = PSOIO.parseSwarm(new ANJIMarioProblem(), swarmFilename);
+            swarm = PSOIO.parseSwarm(new MarioProblem(), swarmFilename);
             // todo: replace ugly separate parsing methods
             gBestFitness = PSOIO.parseBestFitness(swarmFilename);
             startingIter = PSOIO.parseStartingIter(swarmFilename);
@@ -92,7 +120,6 @@ public class PSORunner {
                 ;
 
         swarm.setTopology(new WillRingTopology(neighbours));  //   Generation  2999          3.9968028886505635E-15
-
 
         for (int iter = startingIter; iter < numIterations; ++iter) {
             System.out.println("--------------------");

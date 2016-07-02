@@ -1,10 +1,9 @@
 package will.mario.agent.neuroph;
 
-import ch.idsia.agents.controllers.MarioAIBase2;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import org.neuroph.core.NeuralNetwork;
-import org.neuroph.core.Neuron;
+import will.mario.agent.MarioAIBase2;
 import will.mario.environment.BinaryGridEnvironment;
 import will.mario.environment.GameEnvironment;
 
@@ -61,7 +60,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
     }
 
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
-        double threshold = 0.2;
+        double threshold = 3;
         MarioInput action = new MarioInput();
 
         action.set(MarioKey.RIGHT, outputNeurons[0] > threshold);

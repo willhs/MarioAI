@@ -1,10 +1,15 @@
 package will.pso.io;
 
+import com.sun.medialib.codec.jp2k.Params;
 import org.w3c.dom.Document;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import will.pso.*;
+import will.pso.neuroph.Feature;
+import will.pso.neuroph.MarioProblem;
+import will.pso.neuroph.WillParticle;
+import will.pso.neuroph.WillSwarm;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -94,8 +99,8 @@ public class PSOIO {
 
         Element featuresElem = dom.createElement("features");
         particleElem.appendChild(featuresElem);
-        for (Feature feature : particle.getFeatures()) {
-            featuresElem.appendChild(generateFeatureXML(feature, dom));
+        for (Feature Feature : particle.getFeatures()) {
+            featuresElem.appendChild(generateFeatureXML(Feature, dom));
         }
 
         Element pBestFeaturesElem = dom.createElement("pBestFeatures");
@@ -117,20 +122,20 @@ public class PSOIO {
         return particleElem;
     }
 
-    private static Node generateFeatureXML(Feature feature, Document dom) {
-        Element featElem = dom.createElement("feature");
+    private static Node generateFeatureXML(Feature Feature, Document dom) {
+        Element featElem = dom.createElement("Feature");
 
-        featElem.setAttribute("name", feature.getName());
-        featElem.setAttribute("value", feature.getValue() + "");
-        featElem.setAttribute("velocity", feature.getVel() + "");
-        featElem.setAttribute("min", feature.getMin() + "");
-        featElem.setAttribute("max", feature.getMax() + "");
-        featElem.setAttribute("initialVal", feature.getInitialVal() + "");
+        featElem.setAttribute("name", Feature.getFeature().toString());
+        featElem.setAttribute("value", Feature.getValue() + "");
+        featElem.setAttribute("velocity", Feature.getVel() + "");
+        featElem.setAttribute("min", Feature.getMin() + "");
+        featElem.setAttribute("max", Feature.getMax() + "");
+        featElem.setAttribute("initialVal", Feature.getInitialVal() + "");
 
         return featElem;
     }
 
-    public static WillSwarm parseSwarm(ANJIMarioProblem problem, String filename) {
+    public static WillSwarm parseSwarm(MarioProblem problem, String filename) {
         double c1 = -1;
         double c2 = -1;
         double inertia = -1;
@@ -172,8 +177,8 @@ public class PSOIO {
         double pBestFitness = getDoubleAttr(particleElem, "pBestFitness");
         double nBestFitness = getDoubleAttr(particleElem, "nBestFitness");
 
-        List<Feature> features = new ArrayList<>();
-        Element featuresNode = (Element) particleElem.getElementsByTagName("features").item(0);
+        List<Feature> Features = new ArrayList<>();
+        Element featuresNode = (Element) particleElem.getElementsByTagName("Features").item(0);
 
         for (Node featureNode : asList(featuresNode.getElementsByTagName("feature"))) {
             String name = getStringVal(featureNode, "name");
@@ -183,7 +188,7 @@ public class PSOIO {
             double max = getDoubleAttr(featureNode, "max");
             double initialVal = getDoubleAttr(featureNode, "initialVal");
 
-            features.add(new Feature(name, val, vel, min, max, initialVal));
+            Features.add(new Feature(MarioProblem.PARAMS.valueOf(name), val, vel, min, max, initialVal));
         }
 
         Element pBestFeaturesElem = (Element) particleElem.getElementsByTagName("pBestFeatures").item(0);
@@ -199,7 +204,7 @@ public class PSOIO {
         }
 
         return new WillParticle(
-                features, pBestFeatures, nBestFeatures, fitness, pBestFitness, nBestFitness, c1, c2, inertia
+                Features, pBestFeatures, nBestFeatures, fitness, pBestFitness, nBestFitness, c1, c2, inertia
         );
     }
 

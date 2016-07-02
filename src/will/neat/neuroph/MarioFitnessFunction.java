@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
+import org.neuroph.contrib.neat.gen.Evolver;
 import org.neuroph.contrib.neat.gen.NeuronType;
 import org.neuroph.contrib.neat.gen.operations.FitnessFunction;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
@@ -23,12 +24,16 @@ import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.logging.Logger;
 
 /**
  * Created by Will on 29/06/2016.
  */
 public class MarioFitnessFunction extends Application implements FitnessFunction {
     public static String LEVEL = FastOpts.LEVEL_02_JUMPING;
+
+    private static Logger logger = Logger.getLogger(MarioFitnessFunction.class
+            .getSimpleName());
 
     public static String VIZ_OFF_OPTIONS = ""
             + FastOpts.VIS_OFF
@@ -44,6 +49,8 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
             + FastOpts.S_TIME_LIMIT_200;
 
     private static double bestFitness = 0;
+
+    private final boolean HEADLESS = true;
 
     // temporary
     private NeuralNetwork nn;
@@ -69,9 +76,11 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
 
             if (fitnessVal > bestFitness) {
                 bestFitness = fitnessVal;
-                System.out.println("hidden neurons: " + ofs.getOrganism().getNeurons(NeuronType.HIDDEN).size());
-                System.out.println("connections: " + ofs.getOrganism().getNeurons().size());
-                visualise(nn, fitnessVal);
+                logger.info("hidden neurons: " + ofs.getOrganism().getNeurons(NeuronType.HIDDEN).size());
+                logger.info("connections: " + ofs.getOrganism().getNeurons().size());
+                if (!HEADLESS) {
+                    visualise(nn, fitnessVal);
+                }
             }
 
             // if went right and jumped then play it back

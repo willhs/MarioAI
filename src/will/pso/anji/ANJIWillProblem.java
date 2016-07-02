@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package vuw.pso;
+package will.pso.anji;
 
-import will.pso.Feature;
+import will.pso.neuroph.Feature;
 
 import java.util.List;
 
@@ -12,14 +12,22 @@ import java.util.List;
  *
  * @author xuebing
  */
-public abstract class WillProblem {
+public abstract class ANJIWillProblem {
 
     private boolean _minimization = true;
     private double _max_domain, _min_domain;
     private double _max_velocity;
 
-    public WillProblem() {
+    public ANJIWillProblem() {
     }
+
+    /**
+     * most important thing here
+     * calculate fitness using position
+     * @param position
+     * @return calucated fitness
+     */
+    public abstract double fitness(List<ANJIFeature> position);
 
     public boolean isMinimization() {
         return _minimization;
@@ -74,12 +82,6 @@ public abstract class WillProblem {
     public double getWorstFitness(){
         return isMinimization() ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
     }
-
-    public abstract double fitness(List<Feature> position);
-
-
-
-
 
 }
 

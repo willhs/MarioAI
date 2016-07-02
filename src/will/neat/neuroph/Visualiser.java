@@ -90,7 +90,7 @@ public class Visualiser extends Application{
 //
 //            gc.setLineWidth(1);
 //            gc.setStroke(Color.BLUEVIOLET);
-//            gc.strokeText(k.getName(), actionsX + textPaddingX, destY);
+//            gc.strokeText(k.getFeature(), actionsX + textPaddingX, destY);
 //        });
     }
 

@@ -1,11 +1,9 @@
-package will.pso;
+package will.pso.anji;
 
 import com.anji.neat.Evolver;
 import com.anji.util.Properties;
-import vuw.pso.WillProblem;
+import will.pso.neuroph.WillProblem;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +11,10 @@ import java.util.List;
 /**
  * Created by Will on 16/05/2016.
  */
-public class ANJIMarioProblem extends WillProblem {
+public class ANJIMarioProblem extends ANJIWillProblem {
 
     private Properties props;
-    private List<Feature> features;
+    private List<ANJIFeature> ANJIFeatures;
 
     public ANJIMarioProblem() {
 
@@ -38,30 +36,30 @@ public class ANJIMarioProblem extends WillProblem {
         props.setProperty("popul.size", "" + 120);
 
         // set default values and limits for each property that will be changed
-        features = new ArrayList<>();
+        ANJIFeatures = new ArrayList<>();
 
         // feature: (name, starting val, min, max)
-        features.add(new Feature("add.connection.mutation.rate", 0.02, 0.0001, 0.5));
-        features.add(new Feature("remove.connection.mutation.rate", 0.01, 0.01, 0.3));
-        features.add(new Feature("remove.connection.max.weight", 100, 1, 500));
-        features.add(new Feature("add.neuron.mutation.rate", 0.01, 0.0001, 0.5));
-        features.add(new Feature("prune.mutation.rate", 1, 0, 1)); // lacking experimentation
-        features.add(new Feature("weight.mutation.rate", 0.75, 0.5, 0.8));
-        features.add(new Feature("weight.mutation.std.dev", 1.5, 1, 2));
-        features.add(new Feature("weight.max", 100, 1, 500));
-        features.add(new Feature("weight.min", -100, -500, -1));
-        features.add(new Feature("survival.rate", 0.2, 0.1, 0.5));
+        ANJIFeatures.add(new ANJIFeature("add.connection.mutation.rate", 0.02, 0.0001, 0.5));
+        ANJIFeatures.add(new ANJIFeature("remove.connection.mutation.rate", 0.01, 0.01, 0.3));
+        ANJIFeatures.add(new ANJIFeature("remove.connection.max.weight", 100, 1, 500));
+        ANJIFeatures.add(new ANJIFeature("add.neuron.mutation.rate", 0.01, 0.0001, 0.5));
+        ANJIFeatures.add(new ANJIFeature("prune.mutation.rate", 1, 0, 1)); // lacking experimentation
+        ANJIFeatures.add(new ANJIFeature("weight.mutation.rate", 0.75, 0.5, 0.8));
+        ANJIFeatures.add(new ANJIFeature("weight.mutation.std.dev", 1.5, 1, 2));
+        ANJIFeatures.add(new ANJIFeature("weight.max", 100, 1, 500));
+        ANJIFeatures.add(new ANJIFeature("weight.min", -100, -500, -1));
+        ANJIFeatures.add(new ANJIFeature("survival.rate", 0.2, 0.1, 0.5));
 
         // speciation
-        features.add(new Feature("chrom.compat.excess.coeff", 1, 0, 1)); // lacking exp
-        features.add(new Feature("chrom.compat.disjoint.coeff", 1, 0, 1)); // lacking exp
-        features.add(new Feature("chrom.compat.common.coeff", 0.04, 0, 1)); // lacking exp
-        features.add(new Feature("speciation.threshold", 0.2, 0.1, 1));
+        ANJIFeatures.add(new ANJIFeature("chrom.compat.excess.coeff", 1, 0, 1)); // lacking exp
+        ANJIFeatures.add(new ANJIFeature("chrom.compat.disjoint.coeff", 1, 0, 1)); // lacking exp
+        ANJIFeatures.add(new ANJIFeature("chrom.compat.common.coeff", 0.04, 0, 1)); // lacking exp
+        ANJIFeatures.add(new ANJIFeature("speciation.threshold", 0.2, 0.1, 1));
     }
 
     @Override
-    public double fitness(List<Feature> features) {
-        features.forEach(f -> props.setProperty(f.getName(), "" + f.getValue()));
+    public double fitness(List<ANJIFeature> ANJIFeatures) {
+        ANJIFeatures.forEach(f -> props.setProperty(f.getName(), "" + f.getValue()));
 
         int NUM_TRIALS = 5;
         double total = 0;
@@ -84,8 +82,8 @@ public class ANJIMarioProblem extends WillProblem {
         return averageFitness;
     }
 
-    public List<Feature> getFeatures() {
-        return features;
+    public List<ANJIFeature> getANJIFeatures() {
+        return ANJIFeatures;
     }
 
     public Properties getProps() {

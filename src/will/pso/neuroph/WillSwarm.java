@@ -1,4 +1,4 @@
-package will.pso;/*
+package will.pso.neuroph;/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -43,7 +43,7 @@ public class WillSwarm {
         }
     }
 
-    public WillSwarm(ANJIMarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
+    public WillSwarm(MarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
         this.problem = problem;
         this.particles = particles;
         this.c1 = c1;
@@ -51,7 +51,7 @@ public class WillSwarm {
         this.inertia = inertia;
     }
 
-    public ANJIMarioProblem getProblem() {
+    public MarioProblem getProblem() {
         return problem;
     }
 
@@ -74,11 +74,13 @@ public class WillSwarm {
 
             int index = particles.indexOf(particle);
 
-            // evaluate fitness
+            System.out.println("");
             System.out.println("Getting fitness for particle: " + index + "...");
+            System.out.println(particle.keyValsString());
+
+            // evaluate fitness
             double newFitness = getProblem().fitness(particle.getFeatures());
             particle.setFitness(newFitness);
-            System.out.println("Fitness gotten");
 
             System.out.println("Particle " + index + " fitness: " + newFitness);
 
@@ -89,13 +91,11 @@ public class WillSwarm {
                     particle.setPBestPosition(j, particle.getFeatures(j));
                 }
                 System.out.println("Particle " + index + " bet pBest. New pBest: " + newFitness);
-                System.out.println("Features: " + particle.getFeatures());
             } else {
 //                System.out.println();
 //                System.out.println("PFit<=");
             }
 
-//            System.out.println("\n");
         }
 
         getTopology().share(this);
