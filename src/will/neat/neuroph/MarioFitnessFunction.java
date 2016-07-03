@@ -50,7 +50,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
 
     private static double bestFitness = 0;
 
-    private final boolean HEADLESS = true;
+    private final boolean HEADLESS = false;
 
     // temporary
     private NeuralNetwork nn;
@@ -65,14 +65,15 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
 
             String simulatorOptions = VIZ_OFF_OPTIONS;
 
-            if (ofs.getOrganism().getConnections().size() >= 9) {
-//                simulatorOptions = VIZ_ON_OPTIONS;
-            }
             MarioSimulator simulator = new MarioSimulator(simulatorOptions);
             simulator.run(agent);
 
             float fitnessVal = agent.getFitness();
             ofs.setFitness(fitnessVal);
+
+            if (fitnessVal > 2079) {
+//                System.out.println("HIGHER: " + fitnessVal);
+            }
 
             if (fitnessVal > bestFitness) {
                 bestFitness = fitnessVal;

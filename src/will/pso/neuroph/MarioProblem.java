@@ -12,6 +12,7 @@ import org.neuroph.contrib.neat.gen.operations.selector.NaturalSelectionOrganism
 import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciator;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
 import will.neat.neuroph.MarioFitnessFunction;
+import will.neat.neuroph.mutation.RemoveConnectionMutation;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -26,9 +27,9 @@ public class MarioProblem extends WillProblem {
     private static final int NUM_INPUT_NEURONS = 367;
     private static final int NUM_OUTPUT_NEURONS = 4;
 
-    private static final int POP_SIZE = 100;
+    private static final int POP_SIZE =	200;
     private static final double MAX_FITNESS = 8000;
-    private static final long MAX_GENS = 200;
+    private static final long MAX_GENS = 100;
 
     private SimpleNeatParameters defaultParams;
     private List<Feature> features;
@@ -37,7 +38,7 @@ public class MarioProblem extends WillProblem {
     private List<NeuronGene> outputNeurons;
 
     public enum PARAMS {
-        MAX_SPECIES, SURVIVAL_RATIO, ADD_CONN_PROB,
+        MAX_SPECIES, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
         ADD_NEURON_PROB, WEIGHT_ADJ_PROB, WEIGHT_PETURB
     };
 
@@ -86,6 +87,7 @@ public class MarioProblem extends WillProblem {
         features.add(new Feature(PARAMS.ADD_NEURON_PROB, 0, 1));
         features.add(new Feature(PARAMS.WEIGHT_ADJ_PROB, 0, 1));
         features.add(new Feature(PARAMS.WEIGHT_PETURB, 0, 3));
+        features.add(new Feature(PARAMS.REMOVE_CONN_PROB, 0, 1));
 
         return features;
     }
@@ -139,9 +141,10 @@ public class MarioProblem extends WillProblem {
                     selector.setSurvivalRatio(feature.getValue());
                     break;
                 case ADD_CONN_PROB:
-                    WeightMutationOperation weightMutation = new WeightMutationOperation(0.4);
-                    weightMutation.setMaxWeightPertubation(1);
                     ops.add(new AddConnectionMutationOperation(feature.getValue()));
+                    break;
+                case REMOVE_CONN_PROB:
+                    ops.add(new RemoveConnectionMutation(feature.getValue()));
                     break;
                 case ADD_NEURON_PROB:
                     ops.add(new AddNeuronMutationOperation(feature.getValue()));

@@ -22,10 +22,14 @@ public class RemoveConnectionMutation extends AbstractMutationOperation {
 
     @Override
     protected boolean mutate(NeatParameters neatParameters, Innovations innovations, FitnessScores fitnessScores, Organism o, Set<Gene> genesToAdd, Set<Gene> genesToRemove, int generationNumber) {
-        innovations.getConnectionGenes().stream().filter(i -> {
-            return neatParameters.getRandomGenerator().nextDouble() > getMutationProbability();
-        })
-        .forEach(i -> innovations.getConnectionGenes().remove(i));
+        if (!shouldMutate(neatParameters, getMutationProbability())
+                || innovations.getConnectionGenes().isEmpty()) {
+            return false;
+        }
+
+        int index = (int)(neatParameters.getRandomGenerator().nextDouble() * innovations.getConnectionGenes().size());
+        ConnectionGene connection = innovations.getConnectionGenes().get(index);
+        genesToRemove.add(connection);
         return true;
     }
 }
