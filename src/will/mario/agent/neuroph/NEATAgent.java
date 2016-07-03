@@ -19,9 +19,6 @@ public abstract class NEATAgent extends MarioAIBase2 {
 
     public NEATAgent(NeuralNetwork nn) {
         this.nn = nn;
-//        System.out.println("==============================================");
-//        System.out.println("                 START                        ");
-//        System.out.println("==============================================");
     }
 
     @Override

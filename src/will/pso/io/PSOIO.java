@@ -123,7 +123,7 @@ public class PSOIO {
     }
 
     private static Node generateFeatureXML(Feature Feature, Document dom) {
-        Element featElem = dom.createElement("Feature");
+        Element featElem = dom.createElement("feature");
 
         featElem.setAttribute("name", Feature.getFeature().toString());
         featElem.setAttribute("value", Feature.getValue() + "");
@@ -177,8 +177,8 @@ public class PSOIO {
         double pBestFitness = getDoubleAttr(particleElem, "pBestFitness");
         double nBestFitness = getDoubleAttr(particleElem, "nBestFitness");
 
-        List<Feature> Features = new ArrayList<>();
-        Element featuresNode = (Element) particleElem.getElementsByTagName("Features").item(0);
+        List<Feature> features = new ArrayList<>();
+        Element featuresNode = (Element) particleElem.getElementsByTagName("features").item(0);
 
         for (Node featureNode : asList(featuresNode.getElementsByTagName("feature"))) {
             String name = getStringVal(featureNode, "name");
@@ -188,7 +188,7 @@ public class PSOIO {
             double max = getDoubleAttr(featureNode, "max");
             double initialVal = getDoubleAttr(featureNode, "initialVal");
 
-            Features.add(new Feature(MarioProblem.PARAMS.valueOf(name), val, vel, min, max, initialVal));
+            features.add(new Feature(MarioProblem.PARAMS.valueOf(name), val, vel, min, max, initialVal));
         }
 
         Element pBestFeaturesElem = (Element) particleElem.getElementsByTagName("pBestFeatures").item(0);
@@ -204,7 +204,7 @@ public class PSOIO {
         }
 
         return new WillParticle(
-                Features, pBestFeatures, nBestFeatures, fitness, pBestFitness, nBestFitness, c1, c2, inertia
+                features, pBestFeatures, nBestFeatures, fitness, pBestFitness, nBestFitness, c1, c2, inertia
         );
     }
 

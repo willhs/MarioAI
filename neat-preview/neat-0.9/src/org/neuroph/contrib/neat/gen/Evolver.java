@@ -7,6 +7,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.neuroph.contrib.neat.gen.impl.SimpleNeatParameters;
 import org.neuroph.contrib.neat.gen.operations.MutationOperation;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
 import org.neuroph.contrib.neat.gen.operations.ReproductionOperation;
@@ -167,17 +168,20 @@ public class Evolver {
 
 			// update the innovation id maps before persisting.
 			innovations.updateFromGeneration(currentGeneration);
-			
+
 			neatParameters.getPersistence().addGeneration(innovations,
 					currentGeneration, fitness);
 
 
-			logger.info("connection numbers: " + organisms.stream().map(o ->
+			logger.info("connections: " + organisms.stream().map(o ->
 				 o.getConnections().size()
 			).collect(Collectors.toList()));
 		}
 
-		return fitness.getFittestOrganism(organisms);
+//		System.out.println(getParams().getRandomGenerator().nextDouble());
+		Organism fittestOrganism = fitness.getFittestOrganism(organisms);
+		System.out.println("fittest num connections: " + fittestOrganism.getConnections().size());
+		return fittestOrganism;
 	}
 
 	/**
@@ -367,4 +371,7 @@ public class Evolver {
 		return fitness.getBestFitness();
 	}
 
+	public SimpleNeatParameters getParams() {
+		return (SimpleNeatParameters) neatParameters;
+	}
 }

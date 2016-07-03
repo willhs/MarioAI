@@ -13,6 +13,7 @@ import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciat
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
 import will.neat.neuroph.MarioFitnessFunction;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class MarioProblem extends WillProblem {
 
     private static final int POP_SIZE = 100;
     private static final double MAX_FITNESS = 8000;
-    private static final long MAX_GENS = 50;
+    private static final long MAX_GENS = 200;
 
     private SimpleNeatParameters defaultParams;
     private List<Feature> features;
@@ -41,6 +42,9 @@ public class MarioProblem extends WillProblem {
     };
 
     public MarioProblem() {
+        // we are aiming for the HIGHEST score, not lowest
+        setMinimization(false);
+
         defaultParams = new SimpleNeatParameters();
 
         defaultParams.setFitnessFunction(new MarioFitnessFunction());
@@ -53,6 +57,7 @@ public class MarioProblem extends WillProblem {
 
         NaturalSelectionOrganismSelector selector = (NaturalSelectionOrganismSelector) defaultParams
                 .getOrganismSelector();
+        selector.setElitismEnabled(true);
         selector.setKillUnproductiveSpecies(true);
 
         // instantiate input and output neurons
@@ -94,18 +99,25 @@ public class MarioProblem extends WillProblem {
 
         SimpleNeatParameters params = getParamsFromFeatures(position);
 
-        int NUM_TRIALS = 5;
+        int NUM_TRIALS = 1;
         double total = 0;
 
         Evolver evolver = Evolver.createNew(params, inputNeurons, outputNeurons);
 
         for (int t = 0; t < NUM_TRIALS; t++) {
             try {
+                evolver.getParams().setRandomGenerator(new SecureRandom());
+//                System.out.println(evolver.getParams().getRandomGenerator().hashCode());
+//                System.out.println(evolver.getParams().getOrganismSelector().);
                 evolver.evolve();
             } catch (PersistenceException e) {
                 e.printStackTrace();
             }
-            total += evolver.getBestFitness();
+
+            double trialBest = evolver.getBestFitness();
+            total += trialBest;
+
+            System.out.println("Trial " + t + " best = " + trialBest);
         }
         double averageFitness = total / NUM_TRIALS;
 
@@ -118,7 +130,7 @@ public class MarioProblem extends WillProblem {
             switch(feature.getFeature()) {
                 case MAX_SPECIES:
                     DynamicThresholdSpeciator speciator = new DynamicThresholdSpeciator();
-                    speciator.setMaxSpecies((int)feature.getValue());
+                    speciator.setMaxSpecies((int)Math.round(feature.getValue()));
                     defaultParams.setSpeciator(speciator);
                     break;
                 case SURVIVAL_RATIO:

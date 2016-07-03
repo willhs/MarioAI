@@ -10,6 +10,7 @@ import will.pso.neuroph.WillParticle;
 import will.pso.neuroph.WillRingTopology;
 import will.pso.neuroph.WillSwarm;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.Arrays;
 import java.util.logging.*;
@@ -29,29 +30,11 @@ public class PSORunner {
     public static final double inertia = 0.7298;
     private static final int neighbours = 4;
 
-    private static Logger logger = Logger.getLogger(PSORunner.class
-            .getSimpleName());
-
     // generation to start on (only differs when continuing PSO runs)
     private static int startingIter = 0;
+    private static final File swarmDir = new File("swarm");
 
     public static void main(String[] args) {
-
-//        Logger globalLogger = Logger.getLogger("global");
-//        Handler[] handlers = globalLogger.getHandlers();
-//        for(Handler handler : handlers) {
-//            globalLogger.removeHandler(handler);
-//        }
-//
-//        Formatter fomatter = new Formatter() {
-//            @Override
-//            public String format(LogRecord record) {
-//                return null;
-//            }
-//        }
-//        globalLogger.addHandler(new ConsoleHandler(fomatter));
-//
-//        logger.config();
 
         String swarmFilename = null;
 
@@ -59,7 +42,6 @@ public class PSORunner {
         if (args.length == 1) {
             if (args[0].equals("-l")) {
                 // arg is "continue last run"
-                File swarmDir = new File("swarm");
                 File newest = Arrays.stream(swarmDir.listFiles())
                         .filter(f -> {
                             // true if file has valid particle file naming convention
@@ -79,7 +61,20 @@ public class PSORunner {
                         }).get();
 
                 swarmFilename = newest.getAbsolutePath();
-                System.out.println("Loading from latest run: ");
+                System.out.println("Continuing from latest run (" + swarmFilename + ")");
+            } else if (args[0].equals("-f")) {
+                // continue from a previous instance of PSO from a file
+                JFileChooser chooser = new JFileChooser();
+                chooser.setSelectedFile(swarmDir);
+                int response = chooser.showDialog(null, "Pick PSO file");
+
+                if (response == JFileChooser.APPROVE_OPTION) {
+                    swarmFilename = chooser.getSelectedFile().getName();
+                    System.out.println("Continuing from run in " + swarmFilename);
+                } else {
+                    System.err.println("Didn't select a file. Program closing");
+                    System.exit(0);
+                }
             } else {
                 // loading specific run
                 swarmFilename = args[0];
@@ -110,7 +105,8 @@ public class PSORunner {
             // read swarm from particle
             swarm = PSOIO.parseSwarm(new MarioProblem(), swarmFilename);
             // todo: replace ugly separate parsing methods
-            gBestFitness = PSOIO.parseBestFitness(swarmFilename);
+//            gBestFitness = PSOIO.parseBestFitness(swarmFilename);
+            gBestFitness = swarm.getProblem().getWorstFitness();
             startingIter = PSOIO.parseStartingIter(swarmFilename);
         }
 
@@ -147,7 +143,7 @@ public class PSORunner {
             }
 
             PSOIO.writePSOIterationToFile(filename, swarm, iter, gBestFitness);
-            System.out.println("Iteration written to " + filename);
+            System.out.println("PSO Iteration written to " + filename);
             System.out.println("Global best fitness: " + gBestFitness);
         }
     }

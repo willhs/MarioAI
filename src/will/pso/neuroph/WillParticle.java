@@ -207,7 +207,7 @@ public class WillParticle {
 
     public String toString() {
         return "Particle. PBest: " + pBestFitness + ", NBest: " + nBestFitness
-                + getParams()
+                + "\n" + getParams()
                 + "\nCurr. position: " + values()
                 + "\nPBest position: " + formatVals(pBestFeats);
 //                + "\nNBest position: " + formatVals(nBestFeats)

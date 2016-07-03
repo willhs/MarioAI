@@ -173,7 +173,7 @@ public class FitnessScores implements Serializable {
 	 * @return the highest fitness value in this cache.
 	 */
 	public double getBestFitness() {
-		return fitnessMap.values().stream().max((f2,f1) -> {
+		return fitnessMap.values().stream().max((f1,f2) -> {
 			return Double.compare(f1.doubleValue(), f2.doubleValue());
 		}).get();
 	}
