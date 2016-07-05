@@ -93,6 +93,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
     }
 
     private void visualise(NeuralNetwork nn, double fitnessVal) {
+        System.out.println("PSO run new best fitness! = " + fitnessVal);
         MarioSimulator rerun = new MarioSimulator(VIZ_ON_OPTIONS);
         NEATAgent reagent = new EnvironmentOnlyAgent(nn);
         rerun.run(reagent);

@@ -24,12 +24,15 @@ import java.util.Optional;
  */
 public class MarioProblem extends WillProblem {
 
+    // network io
     private static final int NUM_INPUT_NEURONS = 367;
     private static final int NUM_OUTPUT_NEURONS = 4;
 
+    // constant neat parameters
     private static final int POP_SIZE =	200;
     private static final double MAX_FITNESS = 8000;
     private static final long MAX_GENS = 100;
+    private static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
 
     private SimpleNeatParameters defaultParams;
     private List<Feature> features;
@@ -79,7 +82,7 @@ public class MarioProblem extends WillProblem {
 
     private static List<Feature> makeFeatures(SimpleNeatParameters defaultParams) {
         List<Feature> features = new ArrayList<>();
-        double maxSpecies = defaultParams.getPopulationSize()/10;
+        double maxSpecies = defaultParams.getPopulationSize() / MIN_INDIVIDUAL_PER_SPECIE;
 
         features.add(new Feature(PARAMS.MAX_SPECIES, 1, maxSpecies));
         features.add(new Feature(PARAMS.SURVIVAL_RATIO, 0, 0.5));
@@ -154,13 +157,13 @@ public class MarioProblem extends WillProblem {
                     break;
                 // uses last defined weight mut op so case must be after
                 case WEIGHT_PETURB:
-                    Optional<WeightMutationOperation> mut = ops.stream()
+                    WeightMutationOperation mut = ops.stream()
                             .filter(op -> op instanceof WeightMutationOperation)
                             .map(op -> (WeightMutationOperation)op)
-                            .findFirst();
+                            .findFirst()
+                            .get();
 
-                    WeightMutationOperation op = mut.get();
-                    op.setMaxWeightPertubation(feature.getValue());
+                    mut.setMaxWeightPertubation(feature.getValue());
                     break;
             }
             defaultParams.setMutationOperators(ops);

@@ -100,6 +100,7 @@ public class NaturalSelectionOrganismSelector implements OrganismSelector {
 			Organism randomOrganism = organisms.get(params.getRandomGenerator()
 					.nextInt(organisms.size()));
 
+			// todo: make sure this doesn't happen?
 			if (!survivors.contains(randomOrganism)) {
 				survivors.add(randomOrganism);
 				numberOfOrganismsToKeep--;

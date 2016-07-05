@@ -57,7 +57,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
     }
 
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
-        double threshold = 3;
+        double threshold = 0.5;
         MarioInput action = new MarioInput();
 
         action.set(MarioKey.RIGHT, outputNeurons[0] > threshold);

@@ -9,8 +9,6 @@ import org.neuroph.contrib.neat.gen.operations.mutation.WeightMutationOperation;
 import org.neuroph.contrib.neat.gen.operations.selector.NaturalSelectionOrganismSelector;
 import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciator;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
-import org.neuroph.contrib.neat.gen.persistence.impl.DirectoryOutputPersistence;
-import org.neuroph.contrib.neat.gen.persistence.impl.xstream.XStreamSerializationDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,30 +22,46 @@ public class MarioEvolver {
     private static final int NUM_OUTPUT_NEURONS = 4;
     private static final String PERSISTANCE_DIR = "db/neuroph";
 
+    private static final int POP_SIZE = 500;
+    private static final double MAX_FITNESS = 8000;
+    private static final long MAX_GENERATIONS = 5000;
+
+    private static final int MIN_PER_SPECIE = 20;
+    private static final int MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;
+    private static final double SURVIVAL_RATIO = 0.1;
+
+    private static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
+    private static final double ADD_CONN_PROB = 1;
+    private static final double ADD_NEURON_PROB = 0.4;
+    private static final double WEIGHT_MUT_PROB = 0.4;
+    private static final double MAX_WEIGHT_MUT_AMOUNT = 3;
+    private static final int MAX_GENS_TIL_KILL = 50;
+
     public static void main(String[] args) {
         // set up NEAT paramaters
         SimpleNeatParameters params = new SimpleNeatParameters();
 
         params.setFitnessFunction(new MarioFitnessFunction());
-        params.setPopulationSize(500);
-        params.setMaximumFitness(8500);
-        params.setMaximumGenerations(500);
+        params.setPopulationSize(POP_SIZE);
+        params.setMaximumFitness(MAX_FITNESS);
+        params.setMaximumGenerations(MAX_GENERATIONS);
 
         DynamicThresholdSpeciator speciator = new DynamicThresholdSpeciator();
-        speciator.setMaxSpecies(25);
+        speciator.setMaxSpecies(MAX_SPECIES);
         params.setSpeciator(speciator);
 
         NaturalSelectionOrganismSelector selector = (NaturalSelectionOrganismSelector) params
                 .getOrganismSelector();
-//        selector.setSurvivalRatio(0.1);
-        selector.setKillUnproductiveSpecies(true);
+        selector.setSurvivalRatio(SURVIVAL_RATIO);
+        selector.setKillUnproductiveSpecies(KILL_UNPRODUCTIVE_SPECIES);
+        selector.setMaximumGenerationsSinceImprovement(MAX_GENS_TIL_KILL);
 //
         List<MutationOperation> ops = new ArrayList<>();
 
-        AddConnectionMutationOperation addConnection = new AddConnectionMutationOperation(1);
-        AddNeuronMutationOperation addNeuron = new AddNeuronMutationOperation(0.4);
-        WeightMutationOperation weightMutation = new WeightMutationOperation(0.4);
-        weightMutation.setMaxWeightPertubation(1);
+        AddConnectionMutationOperation addConnection = new AddConnectionMutationOperation(ADD_CONN_PROB);
+        AddNeuronMutationOperation addNeuron = new AddNeuronMutationOperation(ADD_NEURON_PROB);
+        WeightMutationOperation weightMutation = new WeightMutationOperation(WEIGHT_MUT_PROB);
+        weightMutation.setMaxWeightPertubation(MAX_WEIGHT_MUT_AMOUNT);
 
         ops.add(addNeuron);
         ops.add(addConnection);

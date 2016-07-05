@@ -155,17 +155,7 @@ public abstract class AbstractMutationOperation implements MutationOperation {
 	 */
 	protected int determineNumberOfMutationsToPerform(NeatParameters config,
 			int maximum) {
-		int total = 0;
-
-		for (int i = 0; i < maximum; i++) {
-			double rand = config.getRandomGenerator().nextDouble();
-
-			if (rand < mutationProbability) {
-				total++;
-			}
-		}
-
-		return total;
+		return (int)(config.getRandomGenerator().nextDouble() * maximum);
 	}
 
 	protected boolean shouldMutate(NeatParameters params, double mutationRate) {

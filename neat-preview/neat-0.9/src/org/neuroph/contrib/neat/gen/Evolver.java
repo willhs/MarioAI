@@ -42,8 +42,8 @@ public class Evolver {
 	public static Evolver createNew(NeatParameters params,
 			List<NeuronGene> inputLayer, List<NeuronGene> outputLayer) {
 
-		Logger.getGlobal().setLevel(Level.OFF);
-		LogManager.getLogManager().reset();
+//		Logger.getGlobal().setLevel(Level.OFF);
+//		LogManager.getLogManager().reset();
 
 		List<Specie> species = new ArrayList<Specie>();
 		List<Organism> organisms = new ArrayList<Organism>();
@@ -79,7 +79,7 @@ public class Evolver {
 			List<Specie> species, List<Organism> organisms,
 			Innovations innovations) {
 		Specie originOfSpecies = new Specie(params);
-		Organism ref = new Organism(params, inputLayer, outputLayer, true);
+		Organism ref = new Organism(params, inputLayer, outputLayer, false);
 		organisms.add(ref);
 		
 		// we need to put these into the innovations map so we can reload them
@@ -171,7 +171,6 @@ public class Evolver {
 
 			neatParameters.getPersistence().addGeneration(innovations,
 					currentGeneration, fitness);
-
 
 			logger.info("connections: " + organisms.stream().map(o ->
 				 o.getConnections().size()

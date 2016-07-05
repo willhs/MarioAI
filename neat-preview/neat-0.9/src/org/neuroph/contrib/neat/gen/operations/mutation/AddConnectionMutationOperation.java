@@ -118,6 +118,12 @@ public class AddConnectionMutationOperation extends AbstractMutationOperation {
 			}
 		}
 
+		// check that no existing duplicate connections
+		// cpu intensive
+//		if (o.containsConnection(start, end)) {
+//			return false;
+//		}
+
 		return true;
 	}
 
