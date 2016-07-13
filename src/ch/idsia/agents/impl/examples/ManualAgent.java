@@ -36,8 +36,8 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 		// IMPLEMENTS END-LESS RUNS
 		while (true) {
 			String options = FastOpts.VIS_ON_2X +
-					FastOpts.LEVEL_02_JUMPING +
-					FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID_TILES) +
+					FastOpts.LEVEL_04_BLOCKS +
+					FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID_ENTITIES) +
 					FastOpts.S_TIME_LIMIT_200
 //					FastOpts.L_ENEMY(Enemy.GOOMBA, Enemy.SPIKY) +
 //					FastOpts.L_TUBES_ON + FastOpts.L_RANDOMIZE;

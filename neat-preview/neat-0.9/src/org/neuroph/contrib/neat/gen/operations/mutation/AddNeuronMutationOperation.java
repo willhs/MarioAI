@@ -41,6 +41,11 @@ public class AddNeuronMutationOperation extends AbstractMutationOperation {
 		return true;
 	}
 
+	@Override
+	protected int maxNumOfMutationsToPerform(Organism o) {
+		return o.getConnections().size();
+	}
+
 	public static boolean addNeuron(NeatParameters neatParameters,
 			Innovations innovations, Organism o, Set<Gene> genesToAdd,
 			List<ConnectionGene> connections) {

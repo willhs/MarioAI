@@ -67,7 +67,7 @@ public class SimpleNeuralNetworkBuilder implements NeuralNetworkBuilder {
 		Vector<Neuron> outputs = new Vector<Neuron>();
 		Layer outputLayer = new Layer();
 		for (NeuronGene ng : o.getNeurons(NeuronType.OUTPUT)) {
-			Neuron n = new Neuron(new InputFunction(), new Linear(ng
+			Neuron n = new Neuron(new InputFunction(), new Sigmoid(ng
 					.getActivationResponse()));
 			outputs.add(n);
 			outputLayer.addNeuron(n);

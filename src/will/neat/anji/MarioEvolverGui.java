@@ -58,7 +58,7 @@ public class MarioEvolverGui extends Application{
         primaryStage.show();
 
         // initialise evolver
-        Evolver evolver = new Evolver(scene);
+        Evolver evolver = new Evolver();
         evolver.init(props);
 
         Task<Void> task = new Task<Void>() {
@@ -184,7 +184,8 @@ public class MarioEvolverGui extends Application{
 
             int maxConnectionWidth = 5;
 
-            NeatConfiguration config = evolver.getConfig();
+            // requires modified lib
+/*            NeatConfiguration config = evolver.getConfig();
 
             double colourAmount = Algorithms.scaleToRange(
                     conn.getWeight(),
@@ -208,7 +209,7 @@ public class MarioEvolverGui extends Application{
             // draw line
             gc.setStroke(Color.color(colourAmount, 0, 0));
             gc.setLineWidth(lineAmount * maxConnectionWidth);
-            gc.strokeLine(srcX, srcY, destX, destY);
+            gc.strokeLine(srcX, srcY, destX, destY);*/
         });
 
         endNodes.forEach(n -> {

@@ -65,12 +65,18 @@ public abstract class AbstractMutationOperation implements MutationOperation {
 			Set<Gene> genesToAdd = new HashSet<Gene>();
 			Set<Gene> genesToRemove = new HashSet<Gene>();
 
-			if (mutate(neatParameters, innovations, fitnessScores, o,
-					genesToAdd, genesToRemove, generationNumber)) {
-				totalOrganismsMutated++;
-			}
+			// decide how many mutations to apply to this organism
+			int maxMutations = (int)(maxNumOfMutationsToPerform(o) * getMutationProbability());
+			int numMutations = (int)(neatParameters.getRandomGenerator().nextDouble() * maxMutations);
 
-			updateOrganismGenesAfterMutation(o, genesToAdd, genesToRemove);
+			for (int m = 0; m < numMutations; m++) {
+				if (mutate(neatParameters, innovations, fitnessScores, o,
+						genesToAdd, genesToRemove, generationNumber)) {
+					totalOrganismsMutated++;
+				}
+
+				updateOrganismGenesAfterMutation(o, genesToAdd, genesToRemove);
+			}
 		}
 
 		return totalOrganismsMutated;
@@ -157,6 +163,8 @@ public abstract class AbstractMutationOperation implements MutationOperation {
 			int maximum) {
 		return (int)(config.getRandomGenerator().nextDouble() * maximum);
 	}
+
+	protected abstract int maxNumOfMutationsToPerform(Organism o);
 
 	protected boolean shouldMutate(NeatParameters params, double mutationRate) {
 		return (params.getRandomGenerator().nextDouble() < mutationRate);

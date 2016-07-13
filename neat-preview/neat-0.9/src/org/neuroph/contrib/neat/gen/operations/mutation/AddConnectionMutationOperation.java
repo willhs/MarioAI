@@ -73,6 +73,11 @@ public class AddConnectionMutationOperation extends AbstractMutationOperation {
 		return true;
 	}
 
+	@Override
+	protected int maxNumOfMutationsToPerform(Organism o) {
+		return o.getNeurons(NeuronType.INPUT).size();
+	}
+
 	private boolean isValidConnection(Organism o, Innovations inn,
 			Set<Gene> genesToAdd, Set<Gene> genesToRemove, NeuronGene start,
 			NeuronGene end) {

@@ -1,6 +1,5 @@
 package will.pso.io;
 
-import com.sun.medialib.codec.jp2k.Params;
 import org.w3c.dom.Document;
 
 import org.w3c.dom.Element;

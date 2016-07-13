@@ -60,13 +60,16 @@ public class WeightMutationOperation extends AbstractMutationOperation {
 			randomConnection.setWeight(neatParameters.getRandomClamped());
 		} else {
 			double currentWeight = randomConnection.getWeight();
-			randomConnection
-					.setWeight(currentWeight
-							+ (maxWeightPertubation * neatParameters
-									.getRandomClamped()));
+			double randomAmount = maxWeightPertubation * neatParameters.getRandomClamped();
+			randomConnection .setWeight(currentWeight + randomAmount);
 		}
 
 		return true;
+	}
+
+	@Override
+	protected int maxNumOfMutationsToPerform(Organism o) {
+		return o.getConnections().size();
 	}
 
 	private boolean shouldUseNewWeight(NeatParameters np) {

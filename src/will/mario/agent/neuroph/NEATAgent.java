@@ -25,8 +25,6 @@ public abstract class NEATAgent extends MarioAIBase2 {
     public MarioInput actionSelection() {
 
         GameEnvironment env = new BinaryGridEnvironment();
-//        GameEnvironment env = new ValueGridEnvironment();
-//        GameEnvironment env = new MultiGridEnvironment();
 
         return actionSelection(env);
     }
@@ -47,7 +45,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
 //            System.out.println(Arrays.toString(networkOutput));
         }
 
-        if (Math.random() < 0.001) {
+        if (Math.random() < 0.0001) {
 //            System.out.println(Arrays.toString(networkOutput));
         }
 
@@ -57,7 +55,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
     }
 
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
-        double threshold = 0.5;
+        double threshold = 0.55;
         MarioInput action = new MarioInput();
 
         action.set(MarioKey.RIGHT, outputNeurons[0] > threshold);

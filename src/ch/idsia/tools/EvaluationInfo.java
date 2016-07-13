@@ -109,6 +109,10 @@ public final class EvaluationInfo implements Cloneable {
 				* marioSystemOfValues.win;
 	}
 
+	public int computeBasicerFitness() {
+		return distancePassedPhys - timeSpent;
+	}
+
 	public int computeWeightedFitness(SystemOfValues sov) {
 		return distancePassedPhys * sov.distance + flowersDevoured
 				* sov.flowerFire + marioStatus * sov.win + marioMode.getCode() * sov.mode

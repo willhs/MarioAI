@@ -56,4 +56,9 @@ public class ActivationResponseMutationOperation extends
 
 		return true;
 	}
+
+	@Override
+	protected int maxNumOfMutationsToPerform(Organism o) {
+		return o.getNeurons().size();
+	}
 }

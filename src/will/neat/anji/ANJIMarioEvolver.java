@@ -1,5 +1,6 @@
 package will.neat.anji;
 
+import ch.idsia.benchmark.mario.options.FastOpts;
 import com.anji.neat.Evolver;
 import com.anji.util.Properties;
 
@@ -7,6 +8,9 @@ import com.anji.util.Properties;
  * Created by Will on 28/06/2016.
  */
 public class ANJIMarioEvolver {
+
+    public static String LEVEL = FastOpts.LEVEL_02_JUMPING;
+    public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
 
     public static void main(String[] args) throws Throwable {
 

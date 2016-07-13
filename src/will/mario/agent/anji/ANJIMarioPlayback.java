@@ -10,6 +10,7 @@ import com.anji.util.DummyConfiguration;
 import com.anji.util.Properties;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
+import will.neat.anji.ANJIMarioEvolver;
 
 import javax.swing.*;
 
@@ -45,8 +46,8 @@ public class ANJIMarioPlayback {
                 //+ " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
 //                + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
-                + FastOpts.LEVEL_02_JUMPING
-                + FastOpts.S_TIME_LIMIT_200;
+                + ANJIMarioEvolver.LEVEL
+                + ANJIMarioEvolver.TIME_LIMIT;
 
 
         // CREATE SIMULATOR

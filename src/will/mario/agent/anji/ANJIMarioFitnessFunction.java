@@ -9,6 +9,7 @@ import com.anji.util.Configurable;
 import com.anji.util.Properties;
 import org.jgap.BulkFitnessFunction;
 import org.jgap.Chromosome;
+import will.neat.anji.ANJIMarioEvolver;
 
 import java.util.List;
 /**
@@ -25,8 +26,9 @@ public class ANJIMarioFitnessFunction implements BulkFitnessFunction, Configurab
             //+ " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
 //                + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
-            + FastOpts.LEVEL_02_JUMPING
-            + FastOpts.S_TIME_LIMIT_200;
+            + ANJIMarioEvolver.LEVEL
+            + ANJIMarioEvolver.TIME_LIMIT
+            ;
 
 
     @Override
@@ -39,9 +41,6 @@ public class ANJIMarioFitnessFunction implements BulkFitnessFunction, Configurab
         for (Object chr : chromosomes) {
             Chromosome chromosome = (Chromosome) chr;
             // play mario
-            if (chromosome.getId() == 10005) {
-//                System.out.println(chromosome);
-            }
 
             int fitnessValue = evaluate(chromosome);
             chromosome.setFitnessValue(fitnessValue);

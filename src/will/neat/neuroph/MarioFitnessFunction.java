@@ -71,29 +71,19 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
             float fitnessVal = agent.getFitness();
             ofs.setFitness(fitnessVal);
 
-            if (fitnessVal > 2079) {
-//                System.out.println("HIGHER: " + fitnessVal);
-            }
-
             if (fitnessVal > bestFitness) {
                 bestFitness = fitnessVal;
+                logger.info("Fitness function saw new best fitness! = " + fitnessVal);
                 logger.info("hidden neurons: " + ofs.getOrganism().getNeurons(NeuronType.HIDDEN).size());
-                logger.info("connections: " + ofs.getOrganism().getNeurons().size());
+                logger.info("connections: " + ofs.getOrganism().getConnections().size());
                 if (!HEADLESS) {
                     visualise(nn, fitnessVal);
                 }
             }
-
-            // if went right and jumped then play it back
-            if (agent.getKeysPressed()[0] > 0 && agent.getKeysPressed()[2] > 0) {
-            }
-
-//            System.out.println("connections: " + ofs.getOrganism().getConnections().size());
         });
     }
 
     private void visualise(NeuralNetwork nn, double fitnessVal) {
-        System.out.println("PSO run new best fitness! = " + fitnessVal);
         MarioSimulator rerun = new MarioSimulator(VIZ_ON_OPTIONS);
         NEATAgent reagent = new EnvironmentOnlyAgent(nn);
         rerun.run(reagent);

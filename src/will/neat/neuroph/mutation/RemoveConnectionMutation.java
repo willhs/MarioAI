@@ -32,4 +32,9 @@ public class RemoveConnectionMutation extends AbstractMutationOperation {
         genesToRemove.add(connection);
         return true;
     }
+
+    @Override
+    protected int maxNumOfMutationsToPerform(Organism o) {
+        return o.getConnections().size();
+    }
 }

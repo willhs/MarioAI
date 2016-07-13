@@ -34,16 +34,8 @@ public class Evolver {
 	private NeatParameters neatParameters;
 	private FitnessScores fitness;
 
-	public Evolver() {
-		Logger.getGlobal().setLevel(Level.OFF);
-		LogManager.getLogManager().reset();
-	}
-
 	public static Evolver createNew(NeatParameters params,
 			List<NeuronGene> inputLayer, List<NeuronGene> outputLayer) {
-
-//		Logger.getGlobal().setLevel(Level.OFF);
-//		LogManager.getLogManager().reset();
 
 		List<Specie> species = new ArrayList<Specie>();
 		List<Organism> organisms = new ArrayList<Organism>();
@@ -60,8 +52,11 @@ public class Evolver {
 		// this is a new population make sure we do the initial calculation.
 		calculateFitness(params, scores, organisms, 0);
 
-		
+		System.setProperty("java.util.logging.SimpleFormatter.format",
+				"%1$tF %1$tT %4$s %2$s %5$s%6$s%n");
+
 		Evolver e = new Evolver(params, gen, innovations, scores);
+
 		return e;
 	}
 
@@ -99,6 +94,18 @@ public class Evolver {
 		}
 
 		species.add(originOfSpecies);
+	}
+
+	public void setLogging(boolean l) {
+		if (l) {
+			System.out.println("on");
+			Logger.getGlobal().setLevel(Level.INFO);
+			LogManager.getLogManager().reset();
+		} else {
+			System.out.println("off");
+			Logger.getGlobal().setLevel(Level.OFF);
+			LogManager.getLogManager().reset();
+		}
 	}
 
 	public static Evolver loadFromPersistence(NeatParameters params)
@@ -256,6 +263,7 @@ public class Evolver {
 		int totalMutationOperationsPerformed = 0;
 		int totalWeights = 0;
 		int totalAddNeurons = 0;
+		int totalOtherMuts = 0;
 		int totalAddConns = 0;
 
 		notify(species, EvolutionEventType.START_MUTATION);
@@ -268,6 +276,8 @@ public class Evolver {
 				totalAddNeurons += mutsPerformed;
 			} else if (mo instanceof WeightMutationOperation) {
 				totalWeights += mutsPerformed;
+			} else {
+				totalOtherMuts += mutsPerformed;
 			}
 
 			totalMutationOperationsPerformed += mutsPerformed;
@@ -275,7 +285,9 @@ public class Evolver {
 		logger.info("total change weights performed:\t" + totalWeights);
 		logger.info("total add connections performed:\t" + totalAddConns);
 		logger.info("total add neurons performed:\t" + totalAddNeurons);
-		//System.out.println("total mutations performed: " + totalMutationOperationsPerformed);
+		logger.info("total remove neurons performed:\t" + totalOtherMuts);
+
+//		System.out.println("total mutations performed: " + totalMutationOperationsPerformed);
 		notify(species, EvolutionEventType.END_MUTATION);
 	}
 
