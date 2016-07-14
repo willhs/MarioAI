@@ -11,6 +11,7 @@ import org.neuroph.contrib.neat.gen.operations.mutation.WeightMutationOperation;
 import org.neuroph.contrib.neat.gen.operations.selector.NaturalSelectionOrganismSelector;
 import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciator;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
+import will.neat.neuroph.MarioEvolver;
 import will.neat.neuroph.MarioFitnessFunction;
 import will.neat.neuroph.mutation.RemoveConnectionMutation;
 
@@ -25,12 +26,12 @@ import java.util.Optional;
 public class MarioProblem extends WillProblem {
 
     // network io
-    private static final int NUM_INPUT_NEURONS = 367;
-    private static final int NUM_OUTPUT_NEURONS = 4;
+    private static final int NUM_INPUT_NEURONS = MarioEvolver.NUM_INPUT_NEURONS;
+    private static final int NUM_OUTPUT_NEURONS = MarioEvolver.NUM_OUTPUT_NEURONS;
 
     // constant neat parameters
     private static final int POP_SIZE =	200;
-    private static final double MAX_FITNESS = 8000;
+    private static final double MAX_FITNESS = 15000;
     private static final long MAX_GENS = 100;
     private static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
 
@@ -42,7 +43,7 @@ public class MarioProblem extends WillProblem {
 
     public enum PARAMS {
         MAX_SPECIES, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
-        ADD_NEURON_PROB, WEIGHT_ADJ_PROB, WEIGHT_PETURB
+        ADD_NEURON_PROB, WEIGHT_ADJ_PROB, WEIGHT_PETURB, SPECIES_DROPOFF
     };
 
     public MarioProblem() {
@@ -84,13 +85,16 @@ public class MarioProblem extends WillProblem {
         List<Feature> features = new ArrayList<>();
         double maxSpecies = defaultParams.getPopulationSize() / MIN_INDIVIDUAL_PER_SPECIE;
 
-        features.add(new Feature(PARAMS.MAX_SPECIES, 1, maxSpecies));
-        features.add(new Feature(PARAMS.SURVIVAL_RATIO, 0, 0.5));
+        double maxSpeciesDropoff = MAX_GENS/2;
+
         features.add(new Feature(PARAMS.ADD_CONN_PROB, 0, 1));
         features.add(new Feature(PARAMS.ADD_NEURON_PROB, 0, 1));
         features.add(new Feature(PARAMS.WEIGHT_ADJ_PROB, 0, 1));
-        features.add(new Feature(PARAMS.WEIGHT_PETURB, 0, 3));
         features.add(new Feature(PARAMS.REMOVE_CONN_PROB, 0, 1));
+        features.add(new Feature(PARAMS.WEIGHT_PETURB, 0, 2.5));
+        features.add(new Feature(PARAMS.SURVIVAL_RATIO, 0, 0.5));
+        features.add(new Feature(PARAMS.MAX_SPECIES, 1, maxSpecies));
+        features.add(new Feature(PARAMS.SPECIES_DROPOFF, 5, maxSpeciesDropoff));
 
         return features;
     }

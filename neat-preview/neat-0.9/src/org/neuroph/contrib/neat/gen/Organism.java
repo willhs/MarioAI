@@ -88,7 +88,7 @@ public class Organism implements Innovation, Serializable {
 	 */
 	public Organism(NeatParameters factory, List<NeuronGene> inputs,
 			List<NeuronGene> outputs) {
-		this(factory, inputs, outputs, false);
+		this(factory, inputs, outputs, true);
 	}
 
 	public Organism(NeatParameters factory, List<NeuronGene> inputs,

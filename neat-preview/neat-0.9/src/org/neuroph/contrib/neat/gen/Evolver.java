@@ -37,6 +37,7 @@ public class Evolver {
 	public static Evolver createNew(NeatParameters params,
 			List<NeuronGene> inputLayer, List<NeuronGene> outputLayer) {
 
+
 		List<Specie> species = new ArrayList<Specie>();
 		List<Organism> organisms = new ArrayList<Organism>();
 		Innovations innovations = new Innovations();
@@ -98,11 +99,9 @@ public class Evolver {
 
 	public void setLogging(boolean l) {
 		if (l) {
-			System.out.println("on");
 			Logger.getGlobal().setLevel(Level.INFO);
 			LogManager.getLogManager().reset();
 		} else {
-			System.out.println("off");
 			Logger.getGlobal().setLevel(Level.OFF);
 			LogManager.getLogManager().reset();
 		}
@@ -144,6 +143,8 @@ public class Evolver {
 		this.currentGeneration = gen;
 		this.innovations = innovations;
 		this.fitness = fitness;
+
+		setLogging(false);
 	}
 
 	/**
@@ -179,9 +180,9 @@ public class Evolver {
 			neatParameters.getPersistence().addGeneration(innovations,
 					currentGeneration, fitness);
 
-			logger.info("connections: " + organisms.stream().map(o ->
-				 o.getConnections().size()
-			).collect(Collectors.toList()));
+//			logger.info("connections: " + organisms.stream().map(o ->
+//				 o.getConnections().size()
+//			).collect(Collectors.toList()));
 		}
 
 //		System.out.println(getParams().getRandomGenerator().nextDouble());
@@ -282,10 +283,10 @@ public class Evolver {
 
 			totalMutationOperationsPerformed += mutsPerformed;
 		}
-		logger.info("total change weights performed:\t" + totalWeights);
-		logger.info("total add connections performed:\t" + totalAddConns);
-		logger.info("total add neurons performed:\t" + totalAddNeurons);
-		logger.info("total remove neurons performed:\t" + totalOtherMuts);
+//		logger.info("total change weights performed:\t" + totalWeights);
+//		logger.info("total add connections performed:\t" + totalAddConns);
+//		logger.info("total add neurons performed:\t" + totalAddNeurons);
+//		logger.info("total remove conns performed:\t" + totalOtherMuts);
 
 //		System.out.println("total mutations performed: " + totalMutationOperationsPerformed);
 		notify(species, EvolutionEventType.END_MUTATION);

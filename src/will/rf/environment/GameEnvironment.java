@@ -1,4 +1,4 @@
-package will.mario.environment;
+package will.rf.environment;
 
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;

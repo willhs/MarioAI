@@ -2,8 +2,8 @@ package will.mario.agent.anji;
 
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
-import will.mario.environment.BinaryGridEnvironment;
-import will.mario.environment.GameEnvironment;
+import will.rf.environment.BinaryEnvGridEnvironment;
+import will.rf.environment.GameEnvironment;
 import com.anji.integration.Activator;
 
 /**
@@ -19,7 +19,7 @@ public class ANJIEnvironmentOnly extends ANJINEATAgent {
     public MarioInput actionSelection() {
 
         // put relevant environment into form for neural net
-        GameEnvironment env = new BinaryGridEnvironment();
+        GameEnvironment env = new BinaryEnvGridEnvironment();
 //        GameEnvironment env = new ValueGridEnvironment();
 //        GameEnvironment env = new MultiGridEnvironment();
         double[] inputs = env.getInputNeurons(environment, lastInput);

@@ -1,4 +1,4 @@
-package will.mario.environment;
+package will.rf.environment;
 
 import ch.idsia.benchmark.mario.engine.generalization.Tile;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
@@ -12,41 +12,41 @@ import java.util.stream.Collectors;
 /**
  * Created by Will on 15/05/2016.
  *
- * Represents environment as binary tiles - 0 if nothing, 1 if something
+ * Represents environment as tiles - MIN_VAL if nothing, a unique integer for each other tile
  */
-public class BinaryGridEnvironment implements GridEnvironment{
+public class ValueGridEnvironment implements GridEnvironment{
 
     @Override
     public double[] getInputNeurons(IEnvironment environment, MarioInput lastInput) {
+        double VAL_MULTIPLIER = 25;
         // convert 2d tiles to input neurons
         List<Double> inputNeurons = Arrays.stream(environment.getTileField())
                 .flatMap(tileRow -> {
                     return Arrays.stream(tileRow)
                             .map(tile -> {
-                                // 0 if nothing in tile or 1 if something
-                                return tile == Tile.NOTHING ? 0 : 1;
+                                // represent unique tiles
+                                return tile == Tile.NOTHING ? -1000 : tile.ordinal() * VAL_MULTIPLIER;
                             });
                 })
                 .mapToDouble(i->i)
                 .boxed()
                 .collect(Collectors.toList());
 
-        // add entities
-/*        inputNeurons.addAll(Arrays.stream(environment.getEntityField())
+/*        // add entities
+        inputNeurons.addAll(Arrays.stream(environment.getEntityField())
                 .flatMap(entityRow -> {
                     return Arrays.stream(entityRow)
                             .map(entities -> {
-                                // 0 if tile has no entities, 1 if it does
+                                // -1 if tile has no entities, otherwise unique number for each type
                                 return entities.isEmpty() ||
-                                    entities.stream().allMatch(entity -> entity.type == EntityType.NOTHING)
-                                        ? 0 : 1;
+                                        entities.stream().allMatch(entity -> entity.type == EntityType.NOTHING)
+                                        ? -1 : entities.get(0).type.ordinal();
                             });
                 })
                 .mapToDouble(i->i)
                 .boxed()
                 .collect(Collectors.toList())
         );*/
-
         // add the last action as a neurons
         // one input for each different key
         MarioKey.getKeys().forEach(key -> {
@@ -55,7 +55,8 @@ public class BinaryGridEnvironment implements GridEnvironment{
         });
 
         return inputNeurons.stream()
-            .mapToDouble(d -> d)
-            .toArray();
+                .mapToDouble(d -> d)
+                .toArray();
     }
 }
+

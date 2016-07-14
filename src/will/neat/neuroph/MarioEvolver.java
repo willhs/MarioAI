@@ -19,31 +19,39 @@ import java.util.List;
  */
 public class MarioEvolver {
 
-    private static final int NUM_INPUT_NEURONS = 367;
-    private static final int NUM_OUTPUT_NEURONS = 4;
-    private static final String PERSISTANCE_DIR = "db/neuroph";
+    public static final int NUM_INPUT_NEURONS = 728; // 19*19 grid = 361
+    public static final int NUM_OUTPUT_NEURONS = 4;
+    public static final String PERSISTANCE_DIR = "db/neuroph";
 
-    private static final int POP_SIZE = 200;
-    private static final double MAX_FITNESS = 8000;
-    private static final long MAX_GENERATIONS = 200;
+    public static final int POP_SIZE = 200;
+    public static final double MAX_FITNESS = 15000;
+    public static final long MAX_GENERATIONS = 200;
 
-    private static final int MIN_PER_SPECIE = 20;
-    private static final int MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;
-    private static final double SURVIVAL_RATIO = 0.1;
-    private static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
+    public static final int MIN_PER_SPECIE = 15;
+    public static final int MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;
+    public static final double SURVIVAL_RATIO = 0.1;
+    public static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
 
-//    private static final double ADD_CONN_PROB = 0.9;
-//    private static final double REMOVE_CONN_PROB = 0.3;
+    // fully connected
+//    private static final double ADD_CONN_PROB = 0.2;
+//    private static final double REMOVE_CONN_PROB = 0.8;
 //    private static final double ADD_NEURON_PROB = 0.5;
-//    private static final double WEIGHT_MUT_PROB = 0.9;
+//    private static final double PERTURB_PROB = 0.9;
 
-    private static final double ADD_CONN_PROB = 0.04;
-    private static final double REMOVE_CONN_PROB = 0.02;
-    private static final double ADD_NEURON_PROB = 0.02;
-    private static final double WEIGHT_MUT_PROB = 0.04;
+    // FS-NEAT
+    private static final double ADD_CONN_PROB = 0.98;
+    private static final double REMOVE_CONN_PROB = 0.01;
+    private static final double ADD_NEURON_PROB = 0.92;
+    private static final double PERTURB_PROB = 0.5;
+    private static final double MAX_PERTURB = 1;
 
-    private static final double MAX_WEIGHT_MUT_AMOUNT = 3;
-    private static final int MAX_GENS_SPECIES = 30;
+//    private static final double ADD_CONN_PROB = 0.04;
+//    private static final double REMOVE_CONN_PROB = 0.02;
+//    private static final double ADD_NEURON_PROB = 0.02;
+//    private static final double PERTURB_PROB = 0.04;
+
+//    private static final double MAX_PERTURB = 2;
+    private static final int MAX_GENS_SPECIES = 15;
 
     public static void main(String[] args) {
         // set up NEAT paramaters
@@ -69,8 +77,8 @@ public class MarioEvolver {
         AddConnectionMutationOperation addConnection = new AddConnectionMutationOperation(ADD_CONN_PROB);
         AddNeuronMutationOperation addNeuron = new AddNeuronMutationOperation(ADD_NEURON_PROB);
         RemoveConnectionMutation removeConnection = new RemoveConnectionMutation(REMOVE_CONN_PROB);
-        WeightMutationOperation weightMutation = new WeightMutationOperation(WEIGHT_MUT_PROB);
-        weightMutation.setMaxWeightPertubation(MAX_WEIGHT_MUT_AMOUNT);
+        WeightMutationOperation weightMutation = new WeightMutationOperation(PERTURB_PROB);
+        weightMutation.setMaxWeightPertubation(MAX_PERTURB);
 
         ops.add(addNeuron);
         ops.add(addConnection);

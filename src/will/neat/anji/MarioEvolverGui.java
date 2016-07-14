@@ -170,7 +170,7 @@ public class MarioEvolverGui extends Application{
 
             // if in endNodes
             if (actionsIndex == endNodes.indexOf(dest)) {
-                //System.out.println("actions index: " + actionsIndex);
+                //System.out.println("marioKeys index: " + actionsIndex);
                 destY = (int)(actionsPaddingTop + ((double)actionsIndex / endNodes.size()) * canvas.getHeight());
                 // if in endNodes
             } else if (actionsIndex == hiddenNodes.indexOf(dest)){

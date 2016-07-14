@@ -1,18 +1,13 @@
 package will.neat.neuroph;
 
 import ch.idsia.benchmark.mario.MarioSimulator;
-import ch.idsia.benchmark.mario.engine.SimulatorOptions;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import org.neuroph.contrib.neat.gen.Evolver;
 import org.neuroph.contrib.neat.gen.NeuronType;
 import org.neuroph.contrib.neat.gen.operations.FitnessFunction;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
@@ -20,17 +15,17 @@ import org.neuroph.core.NeuralNetwork;
 import will.mario.agent.neuroph.EnvironmentOnlyAgent;
 import will.mario.agent.neuroph.NEATAgent;
 
-import javax.swing.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
  * Created by Will on 29/06/2016.
  */
 public class MarioFitnessFunction extends Application implements FitnessFunction {
-    public static String LEVEL = FastOpts.LEVEL_02_JUMPING;
+    public static String LEVEL = FastOpts.LEVEL_07_SPIKY;
+    public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
 
     private static Logger logger = Logger.getLogger(MarioFitnessFunction.class
             .getSimpleName());
@@ -38,30 +33,39 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
     public static String VIZ_OFF_OPTIONS = ""
             + FastOpts.VIS_OFF
             + LEVEL
-            + FastOpts.S_TIME_LIMIT_200;
+            + TIME_LIMIT;
 
     public static String VIZ_ON_OPTIONS = ""
             + FastOpts.VIS_ON_2X
 //            + " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
-            + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
+//            + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
             + LEVEL
-            + FastOpts.S_TIME_LIMIT_200;
+            + TIME_LIMIT;
 
     private static double bestFitness = 0;
 
-    private final boolean HEADLESS = false;
+    private final boolean RUNNING_PSO = true;
+    private boolean headless = false;
 
     // temporary
     private NeuralNetwork nn;
     private double fitnessVal;
+
+    public MarioFitnessFunction() {
+        if (RUNNING_PSO) {
+            headless = true;
+            Logger.getGlobal().setLevel(Level.OFF);
+            LogManager.getLogManager().reset();
+        }
+    }
 
     @Override
     public void evaluate(List<OrganismFitnessScore> fitnesses) {
         fitnesses.stream().forEach(ofs -> {
             NeuralNetwork nn = ofs.getNeuralNetwork();
 
-            NEATAgent agent = new EnvironmentOnlyAgent(nn);
+            NEATAgent agent = new NEATAgent(nn);
 
             String simulatorOptions = VIZ_OFF_OPTIONS;
 
@@ -76,7 +80,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
                 logger.info("Fitness function saw new best fitness! = " + fitnessVal);
                 logger.info("hidden neurons: " + ofs.getOrganism().getNeurons(NeuronType.HIDDEN).size());
                 logger.info("connections: " + ofs.getOrganism().getConnections().size());
-                if (!HEADLESS) {
+                if (!headless) {
                     visualise(nn, fitnessVal);
                 }
             }
@@ -85,7 +89,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
 
     private void visualise(NeuralNetwork nn, double fitnessVal) {
         MarioSimulator rerun = new MarioSimulator(VIZ_ON_OPTIONS);
-        NEATAgent reagent = new EnvironmentOnlyAgent(nn);
+        NEATAgent reagent = new NEATAgent(nn);
         rerun.run(reagent);
 
 /*        this.nn = nn;

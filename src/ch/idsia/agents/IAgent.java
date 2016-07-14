@@ -65,7 +65,7 @@ public interface IAgent {
 	void observe(IEnvironment environment);	
 	
 	/**
-	 * Agent should now perform an action-selection and return actions it wants to perform.
+	 * Agent should now perform an action-selection and return marioKeys it wants to perform.
 	 * 
 	 * @return Actions to perform
 	 */

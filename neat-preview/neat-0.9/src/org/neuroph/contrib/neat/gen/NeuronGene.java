@@ -72,7 +72,8 @@ public class NeuronGene implements Gene {
 	 *            in which this <codE>NeuronGene</code> exists.
 	 */
 	public NeuronGene(NeuronType type, NeatParameters params) {
-		this(type, params, params.getRandomGenerator().nextDouble());
+//		this(type, params, params.getRandomGenerator().nextDouble());
+		this(type, params, -4.9);
 	}
 
 	/**

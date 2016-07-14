@@ -4,32 +4,39 @@ import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import org.neuroph.core.NeuralNetwork;
 import will.mario.agent.MarioAIBase2;
-import will.mario.environment.BinaryGridEnvironment;
-import will.mario.environment.GameEnvironment;
+import will.rf.action.ActionStrategy;
+import will.rf.action.StandardHoldActionStrat;
+import will.rf.environment.EnvEntEnvironment;
+import will.rf.environment.GameEnvironment;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Will on 29/06/2016.
  */
-public abstract class NEATAgent extends MarioAIBase2 {
+public class NEATAgent extends MarioAIBase2 {
     protected NeuralNetwork nn;
 
     private int[] keysPressed = new int[4];
 
+    private Map<MarioKey, Integer> keysHeld;
+
     public NEATAgent(NeuralNetwork nn) {
         this.nn = nn;
+         keysHeld = new HashMap<>();
     }
+
 
     @Override
     public MarioInput actionSelection() {
-
-        GameEnvironment env = new BinaryGridEnvironment();
-
+        GameEnvironment env = new EnvEntEnvironment();
         return actionSelection(env);
     }
 
     protected MarioInput actionSelection(GameEnvironment env) {
+        updateActionsHeld();
+
         double[] inputs = env.getInputNeurons(environment, lastInput);
         nn.setInput(inputs);
         nn.calculate();
@@ -55,13 +62,9 @@ public abstract class NEATAgent extends MarioAIBase2 {
     }
 
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
-        double threshold = 0.55;
-        MarioInput action = new MarioInput();
 
-        action.set(MarioKey.RIGHT, outputNeurons[0] > threshold);
-        action.set(MarioKey.LEFT, outputNeurons[1] > threshold);
-        action.set(MarioKey.JUMP, outputNeurons[2] > threshold);
-        action.set(MarioKey.SPEED, outputNeurons[3] > threshold);
+        ActionStrategy actionStrat = new StandardHoldActionStrat();
+        MarioInput action = actionStrat.makeAction(outputNeurons, lastInput, keysHeld);
 
         action.getPressed().forEach(k -> {
             if (k == MarioKey.RIGHT) {
@@ -82,4 +85,11 @@ public abstract class NEATAgent extends MarioAIBase2 {
         return keysPressed;
     }
 
+    protected void updateActionsHeld() {
+        keysHeld.forEach((key, frames) -> {
+//            if (frames > 0) {
+                keysHeld.put(key, frames - 1);
+//            }
+        });
+    }
 }

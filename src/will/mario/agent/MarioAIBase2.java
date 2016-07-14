@@ -46,9 +46,9 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	protected int highestFitness;
 
 	// fields to help determine if mario has moved much
-	private int lastCell = -1;
-	private int framesInSameCell = 0;
-	private int FRAMES_THRESHOLD = 24; // 1.5 seconds
+	private int lastPos = -1;
+	private int framesInSamePos = 0;
+	private int STAYS_STILL_THRESHOLD = 24; // 1.5 seconds
 
 	public MarioAIBase2() {
 		super("MarioAIBase");
@@ -72,7 +72,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	public void observe(IEnvironment environment) {
 		this.environment = environment;
 
-		int fitness = environment.getEvaluationInfo().computeBasicFitness();
+		int fitness = environment.getEvaluationInfo().computeWeightedFitness();
 		if (fitness > highestFitness) {
 			highestFitness = fitness;
 		}
@@ -85,16 +85,16 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 
 	private boolean doesSuck() {
 		// determine whether mario has moved significantly
-		if (environment.getEvaluationInfo().distancePassedCells == lastCell) {
-			framesInSameCell++;
-			if (framesInSameCell >= FRAMES_THRESHOLD) {
+		if (environment.getEvaluationInfo().distancePassedPhys == lastPos) {
+			framesInSamePos++;
+			if (framesInSamePos >= STAYS_STILL_THRESHOLD) {
 				return true;
 			}
 		} else {
-			framesInSameCell = 0;
+			framesInSamePos = 0;
 		}
 
-		lastCell = environment.getEvaluationInfo().distancePassedCells;
+		lastPos = environment.getEvaluationInfo().distancePassedPhys;
 
 		return false;
 	}

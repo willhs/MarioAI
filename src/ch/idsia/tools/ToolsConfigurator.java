@@ -163,7 +163,7 @@ public class ToolsConfigurator extends JFrame
 //public Checkbox CheckboxShowGameViewer = new Checkbox("Show Game Viewer", true);
 //
 //public Label LabelConsole = new Label("Console:");
-//public TextArea TextAreaConsole = new TextArea("Console:"/*, 8,40*/);  // Verbose all, keys, events, actions, observations
+//public TextArea TextAreaConsole = new TextArea("Console:"/*, 8,40*/);  // Verbose all, keys, events, marioKeys, observations
 //public Checkbox CheckboxShowVizualization = new Checkbox("Enable Visualization", SimulatorOptions.isVisualization);
 //public Checkbox CheckboxMaximizeFPS = new Checkbox("Maximize FPS");
 //public Choice ChoiceAgent = new Choice();

@@ -9,7 +9,7 @@ import com.anji.util.Properties;
  */
 public class ANJIMarioEvolver {
 
-    public static String LEVEL = FastOpts.LEVEL_02_JUMPING;
+    public static String LEVEL = FastOpts.LEVEL_04_BLOCKS;
     public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
 
     public static void main(String[] args) throws Throwable {

@@ -69,14 +69,14 @@ public abstract class AbstractMutationOperation implements MutationOperation {
 			int maxMutations = (int)(maxNumOfMutationsToPerform(o) * getMutationProbability());
 			int numMutations = (int)(neatParameters.getRandomGenerator().nextDouble() * maxMutations);
 
-			for (int m = 0; m < numMutations; m++) {
+//			for (int m = 0; m < numMutations; m++) {
 				if (mutate(neatParameters, innovations, fitnessScores, o,
 						genesToAdd, genesToRemove, generationNumber)) {
 					totalOrganismsMutated++;
 				}
 
 				updateOrganismGenesAfterMutation(o, genesToAdd, genesToRemove);
-			}
+//			}
 		}
 
 		return totalOrganismsMutated;
