@@ -22,7 +22,7 @@ public class ANJIEnvironmentOnly extends ANJINEATAgent {
         GameEnvironment env = new BinaryEnvGridEnvironment();
 //        GameEnvironment env = new ValueGridEnvironment();
 //        GameEnvironment env = new MultiGridEnvironment();
-        double[] inputs = env.getInputNeurons(environment, lastInput);
+        double[] inputs = env.asInputNeurons(environment, lastInput);
 
         // put tiles through the neural network to receive game inputs
         // 1 or 0 for each of the game inputs: [left,right,down,jump,speed/attack,up(useless)]

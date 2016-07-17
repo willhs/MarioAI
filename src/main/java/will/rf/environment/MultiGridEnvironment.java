@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class MultiGridEnvironment implements GridEnvironment{
 
     @Override
-    public double[] getInputNeurons(IEnvironment environment, MarioInput lastInput) {
+    public double[] asInputNeurons(IEnvironment environment, MarioInput lastInput) {
         // a grid for each different type of tile
         List<List<Double>> grids = Arrays.stream(Tile.values())
                 // only use most common tiles to reduce total nodes

@@ -10,5 +10,5 @@ import ch.idsia.benchmark.mario.environments.IEnvironment;
  */
 public interface GameEnvironment {
 
-    public double[] getInputNeurons(IEnvironment environment, MarioInput lastInput);
+    public double[] asInputNeurons(IEnvironment environment, MarioInput lastInput);
 }

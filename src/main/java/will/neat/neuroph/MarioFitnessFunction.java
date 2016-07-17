@@ -24,8 +24,11 @@ import java.util.logging.Logger;
  * Created by Will on 29/06/2016.
  */
 public class MarioFitnessFunction extends Application implements FitnessFunction {
-    public static String LEVEL = FastOpts.LEVEL_07_SPIKY;
+    private static final double NOTABLE_FITNESS_JUMP = 100;
+    public static String LEVEL = FastOpts.LEVEL_06_GOOMBA;
     public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
+    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(0);
+    public static String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
 
     private static Logger logger = Logger.getLogger(MarioFitnessFunction.class
             .getSimpleName());
@@ -33,19 +36,21 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
     public static String VIZ_OFF_OPTIONS = ""
             + FastOpts.VIS_OFF
             + LEVEL
-            + TIME_LIMIT;
+            + DIFFICULTY
+            + MARIO_TYPE
+            + TIME_LIMIT
+            ;
 
-    public static String VIZ_ON_OPTIONS = ""
-            + FastOpts.VIS_ON_2X
+    public static String VIZ_ON_OPTIONS = VIZ_OFF_OPTIONS
+            .replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X)
 //            + " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
 //            + FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID)
-            + LEVEL
-            + TIME_LIMIT;
+            ;
 
     private static double bestFitness = 0;
 
-    private final boolean RUNNING_PSO = true;
+    private final boolean RUNNING_PSO = false;
     private boolean headless = false;
 
     // temporary
@@ -76,13 +81,19 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
             ofs.setFitness(fitnessVal);
 
             if (fitnessVal > bestFitness) {
-                bestFitness = fitnessVal;
                 logger.info("Fitness function saw new best fitness! = " + fitnessVal);
                 logger.info("hidden neurons: " + ofs.getOrganism().getNeurons(NeuronType.HIDDEN).size());
                 logger.info("connections: " + ofs.getOrganism().getConnections().size());
-                if (!headless) {
-                    visualise(nn, fitnessVal);
+
+                // if larger jump in fitness is achieved, visualise
+//                if (fitnessVal - bestFitness > NOTABLE_FITNESS_JUMP) {
+                if (fitnessVal > 8000) {
+                    if (!headless) {
+                        visualise(nn, fitnessVal);
+                    }
                 }
+                System.out.println("test");
+                bestFitness = fitnessVal;
             }
         });
     }

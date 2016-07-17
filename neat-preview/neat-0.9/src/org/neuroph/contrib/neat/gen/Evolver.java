@@ -144,7 +144,7 @@ public class Evolver {
 		this.innovations = innovations;
 		this.fitness = fitness;
 
-		setLogging(false);
+//		setLogging(false);
 	}
 
 	/**

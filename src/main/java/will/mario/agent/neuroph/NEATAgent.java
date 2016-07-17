@@ -1,11 +1,13 @@
 package will.mario.agent.neuroph;
 
+import ch.idsia.benchmark.mario.engine.generalization.EntityType;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import org.neuroph.core.NeuralNetwork;
 import will.mario.agent.MarioAIBase2;
 import will.rf.action.ActionStrategy;
 import will.rf.action.StandardHoldActionStrat;
+import will.rf.environment.EnvEnemyEnvironment;
 import will.rf.environment.EnvEntEnvironment;
 import will.rf.environment.GameEnvironment;
 
@@ -30,14 +32,21 @@ public class NEATAgent extends MarioAIBase2 {
 
     @Override
     public MarioInput actionSelection() {
+        // one grid for environment + separate grid for each enemy
+/*        GameEnvironment env = new EnvEnemyEnvironment(
+                EntityType.GOOMBA,
+                EntityType.SPIKY
+        );*/
+
         GameEnvironment env = new EnvEntEnvironment();
+
         return actionSelection(env);
     }
 
     protected MarioInput actionSelection(GameEnvironment env) {
         updateActionsHeld();
 
-        double[] inputs = env.getInputNeurons(environment, lastInput);
+        double[] inputs = env.asInputNeurons(environment, lastInput);
         nn.setInput(inputs);
         nn.calculate();
 

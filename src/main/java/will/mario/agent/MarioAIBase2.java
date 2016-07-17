@@ -48,7 +48,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	// fields to help determine if mario has moved much
 	private int lastPos = -1;
 	private int framesInSamePos = 0;
-	private int STAYS_STILL_THRESHOLD = 24; // 1.5 seconds
+	private int STAYS_STILL_THRESHOLD = 36; // 1.5 seconds
 
 	public MarioAIBase2() {
 		super("MarioAIBase");

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class ValueGridEnvironment implements GridEnvironment{
 
     @Override
-    public double[] getInputNeurons(IEnvironment environment, MarioInput lastInput) {
+    public double[] asInputNeurons(IEnvironment environment, MarioInput lastInput) {
         double VAL_MULTIPLIER = 25;
         // convert 2d tiles to input neurons
         List<Double> inputNeurons = Arrays.stream(environment.getTileField())

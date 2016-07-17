@@ -19,17 +19,17 @@ import java.util.List;
  */
 public class MarioEvolver {
 
-    public static final int NUM_INPUT_NEURONS = 728; // 19*19 grid = 361
+    public static final int NUM_INPUT_NEURONS = 728;//1089; // 19*19 grid = 361
     public static final int NUM_OUTPUT_NEURONS = 4;
     public static final String PERSISTANCE_DIR = "db/neuroph";
 
-    public static final int POP_SIZE = 200;
+    public static final int POP_SIZE = 300;
     public static final double MAX_FITNESS = 15000;
-    public static final long MAX_GENERATIONS = 200;
+    public static final long MAX_GENERATIONS = 400;
 
-    public static final int MIN_PER_SPECIE = 15;
+    public static final int MIN_PER_SPECIE = 10;
     public static final int MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;
-    public static final double SURVIVAL_RATIO = 0.1;
+    public static final double SURVIVAL_RATIO = 0.0;
     public static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
 
     // fully connected
@@ -39,11 +39,11 @@ public class MarioEvolver {
 //    private static final double PERTURB_PROB = 0.9;
 
     // FS-NEAT
-    private static final double ADD_CONN_PROB = 0.98;
-    private static final double REMOVE_CONN_PROB = 0.01;
-    private static final double ADD_NEURON_PROB = 0.92;
-    private static final double PERTURB_PROB = 0.5;
-    private static final double MAX_PERTURB = 1;
+    private static final double ADD_CONN_PROB = 1;
+    private static final double ADD_NEURON_PROB = 1;
+    private static final double PERTURB_PROB = 1;
+    private static final double REMOVE_CONN_PROB = 0.2;
+    private static final double MAX_PERTURB = 0.92;
 
 //    private static final double ADD_CONN_PROB = 0.04;
 //    private static final double REMOVE_CONN_PROB = 0.02;
@@ -51,7 +51,7 @@ public class MarioEvolver {
 //    private static final double PERTURB_PROB = 0.04;
 
 //    private static final double MAX_PERTURB = 2;
-    private static final int MAX_GENS_SPECIES = 15;
+    private static final int MAX_GENS_SPECIES = 50;
 
     public static void main(String[] args) {
         // set up NEAT paramaters
