@@ -12,8 +12,9 @@ import org.neuroph.contrib.neat.gen.NeuronType;
 import org.neuroph.contrib.neat.gen.operations.FitnessFunction;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
 import org.neuroph.core.NeuralNetwork;
-import will.mario.agent.neuroph.EnvironmentOnlyAgent;
-import will.mario.agent.neuroph.NEATAgent;
+import will.mario.agent.anji.ANJINEATAgent;
+import will.mario.agent.NEATAgent;
+import will.mario.agent.neuroph.NeurophAgent;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -70,7 +71,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
         fitnesses.stream().forEach(ofs -> {
             NeuralNetwork nn = ofs.getNeuralNetwork();
 
-            NEATAgent agent = new NEATAgent(nn);
+            NEATAgent agent = new NeurophAgent(nn);
 
             String simulatorOptions = VIZ_OFF_OPTIONS;
 
@@ -100,7 +101,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
 
     private void visualise(NeuralNetwork nn, double fitnessVal) {
         MarioSimulator rerun = new MarioSimulator(VIZ_ON_OPTIONS);
-        NEATAgent reagent = new NEATAgent(nn);
+        NEATAgent reagent = new NeurophAgent(nn);
         rerun.run(reagent);
 
 /*        this.nn = nn;
@@ -133,7 +134,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
             @Override
             protected Void call() throws Exception {
                 MarioSimulator rerun = new MarioSimulator(VIZ_ON_OPTIONS);
-                NEATAgent reagent = new EnvironmentOnlyAgent(nn);
+                NEATAgent reagent = new NeurophAgent(nn);
                 rerun.run(reagent);
 
                 // once done, stop gui thread
