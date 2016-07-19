@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import org.jgap.Chromosome;
 import org.neuroph.contrib.neat.gen.*;
 import org.neuroph.contrib.neat.gen.impl.SimpleNeatParameters;
 import org.neuroph.contrib.neat.gen.operations.MutationOperation;
@@ -39,7 +38,7 @@ public class MarioEvolverGUI extends Application {
         // set up NEAT paramaters
         SimpleNeatParameters params = new SimpleNeatParameters();
 
-        params.setFitnessFunction(new MarioFitnessFunction());
+        params.setFitnessFunction(new NeurophFitnessFunction());
         params.setPopulationSize(500);
         params.setMaximumFitness(6000);
         params.setMaximumGenerations(500);

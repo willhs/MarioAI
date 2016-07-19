@@ -12,13 +12,12 @@ import org.neuroph.contrib.neat.gen.operations.selector.NaturalSelectionOrganism
 import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciator;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
 import will.neat.neuroph.MarioEvolver;
-import will.neat.neuroph.MarioFitnessFunction;
+import will.neat.neuroph.NeurophFitnessFunction;
 import will.neat.neuroph.mutation.RemoveConnectionMutation;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by Will on 1/07/2016.
@@ -52,7 +51,7 @@ public class MarioProblem extends WillProblem {
 
         defaultParams = new SimpleNeatParameters();
 
-        defaultParams.setFitnessFunction(new MarioFitnessFunction());
+        defaultParams.setFitnessFunction(new NeurophFitnessFunction());
         defaultParams.setPopulationSize(POP_SIZE);
         defaultParams.setMaximumFitness(MAX_FITNESS);
         defaultParams.setMaximumGenerations(MAX_GENS);

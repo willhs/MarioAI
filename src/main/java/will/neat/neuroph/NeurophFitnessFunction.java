@@ -12,10 +12,11 @@ import org.neuroph.contrib.neat.gen.NeuronType;
 import org.neuroph.contrib.neat.gen.operations.FitnessFunction;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
 import org.neuroph.core.NeuralNetwork;
-import will.mario.agent.neuroph.EnvironmentOnlyAgent;
-import will.mario.agent.neuroph.NEATAgent;
+import will.mario.agent.NEATAgent;
+import will.mario.agent.neuroph.NeurophAgent;
 
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -23,17 +24,17 @@ import java.util.logging.Logger;
 /**
  * Created by Will on 29/06/2016.
  */
-public class MarioFitnessFunction extends Application implements FitnessFunction {
-    private static final double NOTABLE_FITNESS_JUMP = 100;
-    public static String LEVEL = FastOpts.LEVEL_06_GOOMBA;
+public class NeurophFitnessFunction extends Application implements FitnessFunction {
+
+    public static String LEVEL = FastOpts.LEVEL_04_BLOCKS;
     public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
     public static String DIFFICULTY = FastOpts.L_DIFFICULTY(0);
     public static String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
 
-    private static Logger logger = Logger.getLogger(MarioFitnessFunction.class
+    private static Logger logger = Logger.getLogger(NeurophFitnessFunction.class
             .getSimpleName());
 
-    public static String VIZ_OFF_OPTIONS = ""
+    public static String DEFAULT_SIM_OPTIONS = ""
             + FastOpts.VIS_OFF
             + LEVEL
             + DIFFICULTY
@@ -41,7 +42,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
             + TIME_LIMIT
             ;
 
-    public static String VIZ_ON_OPTIONS = VIZ_OFF_OPTIONS
+    public static String VIZ_ON_OPTIONS = DEFAULT_SIM_OPTIONS
             .replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X)
 //            + " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 50"
 //                + " " + MarioOptions.IntOption.VISUALIZATION_FPS.getParam() + " 30"
@@ -57,7 +58,7 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
     private NeuralNetwork nn;
     private double fitnessVal;
 
-    public MarioFitnessFunction() {
+    public NeurophFitnessFunction() {
         if (RUNNING_PSO) {
             headless = true;
             Logger.getGlobal().setLevel(Level.OFF);
@@ -70,10 +71,14 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
         fitnesses.stream().forEach(ofs -> {
             NeuralNetwork nn = ofs.getNeuralNetwork();
 
-            NEATAgent agent = new NEATAgent(nn);
+            NEATAgent agent = new NeurophAgent(nn);
 
-            String simulatorOptions = VIZ_OFF_OPTIONS;
+            String simulatorOptions = DEFAULT_SIM_OPTIONS;
 
+            int seed = new Random().nextInt();
+//            simulatorOptions += " " + MarioOptions.IntOption.LEVEL_RANDOM_SEED.getParam() + " " + seed;
+
+            System.out.println(simulatorOptions);
             MarioSimulator simulator = new MarioSimulator(simulatorOptions);
             simulator.run(agent);
 
@@ -85,22 +90,24 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
                 logger.info("hidden neurons: " + ofs.getOrganism().getNeurons(NeuronType.HIDDEN).size());
                 logger.info("connections: " + ofs.getOrganism().getConnections().size());
 
-                // if larger jump in fitness is achieved, visualise
-//                if (fitnessVal - bestFitness > NOTABLE_FITNESS_JUMP) {
-                if (fitnessVal > 8000) {
+                boolean shouldVisualise = fitnessVal - bestFitness > 8000;
+
+                if (shouldVisualise) {
                     if (!headless) {
-                        visualise(nn, fitnessVal);
+                        visualise(nn, simulatorOptions);
                     }
                 }
-                System.out.println("test");
                 bestFitness = fitnessVal;
             }
         });
     }
 
-    private void visualise(NeuralNetwork nn, double fitnessVal) {
-        MarioSimulator rerun = new MarioSimulator(VIZ_ON_OPTIONS);
-        NEATAgent reagent = new NEATAgent(nn);
+    private void visualise(NeuralNetwork nn, String options) {
+        String vizOnOptions = DEFAULT_SIM_OPTIONS
+                .replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
+
+        MarioSimulator rerun = new MarioSimulator(vizOnOptions);
+        NEATAgent reagent = new NeurophAgent(nn);
         rerun.run(reagent);
 
 /*        this.nn = nn;
@@ -133,11 +140,11 @@ public class MarioFitnessFunction extends Application implements FitnessFunction
             @Override
             protected Void call() throws Exception {
                 MarioSimulator rerun = new MarioSimulator(VIZ_ON_OPTIONS);
-                NEATAgent reagent = new EnvironmentOnlyAgent(nn);
+                NEATAgent reagent = new NeurophAgent(nn);
                 rerun.run(reagent);
 
                 // once done, stop gui thread
-                MarioFitnessFunction.this.stop();
+                NeurophFitnessFunction.this.stop();
                 return null;
             }
         };

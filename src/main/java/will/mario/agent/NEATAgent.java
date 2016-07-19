@@ -1,4 +1,4 @@
-package will.mario.agent.neuroph;
+package will.mario.agent;
 
 import ch.idsia.benchmark.mario.engine.generalization.EntityType;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
@@ -17,18 +17,16 @@ import java.util.Map;
 /**
  * Created by Will on 29/06/2016.
  */
-public class NEATAgent extends MarioAIBase2 {
-    protected NeuralNetwork nn;
-
+public abstract class NEATAgent extends MarioAIBase2 {
     private int[] keysPressed = new int[4];
 
     private Map<MarioKey, Integer> keysHeld;
 
-    public NEATAgent(NeuralNetwork nn) {
-        this.nn = nn;
+    public NEATAgent() {
          keysHeld = new HashMap<>();
     }
 
+    protected abstract double[] activateNetwork(double[] inputs);
 
     @Override
     public MarioInput actionSelection() {
@@ -47,12 +45,10 @@ public class NEATAgent extends MarioAIBase2 {
         updateActionsHeld();
 
         double[] inputs = env.asInputNeurons(environment, lastInput);
-        nn.setInput(inputs);
-        nn.calculate();
 
         // put tiles through the neural network to receive game inputs
         // 1 or 0 for each of the game inputs: [left,right,down,jump,speed/attack,up(useless)]
-        double[] networkOutput = nn.getOutputAsArray();
+        double[] networkOutput = activateNetwork(inputs);
 
         MarioInput action = mapNeuronsToAction(networkOutput);
 

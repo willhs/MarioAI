@@ -89,8 +89,11 @@ public class MarioSimulator {
 		MarioOptions.reset(options);
 		
 		//System.out.println("[MarioSimulator] Initializing the environment and the agent...");
-		
-		IEnvironment environment = MarioEnvironment.getInstance();
+
+        IEnvironment environment = null;
+
+        environment = MarioEnvironment.getInstance();
+
 		environment.reset(agent);
 				
 		//System.out.println("[MarioSimulator] SIMULATION RUNNING!");

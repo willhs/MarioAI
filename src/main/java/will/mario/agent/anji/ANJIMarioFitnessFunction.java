@@ -61,7 +61,7 @@ public class ANJIMarioFitnessFunction implements BulkFitnessFunction, Configurab
             e.printStackTrace();
         }
 
-        ANJIEnvironmentOnly agent = new ANJIEnvironmentOnly(activator);
+        ANJINEATAgent agent = new ANJINEATAgent(activator);
 
         MarioSimulator simulator = new MarioSimulator(OPTIONS);
         simulator.run(agent);

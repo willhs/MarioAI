@@ -57,7 +57,7 @@ public class MarioEvolver {
         // set up NEAT paramaters
         SimpleNeatParameters params = new SimpleNeatParameters();
 
-        params.setFitnessFunction(new MarioFitnessFunction());
+        params.setFitnessFunction(new NeurophFitnessFunction());
         params.setPopulationSize(POP_SIZE);
         params.setMaximumFitness(MAX_FITNESS);
         params.setMaximumGenerations(MAX_GENERATIONS);
@@ -114,13 +114,6 @@ public class MarioEvolver {
         } catch (PersistenceException e) {
             System.err.println("Persistance error!");
             e.printStackTrace();
-        }
-    }
-
-    private class ANJINEATParameters extends SimpleNeatParameters {
-        public ANJINEATParameters() {
-            super();
-
         }
     }
 }

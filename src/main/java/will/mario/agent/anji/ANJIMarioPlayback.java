@@ -54,7 +54,7 @@ public class ANJIMarioPlayback {
         MarioSimulator simulator = new MarioSimulator(OPTIONS);
 
         // CREATE AGENT
-        IAgent agent = new ANJIEnvironmentOnly(activator);
+        IAgent agent = new ANJINEATAgent(activator);
 
         // RUN SIMULATOR w/ AGENT
         simulator.run(agent);

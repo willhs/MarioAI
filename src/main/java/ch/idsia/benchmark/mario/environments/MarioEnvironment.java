@@ -113,6 +113,7 @@ public final class MarioEnvironment implements IEnvironment {
 	DecimalFormat df = new DecimalFormat("######.#");
 
 	public static MarioEnvironment getInstance() {
+		System.out.println("test");
 		return ourInstance;
 	}
 
