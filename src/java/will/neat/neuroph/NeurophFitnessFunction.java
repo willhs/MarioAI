@@ -3,12 +3,6 @@ package will.neat.neuroph;
 import ch.idsia.benchmark.mario.MarioSimulator;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.benchmark.mario.options.MarioOptions;
-import javafx.application.Application;
-import javafx.concurrent.Task;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.stage.Stage;
 import org.neuroph.contrib.neat.gen.NeuronType;
 import org.neuroph.contrib.neat.gen.operations.FitnessFunction;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
@@ -25,31 +19,12 @@ import java.util.logging.Logger;
 /**
  * Created by Will on 29/06/2016.
  */
-public class NeurophFitnessFunction implements FitnessFunction {
-
-    private static final int TRIALS = 5;
-    public static String LEVEL = FastOpts.LEVEL_06_GOOMBA;
-    public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
-    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(0);
-    public static String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
-    public static String LEVEL_LENGTH = FastOpts.L_LENGTH_512;
+public class NeurophFitnessFunction extends will.neat.AbstractFitnessFunction implements FitnessFunction {
 
     private static Logger logger = Logger.getLogger(NeurophFitnessFunction.class
             .getSimpleName());
 
-    public static String DEFAULT_SIM_OPTIONS = ""
-            + FastOpts.VIS_OFF
-            + LEVEL
-            + DIFFICULTY
-            + MARIO_TYPE
-            + TIME_LIMIT
-            + LEVEL_LENGTH
-            ;
-
     private static double bestFitness = 0;
-
-    private final boolean RUNNING_PSO = true;
-    private boolean headless = true;
 
     public NeurophFitnessFunction() {
         if (RUNNING_PSO) {

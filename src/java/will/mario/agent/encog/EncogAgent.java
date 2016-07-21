@@ -1,6 +1,7 @@
 package will.mario.agent.encog;
 
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
+import org.encog.ml.data.MLData;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.neural.neat.NEATNetwork;
 import will.mario.agent.NEATAgent;
@@ -18,7 +19,10 @@ public class EncogAgent extends NEATAgent {
 
     @Override
     protected double[] activateNetwork(double[] inputs) {
-        return network.compute(new BasicMLData(inputs)).getData();
+        MLData data = new BasicMLData(inputs.length);
+        data.setData(inputs);
+
+        return network.compute(data).getData();
     }
 
     @Override

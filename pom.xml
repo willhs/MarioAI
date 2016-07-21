@@ -12,10 +12,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <resources>
-        <resource>src/resources</resource>
-    </resources>
-
     <dependencies>
         <dependency>
             <groupId>org.encog</groupId>
