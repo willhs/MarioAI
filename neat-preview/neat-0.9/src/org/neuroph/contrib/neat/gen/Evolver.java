@@ -1,5 +1,9 @@
 package org.neuroph.contrib.neat.gen;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,7 +40,6 @@ public class Evolver {
 
 	public static Evolver createNew(NeatParameters params,
 			List<NeuronGene> inputLayer, List<NeuronGene> outputLayer) {
-
 
 		List<Specie> species = new ArrayList<Specie>();
 		List<Organism> organisms = new ArrayList<Organism>();
@@ -144,7 +147,7 @@ public class Evolver {
 		this.innovations = innovations;
 		this.fitness = fitness;
 
-//		setLogging(false);
+		setLogging(false);
 	}
 
 	/**
@@ -159,6 +162,15 @@ public class Evolver {
 		List<Organism> organisms = currentGeneration.getOrganisms();
 		List<Specie> species = currentGeneration.getSpecies();
 
+		// writing to file
+/*		String resultsFilename = "results/neuroph/results-" + System.currentTimeMillis() + ".csv";
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(new File(resultsFilename)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+
 		// keep evolving until the exit criteria has been met.
 		while (!neatParameters.getTerminationCondition().exitCriteriaMet(
 				neatParameters, generationNumber, currentGeneration, fitness)) {
@@ -170,6 +182,24 @@ public class Evolver {
 
 			organisms = new ArrayList<Organism>(newGeneration);
 
+			// write stuff to file
+			// ----------------------
+/*			double averageConns = organisms.stream()
+					.mapToDouble(o -> o.getConnections().size())
+					.average()
+					.getAsDouble();
+
+			try {
+				writer.write(currentGeneration
+                        + "," + fitness.getBestFitness()
+                        + "," + averageConns
+                        + "\n"
+                );
+			} catch (IOException e) {
+				e.printStackTrace();
+			}*/
+			// ---------------------
+
 			List<Specie> speciesClone = SpecieHelper.copy(species);
 
 			currentGeneration = new Generation(generationNumber, speciesClone, neatParameters.nextInnovationId());
@@ -180,10 +210,19 @@ public class Evolver {
 			neatParameters.getPersistence().addGeneration(innovations,
 					currentGeneration, fitness);
 
+
 //			logger.info("connections: " + organisms.stream().map(o ->
 //				 o.getConnections().size()
-//			).collect(Collectors.toList()));
+//			).average());
 		}
+
+/*
+		try {
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+*/
 
 //		System.out.println(getParams().getRandomGenerator().nextDouble());
 		Organism fittestOrganism = fitness.getFittestOrganism(organisms);
