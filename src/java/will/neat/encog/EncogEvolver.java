@@ -16,6 +16,7 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -37,6 +38,7 @@ public class EncogEvolver {
     private static final int MAX_GENS_SPECIES = 50;
     public static final double SURVIVAL_RATIO = 0.1;
     public static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
+    private static final double COMPAT_THRESHOLD = 5.5;
 
     private static Logger logger = Logger.getLogger(EncogEvolver.class
             .getSimpleName());
@@ -44,32 +46,37 @@ public class EncogEvolver {
     // mutations
 
     // fully connected
-//    private static final double ADD_CONN_PROB = 0.2;
-//    private static final double REMOVE_CONN_PROB = 0.8;
-//    private static final double ADD_NEURON_PROB = 0.5;
-//    private static final double PERTURB_PROB = 0.9;
+    private static final double ADD_CONN_PROB = 0.2;
+    private static final double REMOVE_CONN_PROB = 0.8;
+    private static final double ADD_NEURON_PROB = 0.5;
+    private static final double PERTURB_PROB = 0.9;
 
     // start no connections (FS-NEAT)
-    private static final double ADD_CONN_PROB = 1;
-    private static final double ADD_NEURON_PROB = 1;
-    private static final double PERTURB_PROB = 1;
-    private static final double REMOVE_CONN_PROB = 0.2;
+//    private static final double ADD_CONN_PROB = 1;
+//    private static final double ADD_NEURON_PROB = 1;
+//    private static final double PERTURB_PROB = 1;
+//    private static final double REMOVE_CONN_PROB = 0.2;
+
     private static final double PERTURB_SD = 0.92; // perturb standard deviation
 
     public static void main(String[] args) {
 
-        Substrate substrate = makeSubstrate();
+        Substrate substrate = makeMarioBrosSubstrate();
 
         NEATPopulation population = new NEATPopulation(substrate, POP_SIZE);
-        population.setActivationCycles(2);
+        population.setActivationCycles(5);
         population.setSurvivalRate(SURVIVAL_RATIO);
         population.reset();
 
         CalculateScore fitnessFunction = new EncogMarioFitnessFunction();
 
-        final TrainEA neat = new TrainEA(population, fitnessFunction);
-        neat.setSpeciation(new OriginalNEATSpeciation());
+        OriginalNEATSpeciation speciation = new OriginalNEATSpeciation();
+        speciation.setCompatibilityThreshold(COMPAT_THRESHOLD);
+        speciation.setMaxNumberOfSpecies(MAX_SPECIES);
+        speciation.setNumGensAllowedNoImprovement(MAX_GENS_SPECIES);
 
+        final TrainEA neat = new TrainEA(population, fitnessFunction);
+        neat.setSpeciation(speciation);
         neat.setSelection(new TruncationSelection(neat, 0.2));
 
 //        CompoundOperator weightMutation = composeWeightMutation();
@@ -85,13 +92,42 @@ public class EncogEvolver {
         neat.addOperation(ADD_CONN_PROB, new NEATMutateAddLink());
         neat.addOperation(REMOVE_CONN_PROB, new NEATMutateRemoveLink());
         neat.getOperators().finalizeStructure();
+        neat.setThreadCount(1);
+
+/*        neat.addStrategy(new Strategy() {
+
+            TrainEA train;
+
+            @Override
+            public void init(MLTrain train) {
+                this.train = (TrainEA) train;
+            }
+
+            @Override
+            public void preIteration() {
+
+            }
+
+            @Override
+            public void postIteration() {
+                HyperNEATGenome genome = (HyperNEATGenome) train.getBestGenome();
+                List<NEATNeuronGene> inputs = genome.getNeuronsChromosome().stream()
+                        .filter(c -> c.getNeuronType() == NEATNeuronType.Input)
+                        .collect(Collectors.toList());
+
+                inputs.forEach(i -> {
+                    System.out.println(i.getId() + ": " + i.get);
+                });
+            }
+        });*/
 
         neat.setCODEC(new HyperNEATCODEC());
 
+        int gen = 0;
+
         // evolve til done
-        while (neat.isTrainingDone() || population.getBestGenome() != null ?
-                population.getBestGenome().getScore() < MAX_FITNESS
-                : true) {
+        while (!neat.isTrainingDone() ||
+                (population.getBestGenome() != null && population.getBestGenome().getScore() < MAX_FITNESS)) {
 
             neat.iteration();
 
@@ -101,23 +137,30 @@ public class EncogEvolver {
 
             double averageCPPNLinks = population.getSpecies().stream()
                     .map(s -> s.getMembers())
+                    .flatMap(genomes -> genomes.stream())
                     .mapToInt(genome -> ((HyperNEATGenome)genome).getLinksChromosome().size())
                     .average()
                     .getAsDouble();
 
             double averageCPPNNodes = population.getSpecies().stream()
                     .map(s -> s.getMembers())
+                    .flatMap(genomes -> genomes.stream())
                     .mapToInt(genome -> ((HyperNEATGenome)genome).getNeuronsChromosome().size())
                     .average()
                     .getAsDouble();
 
 
+            logger.info("Generation:\t" + gen);
             logger.info("Best fitness:\t" + bestFitness);
             logger.info("Num species:\t" + numSpecies);
             logger.info("Ave CPPN conns:\t" + averageCPPNLinks);
             logger.info("Ave CPPN nodes:\t" + averageCPPNNodes);
+
+            gen++;
         }
 
+        logger.info("Evolving done");
+        logger.info("Winning fitness: " + population.getBestGenome().getScore());
     }
 
     private static CompoundOperator composeWeightMutation() {
@@ -176,7 +219,7 @@ public class EncogEvolver {
         return weightMutation;
     }
 
-    private static Substrate makeSubstrate() {
+    private static Substrate makeMarioBrosSubstrate() {
 //        Substrate substrate = SubstrateFactory.factorSandwichSubstrate();
         Substrate substrate = new Substrate(2);
 
@@ -203,25 +246,25 @@ public class EncogEvolver {
 
         // make outputs
 
-        // left
-        SubstrateNode left = substrate.createOutputNode();
-        left.getLocation()[0] = -1;
-        left.getLocation()[1] = 0;
-
         // right
         SubstrateNode right = substrate.createOutputNode();
         right.getLocation()[0] = 1;
         right.getLocation()[1] = 0;
 
-        // speed
-        SubstrateNode speed = substrate.createOutputNode();
-        speed.getLocation()[0] = 2;
-        speed.getLocation()[1] = 0;
+        // left
+        SubstrateNode left = substrate.createOutputNode();
+        left.getLocation()[0] = -1;
+        left.getLocation()[1] = 0;
 
-        // up
+        // jump
         SubstrateNode up = substrate.createOutputNode();
         up.getLocation()[0] = 0;
         up.getLocation()[1] = 1;
+
+        // speed
+        SubstrateNode speed = substrate.createOutputNode();
+        speed.getLocation()[0] = 0;
+        speed.getLocation()[1] = 0;
 
         return substrate;
     }

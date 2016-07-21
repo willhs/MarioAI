@@ -5,9 +5,11 @@ import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import org.neuroph.core.NeuralNetwork;
 import will.rf.action.ActionStrategy;
 import will.rf.action.StandardHoldActionStrat;
+import will.rf.environment.BinaryEnvGridEnvironment;
 import will.rf.environment.EnvEntEnvironment;
 import will.rf.environment.GameEnvironment;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
                 EntityType.SPIKY
         );*/
 
-        GameEnvironment env = new EnvEntEnvironment();
+        GameEnvironment env = new BinaryEnvGridEnvironment();
 
         return actionSelection(env);
     }
@@ -89,9 +91,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
 
     protected void updateActionsHeld() {
         keysHeld.forEach((key, frames) -> {
-//            if (frames > 0) {
                 keysHeld.put(key, frames - 1);
-//            }
         });
     }
 

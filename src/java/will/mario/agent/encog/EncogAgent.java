@@ -26,11 +26,6 @@ public class EncogAgent extends NEATAgent {
     }
 
     @Override
-    public MarioInput actionSelection() {
-        return null;
-    }
-
-    @Override
     public Object getNN() {
         return network;
     }

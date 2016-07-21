@@ -119,7 +119,7 @@ public final class LevelScene implements SpriteContext {
 			System.err
 					.println("[MarioAI ERROR] : error loading file resources/tiles.dat ; ensure this file exists in ch/ch.idsia/benchmark/mario/engine ");
 			e.printStackTrace();
-			System.exit(0);
+            throw new RuntimeException("Couldn't load tiles");
 		}
 	}
 

@@ -23,6 +23,10 @@ public class EncogMarioFitnessFunction extends AbstractFitnessFunction implement
     private static Logger logger = Logger.getLogger(EncogMarioFitnessFunction.class
             .getSimpleName());
 
+    public EncogMarioFitnessFunction() {
+        super();
+    }
+
     @Override
     public double calculateScore(MLMethod mlMethod) {
         NEATNetwork nn = (NEATNetwork) mlMethod;
@@ -48,8 +52,13 @@ public class EncogMarioFitnessFunction extends AbstractFitnessFunction implement
         String trialSimOptions = DEFAULT_SIM_OPTIONS
                 + " " + MarioOptions.IntOption.LEVEL_RANDOM_SEED.getParam() + " " + seed;
 
-        MarioSimulator simulator = new MarioSimulator(trialSimOptions);
-        simulator.run(agent);
+        try {
+            MarioSimulator simulator = new MarioSimulator(trialSimOptions);
+            simulator.run(agent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         float trialFitness = agent.getFitness();
 
@@ -82,6 +91,8 @@ public class EncogMarioFitnessFunction extends AbstractFitnessFunction implement
         NEATAgent reagent = new EncogAgent(nn);
         rerun.run(reagent);
 
+        System.out.println("viz score: " + reagent.getFitness());
+
 /*        this.nn = nn;
         System.out.println("assigned nn: " + nn.getOutputNeurons().size());
         this.fitnessVal = fitnessVal;
@@ -96,6 +107,6 @@ public class EncogMarioFitnessFunction extends AbstractFitnessFunction implement
 
     @Override
     public boolean requireSingleThreaded() {
-        return false;
+        return true;
     }
 }

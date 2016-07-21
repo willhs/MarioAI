@@ -10,6 +10,8 @@ import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.agents.IAgent;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
 
+import static will.neat.AbstractFitnessFunction.DEFAULT_SIM_OPTIONS;
+
 /**
  * Agent that sprints forward, jumps and shoots.
  * 
@@ -33,14 +35,8 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 	public static void main(String[] args) {
 		// IMPLEMENTS END-LESS RUNS
 		while (true) {
-			String options = FastOpts.VIS_ON_2X +
-					FastOpts.LEVEL_04_BLOCKS +
-					FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID_ENTITIES) +
-					FastOpts.S_TIME_LIMIT_200
-//					FastOpts.L_ENEMY(Enemy.GOOMBA, Enemy.SPIKY) +
-//					FastOpts.L_TUBES_ON + FastOpts.L_RANDOMIZE;
-			;
-			
+			String options = DEFAULT_SIM_OPTIONS.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
+
 			MarioSimulator simulator = new MarioSimulator(options);
 			
 			IAgent agent = new ManualAgent();

@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 public abstract class AbstractFitnessFunction {
 
     protected static final int TRIALS = 5;
-    public static String LEVEL = FastOpts.LEVEL_06_GOOMBA;
+    public static String LEVEL = FastOpts.LEVEL_05_GAPS;
     public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
-    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(0);
+    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(2);
     public static String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
     public static String LEVEL_LENGTH = FastOpts.L_LENGTH_512;
 
@@ -27,7 +27,7 @@ public abstract class AbstractFitnessFunction {
 
     protected static double bestFitness = 0;
 
-    protected final boolean RUNNING_PSO = true;
-    protected boolean headless = true;
+    protected final boolean RUNNING_PSO = false;
+    protected boolean headless = false;
 }
 
