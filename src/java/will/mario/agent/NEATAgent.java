@@ -12,12 +12,16 @@ import will.rf.environment.GameEnvironment;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created by Will on 29/06/2016.
  */
 public abstract class NEATAgent extends MarioAIBase2 {
     private int[] keysPressed = new int[4];
+
+    private static Logger logger = Logger.getLogger(NEATAgent.class
+            .getSimpleName());
 
     private Map<MarioKey, Integer> keysHeld;
 
@@ -57,7 +61,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
         }
 
         if (Math.random() < 0.0001) {
-//            System.out.println(Arrays.toString(networkOutput));
+            logger.info(Arrays.toString(networkOutput));
         }
 
         lastInput = action;

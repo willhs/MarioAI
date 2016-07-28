@@ -91,14 +91,14 @@ public class MarioSimulator {
 		//System.out.println("[MarioSimulator] Initializing the environment and the agent...");
 
         IEnvironment environment = null;
-
         environment = MarioEnvironment.getInstance();
 
 		environment.reset(agent);
 				
 		//System.out.println("[MarioSimulator] SIMULATION RUNNING!");
 		
-		while (!environment.isLevelFinished()) {
+		while (!environment.isLevelFinished()
+				&& !agent.sucks()) {
 			// UPDATE THE ENVIRONMENT
 			environment.tick();
 			// PUSH NEW PERCEPTS TO THE AGENT
@@ -109,10 +109,6 @@ public class MarioSimulator {
 			environment.performAction(actions);
 			// NOTIFY AGENT ABOUT CURRENT INTERMEDIATE REWARD
 			agent.receiveReward(environment.getIntermediateReward());
-
-			if (agent.sucks()) {
-				break;
-			}
 		}
 		
 		//System.out.println("[MarioSimulator] SIMULATION ENDED!");

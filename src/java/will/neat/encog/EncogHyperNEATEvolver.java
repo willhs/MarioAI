@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class EncogHyperNEATEvolver {
 
     // io
-    public static final int NUM_INPUT_NEURONS = 728; //1089; // 19*19 grid = 361
+    public static final int NUM_INPUT_NEURONS = 361; //1089; // 19*19 grid = 361
     public static final int NUM_OUTPUT_NEURONS = 4;
 
     // evolution
@@ -38,6 +38,8 @@ public class EncogHyperNEATEvolver {
     public static final double SURVIVAL_RATIO = 0.1;
     public static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
     private static final double COMPAT_THRESHOLD = 6;
+    private static final double ELITE_RATE = 0.1;
+    private static final double CROSSOVER_PROB = 0.5;
 
     private static Logger logger = Logger.getLogger(EncogHyperNEATEvolver.class
             .getSimpleName());
@@ -83,16 +85,19 @@ public class EncogHyperNEATEvolver {
         final TrainEA neat = new TrainEA(population, fitnessFunction);
         neat.setSpeciation(speciation);
         neat.setSelection(new TruncationSelection(neat, 0.2));
+        neat.setEliteRate(ELITE_RATE);
 
-//        CompoundOperator weightMutation = composeWeightMutation();
+        CompoundOperator compoundWeightMutation = composeWeightMutation();
         NEATMutateWeights weightMutation = new NEATMutateWeights(
                 new SelectFixed(1),
                 new MutatePerturbLinkWeight(PERTURB_SD)
         );
 
-        neat.setChampMutation(weightMutation);
+        CompoundOperator crossover = new CompoundOperator();
+        crossover.getComponents().add(CROSSOVER_PROB, new NEATCrossover());
+
         neat.addOperation(0.5, new NEATCrossover());
-        neat.addOperation(PERTURB_PROB, weightMutation);
+        neat.addOperation(PERTURB_PROB, compoundWeightMutation);
         neat.addOperation(ADD_NEURON_PROB, new NEATMutateAddNode());
         neat.addOperation(ADD_CONN_PROB, new NEATMutateAddLink());
         neat.addOperation(REMOVE_CONN_PROB, new NEATMutateRemoveLink());
@@ -242,8 +247,8 @@ public class EncogHyperNEATEvolver {
         for (int r = 0; r < gridWidth; r++ ) {
             for (int c = 0; c < gridHeight; c++) {
                 SubstrateNode input = substrate.createInputNode();
-                input.getLocation()[0] = r;
-                input.getLocation()[1] = c;
+                input.getLocation()[0] = c;
+                input.getLocation()[1] = r;
             }
         }
 
@@ -251,32 +256,37 @@ public class EncogHyperNEATEvolver {
         for (int r = 0; r < gridWidth; r++ ) {
             for (int c = 0; c < gridHeight; c++) {
                 SubstrateNode input = substrate.createHiddenNode();
-                input.getLocation()[0] = r;
-                input.getLocation()[1] = c;
+                input.getLocation()[0] = c;
+                input.getLocation()[1] = r;
             }
         }
 
         // make outputs
+        int middleX = gridWidth/2;
+        int middleY = gridHeight/2;
+        double spread = 1;
 
         // right
         SubstrateNode right = substrate.createOutputNode();
-        right.getLocation()[0] = 1;
-        right.getLocation()[1] = 0;
+        right.getLocation()[0] = middleX + spread;
+        right.getLocation()[1] = middleY;
 
         // left
         SubstrateNode left = substrate.createOutputNode();
-        left.getLocation()[0] = -1;
-        left.getLocation()[1] = 0;
+        left.getLocation()[0] = middleX - spread;
+        left.getLocation()[1] = middleY;
 
         // jump
         SubstrateNode up = substrate.createOutputNode();
-        up.getLocation()[0] = 0;
-        up.getLocation()[1] = 1;
+        up.getLocation()[0] = middleX;
+        up.getLocation()[1] = middleY + spread;
 
         // speed
         SubstrateNode speed = substrate.createOutputNode();
-        speed.getLocation()[0] = 0;
-        speed.getLocation()[1] = 0;
+        speed.getLocation()[0] = middleX;
+        speed.getLocation()[1] = middleY;
+
+        System.out.println(substrate);
 
         return substrate;
     }

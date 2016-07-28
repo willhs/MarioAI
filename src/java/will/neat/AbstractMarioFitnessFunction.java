@@ -3,6 +3,7 @@ package will.neat;
 import ch.idsia.benchmark.mario.MarioSimulator;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.benchmark.mario.options.MarioOptions;
+import javafx.concurrent.Task;
 import will.mario.agent.NEATAgent;
 import will.neat.neuroph.Visualiser;
 
@@ -13,12 +14,13 @@ import java.util.logging.Logger;
 
 /**
  * Created by hardwiwill on 21/07/16.
+ * Generic 'N' represents the kind of neural network that is being evaluated
  */
-public abstract class AbstractMarioFitnessFunction {
+public abstract class AbstractMarioFitnessFunction<N> {
 
     public static String LEVEL = FastOpts.LEVEL_05_GAPS;
-    public static String TIME_LIMIT = FastOpts.S_TIME_LIMIT_200;
-    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(4);
+    public static String TIME_LIMIT = MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 100";
+    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(2);
     public static String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
     public static String LEVEL_LENGTH = FastOpts.L_LENGTH_512;
 
@@ -47,7 +49,7 @@ public abstract class AbstractMarioFitnessFunction {
         }
     }
 
-    protected double evaluate(NEATAgent agent, Logger logger) {
+    protected double evaluate(NEATAgent agent, N nn, Logger logger) {
         double fitnessSum = 0;
 
         for (int t = 0; t < TRIALS; t++) {
@@ -59,7 +61,10 @@ public abstract class AbstractMarioFitnessFunction {
             if (shouldPlayback(trialFitness)) {
                 String vizSimOptions = simOptions.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
                 playMario(agent, vizSimOptions);
-                logRun(logger, trialFitness);
+            }
+
+            if (trialFitness > bestFitness) {
+                logRun(logger, trialFitness, nn);
             }
 
             updateBestFitness(trialFitness);
@@ -95,13 +100,8 @@ public abstract class AbstractMarioFitnessFunction {
                 + " " + MarioOptions.IntOption.LEVEL_RANDOM_SEED.getParam() + " " + seed;
     }
 
-    protected void logRun(Logger logger, double fitness) {
+    protected void logRun(Logger logger, double fitness, N n) {
         logger.info("Fitness function saw new best fitness! = " + fitness);
     }
 
-    protected void visualise() {
-        Visualiser viz = new Visualiser();
-
-        viz.drawNeuralNet();
-    }
 }

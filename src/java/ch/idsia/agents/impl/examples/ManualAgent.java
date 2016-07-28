@@ -3,14 +3,14 @@ package ch.idsia.agents.impl.examples;
 import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.controllers.MarioHijackAIBase;
 import ch.idsia.benchmark.mario.MarioSimulator;
-import ch.idsia.benchmark.mario.engine.SimulatorOptions;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.agents.IAgent;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
 
-import static will.neat.AbstractFitnessFunction.DEFAULT_SIM_OPTIONS;
+import static will.neat.AbstractMarioFitnessFunction.DEFAULT_SIM_OPTIONS;
+
 
 /**
  * Agent that sprints forward, jumps and shoots.

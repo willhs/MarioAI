@@ -1,12 +1,14 @@
 package will.neat.neuroph;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.encog.neural.neat.NEATNetwork;
 import org.neuroph.core.Connection;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.Neuron;
@@ -23,12 +25,18 @@ public class Visualiser extends Application{
 
     private Canvas canvas;
 
-    public Visualiser() {
-        Application.launch();
+    private Task<Void> task;
+    private double fitness;
+    private NEATNetwork nn;
+
+    public Visualiser(Task<Void> task, NEATNetwork nn, double fitness) {
+        this.task = task;
+        this.fitness = fitness;
+        this.nn = nn;
     }
 
-    public void drawNeuralNet(Canvas canvas, NeuralNetwork nn, double fitness) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+    public void drawNeuralNet() {
+/*        GraphicsContext gc = canvas.getGraphicsContext2D();
 
         int gridX = 0, gridY = 0;
         int rows = 19, cols = 19;
@@ -80,7 +88,7 @@ public class Visualiser extends Application{
                     drawConnection(gc, conn, srcX, srcY, destX, destY);
                 }
             });
-        });
+        });*/
 
 //        endNodes.forEach(n -> {
 //            int index = endNodes.indexOf(n);
@@ -128,7 +136,11 @@ public class Visualiser extends Application{
         root.getChildren().add(canvas);
         primaryStage.setScene(scene);
 
-        //drawNeuralNet( nn, fitness);
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+        drawNeuralNet();
 
         primaryStage.show();
     }

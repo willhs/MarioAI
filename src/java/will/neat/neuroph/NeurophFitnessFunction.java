@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 /**
  * Created by Will on 29/06/2016.
  */
-public class NeurophFitnessFunction extends AbstractMarioFitnessFunction implements FitnessFunction {
+public class NeurophFitnessFunction extends AbstractMarioFitnessFunction<NeuralNetwork> implements FitnessFunction {
 
     private static Logger logger = Logger.getLogger(NeurophFitnessFunction.class
             .getSimpleName());
@@ -36,7 +36,7 @@ public class NeurophFitnessFunction extends AbstractMarioFitnessFunction impleme
             NeuralNetwork nn = ofs.getNeuralNetwork();
 
             NEATAgent agent = new NeurophAgent(nn);
-            double fitnessVal = evaluate(agent, logger);
+            double fitnessVal = evaluate(agent, nn, logger);
 
             ofs.setFitness(fitnessVal);
         });
