@@ -10,7 +10,7 @@ import org.encog.neural.neat.NEATNetwork;
 import will.mario.agent.NEATAgent;
 import will.mario.agent.encog.EncogAgent;
 import will.mario.agent.neuroph.NeurophAgent;
-import will.neat.AbstractFitnessFunction;
+import will.neat.AbstractMarioFitnessFunction;
 
 import java.util.Random;
 import java.util.logging.Logger;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * Created by Will on 17/07/2016.
  */
-public class EncogMarioFitnessFunction extends AbstractFitnessFunction implements CalculateScore {
+public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction implements CalculateScore {
 
     private static Logger logger = Logger.getLogger(EncogMarioFitnessFunction.class
             .getSimpleName());
@@ -31,73 +31,9 @@ public class EncogMarioFitnessFunction extends AbstractFitnessFunction implement
     public double calculateScore(MLMethod mlMethod) {
         NEATNetwork nn = (NEATNetwork) mlMethod;
 
-        double fitnessSum = 0;
+        NEATAgent agent = new EncogAgent(nn);
 
-        for (int t = 0; t < TRIALS; t++) {
-            NEATAgent agent = new EncogAgent(nn);
-
-            float trialFitness = testRun(agent, nn);
-            fitnessSum += trialFitness;
-        }
-
-        double averageFitness = fitnessSum / TRIALS;
-        double fitnessVal = averageFitness;
-
-        return fitnessVal;
-    }
-
-    private float testRun(NEATAgent agent, NEATNetwork nn) {
-
-        int seed = new Random().nextInt();
-        String trialSimOptions = DEFAULT_SIM_OPTIONS
-                + " " + MarioOptions.IntOption.LEVEL_RANDOM_SEED.getParam() + " " + seed;
-
-        try {
-            MarioSimulator simulator = new MarioSimulator(trialSimOptions);
-            simulator.run(agent);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        float trialFitness = agent.getFitness();
-
-        if (trialFitness > bestFitness) {
-            reportBest(nn, trialFitness);
-            bestFitness = trialFitness;
-        }
-
-        boolean shouldVisualise = trialFitness == bestFitness && trialFitness > 6000;
-
-        if (shouldVisualise) {
-            if (!headless) {
-                visualise((NEATNetwork)agent.getNN(), trialSimOptions);
-            }
-        }
-
-        return trialFitness;
-    }
-
-    private void reportBest(NEATNetwork nn, float fitness) {
-        logger.info("Fitness function saw new best fitness! = " + fitness);
-        logger.info("connections: " + nn.getLinks().length);
-    }
-
-    private void visualise(NEATNetwork nn, String options) {
-        String vizOnOptions = options
-                .replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
-
-        MarioSimulator rerun = new MarioSimulator(vizOnOptions);
-        NEATAgent reagent = new EncogAgent(nn);
-        rerun.run(reagent);
-
-        System.out.println("viz score: " + reagent.getFitness());
-
-/*        this.nn = nn;
-        System.out.println("assigned nn: " + nn.getOutputNeurons().size());
-        this.fitnessVal = fitnessVal;
-
-        Application.launch();*/
+        return evaluate(agent, logger);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 	}
 
 	public MarioInput actionSelectionAI() {
-		System.out.println(info.distancePassedPhys);
+//		System.out.println(info.distancePassedPhys);
 //		System.out.println(info.distancePassedCells);
 		return action;
 	}

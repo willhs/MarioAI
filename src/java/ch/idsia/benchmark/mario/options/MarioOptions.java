@@ -154,8 +154,8 @@ public class MarioOptions {
 		LEVEL_MARIO_INITIAL_POSITION_X("mix", 32, "Mario spawn position X (in pixels)."),
 		LEVEL_MARIO_INITIAL_POSITION_Y("miy", 32, "Mario spawn position Y (in pixels)."),		
 		LEVEL_HEIGHT("lh", 15, "Level height."),
-		LEVEL_EXIT_X("ex", 0, "Feature-X of the exit within the level in tiles (if [0,0] -> moved to the right end of the level."),
-		LEVEL_EXIT_Y("ey", 0, "Feature-Y of the exit within the level in tiles (if [0,0] -> moved to the right end of the level."),
+		LEVEL_EXIT_X("ex", 0, "NeurophFeature-X of the exit within the level in tiles (if [0,0] -> moved to the right end of the level."),
+		LEVEL_EXIT_Y("ey", 0, "NeurophFeature-Y of the exit within the level in tiles (if [0,0] -> moved to the right end of the level."),
 		
 		SIMULATION_MARIO_START_MODE("mm", 2, "Mario start mode, 2 -> FIRE, 1 -> LARGE, 0 -> SMALL."),
 		SIMULATION_TIME_LIMIT("tl", 200, "How many marioseconds Mario has to finish the level."),

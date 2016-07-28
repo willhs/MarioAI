@@ -22,7 +22,7 @@ abstract class AbstractGridEnvironment implements GridEnvironment {
                     return Arrays.stream(tileRow)
                             .map(tile -> {
                                 // 0 if nothing in tile or 1 if something
-                                return tile == Tile.NOTHING ? 0 : 1;
+                                return tile == Tile.NOTHING ? 0 : 0.5;
                             });
                 })
                 .mapToDouble(i->i)

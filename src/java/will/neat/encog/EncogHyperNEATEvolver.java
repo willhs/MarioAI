@@ -16,13 +16,12 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
  * Created by Will on 17/07/2016.
  */
-public class EncogEvolver {
+public class EncogHyperNEATEvolver {
 
     // io
     public static final int NUM_INPUT_NEURONS = 728; //1089; // 19*19 grid = 361
@@ -38,16 +37,21 @@ public class EncogEvolver {
     private static final int MAX_GENS_SPECIES = 50;
     public static final double SURVIVAL_RATIO = 0.1;
     public static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
-    private static final double COMPAT_THRESHOLD = 5.5;
+    private static final double COMPAT_THRESHOLD = 6;
 
-    private static Logger logger = Logger.getLogger(EncogEvolver.class
+    private static Logger logger = Logger.getLogger(EncogHyperNEATEvolver.class
             .getSimpleName());
 
     // mutations
 
     // fully connected
-    private static final double ADD_CONN_PROB = 0.2;
-    private static final double REMOVE_CONN_PROB = 0.8;
+//    private static final double ADD_CONN_PROB = 0.2;
+//    private static final double REMOVE_CONN_PROB = 0.8;
+//    private static final double ADD_NEURON_PROB = 0.5;
+//    private static final double PERTURB_PROB = 0.9;
+
+    private static final double ADD_CONN_PROB = 0.8;
+    private static final double REMOVE_CONN_PROB = 0.2;
     private static final double ADD_NEURON_PROB = 0.5;
     private static final double PERTURB_PROB = 0.9;
 
@@ -67,6 +71,7 @@ public class EncogEvolver {
         population.setActivationCycles(5);
         population.setSurvivalRate(SURVIVAL_RATIO);
         population.reset();
+        population.setCODEC(new HyperNEATCODECWill());
 
         CalculateScore fitnessFunction = new EncogMarioFitnessFunction();
 
@@ -121,7 +126,8 @@ public class EncogEvolver {
             }
         });*/
 
-        neat.setCODEC(new HyperNEATCODEC());
+//        neat.setCODEC(new HyperNEATCODEC());
+        neat.setCODEC(new HyperNEATCODECWill());
 
         int gen = 0;
 
@@ -133,6 +139,12 @@ public class EncogEvolver {
 
             // report
             double bestFitness = population.getBestGenome().getScore();
+            double bestFitnessGen = population.getSpecies().stream()
+                    .flatMap(s -> s.getMembers().stream())
+                    .mapToDouble(g -> g.getScore())
+                    .max()
+                    .getAsDouble();
+
             int numSpecies = population.getSpecies().size();
 
             double averageCPPNLinks = population.getSpecies().stream()
@@ -151,7 +163,7 @@ public class EncogEvolver {
 
 
             logger.info("Generation:\t" + gen);
-            logger.info("Best fitness:\t" + bestFitness);
+            logger.info("Best fitness:\t" + bestFitnessGen);
             logger.info("Num species:\t" + numSpecies);
             logger.info("Ave CPPN conns:\t" + averageCPPNLinks);
             logger.info("Ave CPPN nodes:\t" + averageCPPNNodes);

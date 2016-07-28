@@ -23,7 +23,11 @@ public class Visualiser extends Application{
 
     private Canvas canvas;
 
-    public static void drawNeuralNet(Canvas canvas, NeuralNetwork nn, double fitness) {
+    public Visualiser() {
+        Application.launch();
+    }
+
+    public void drawNeuralNet(Canvas canvas, NeuralNetwork nn, double fitness) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         int gridX = 0, gridY = 0;

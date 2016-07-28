@@ -305,12 +305,12 @@ public final class MarioEnvironment implements IEnvironment {
 		if (levelScene.level != null && levelScene.mario != null) {
 			ret.add("Total levelScene length = " + levelScene.level.length);
 			ret.add("Total levelScene height = " + levelScene.level.height);
-			ret.add("Physical Mario Feature (x,y): ("
+			ret.add("Physical Mario NeurophFeature (x,y): ("
 					+ df.format(levelScene.mario.x) + ","
 					+ df.format(levelScene.mario.y) + ")");
 			ret.add("Mario Observation (Receptive Field)   Width: "
 					+ mario.receptiveFieldWidth + " Height: " + mario.receptiveFieldHeight);
-			ret.add("X Exit Feature: " + levelScene.level.xExit);
+			ret.add("X Exit NeurophFeature: " + levelScene.level.xExit);
 			int MarioXInMap = (int) levelScene.mario.x / levelScene.cellSize; // TODO:
 																				// !!H!
 																				// doublcheck
@@ -325,7 +325,7 @@ public final class MarioEnvironment implements IEnvironment {
 																				// replace
 																				// with
 																				// levelScene.mario.mapY
-			ret.add("Calibrated Mario Feature (x,y): (" + MarioXInMap + ","
+			ret.add("Calibrated Mario NeurophFeature (x,y): (" + MarioXInMap + ","
 					+ MarioYInMap + ")\n");
 
 			Tile[][] levelScene = getTileField();
