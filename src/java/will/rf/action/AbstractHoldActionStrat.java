@@ -9,8 +9,8 @@ import ch.idsia.benchmark.mario.engine.input.MarioKey;
 public abstract class AbstractHoldActionStrat implements HoldActionStrat {
 
     protected MarioKey[] marioKeys = new MarioKey[]{
-            MarioKey.RIGHT,
             MarioKey.LEFT,
+            MarioKey.RIGHT,
             MarioKey.JUMP,
             MarioKey.SPEED
     };

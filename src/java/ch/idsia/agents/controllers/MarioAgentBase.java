@@ -66,6 +66,7 @@ public abstract class MarioAgentBase implements IAgent {
 
 	@Override
 	public void reset(AgentOptions options) {
+		sucks = false;
 	}
 	
 	@Override

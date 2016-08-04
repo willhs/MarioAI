@@ -42,6 +42,15 @@ public class NeurophFitnessFunction extends AbstractMarioFitnessFunction<NeuralN
         });
     }
 
+    @Override
+    protected void logRun(Logger logger, double fitness, NeuralNetwork nn) {
+        logger.info("Fitness function saw new best fitness! = " + fitness);
+    }
+
+    @Override
+    protected boolean shouldPlayBack(double fitness) {
+        return !headless && fitness > bestFitness && fitness > 8000;
+    }
 
     private void visualise(NeuralNetwork nn, String options) {
         String vizOnOptions = options

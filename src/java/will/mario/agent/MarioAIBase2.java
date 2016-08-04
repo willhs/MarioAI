@@ -63,6 +63,9 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	public void reset(AgentOptions options) {
 		super.reset(options);
 		highestFitness = 0;
+        lastPos = -1;
+		framesInSamePos = 0;
+		lastInput = new MarioInput();
 	}
 
 	@Override
@@ -97,7 +100,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	}
 
 	public float getFitness() {
-		return highestFitness + intermediateReward;
+		return highestFitness;
 	}
 
 }

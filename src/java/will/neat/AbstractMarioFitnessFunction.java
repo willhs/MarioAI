@@ -3,9 +3,7 @@ package will.neat;
 import ch.idsia.benchmark.mario.MarioSimulator;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.benchmark.mario.options.MarioOptions;
-import javafx.concurrent.Task;
 import will.mario.agent.NEATAgent;
-import will.neat.neuroph.Visualiser;
 
 import java.util.Random;
 import java.util.logging.Level;
@@ -19,7 +17,7 @@ import java.util.logging.Logger;
 public abstract class AbstractMarioFitnessFunction<N> {
 
     public static String LEVEL = FastOpts.LEVEL_05_GAPS;
-    public static String TIME_LIMIT = MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 100";
+    public static String TIME_LIMIT = " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 200";
     public static String DIFFICULTY = FastOpts.L_DIFFICULTY(2);
     public static String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
     public static String LEVEL_LENGTH = FastOpts.L_LENGTH_512;
@@ -33,13 +31,13 @@ public abstract class AbstractMarioFitnessFunction<N> {
             + LEVEL_LENGTH
             ;
 
-    protected final int TRIALS = 5;
+    protected final int TRIALS = 20;
 
     protected final boolean RUNNING_PSO = false;
 
     protected static double bestFitness = 0;
 
-    protected boolean headless = false;
+    protected boolean headless = true;
 
     public AbstractMarioFitnessFunction() {
         if (RUNNING_PSO) {
@@ -53,18 +51,25 @@ public abstract class AbstractMarioFitnessFunction<N> {
         double fitnessSum = 0;
 
         for (int t = 0; t < TRIALS; t++) {
+            // reset agent
+            agent.reset(null);
+
+            // do trial with new random seed
             int seed = new Random().nextInt();
             String simOptions = getSimOptions(seed);
 
             float trialFitness = playMario(agent, simOptions);
 
-            if (shouldPlayback(trialFitness)) {
-                String vizSimOptions = simOptions.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
-                playMario(agent, vizSimOptions);
+            // notify bet fitness
+            if (trialFitness > bestFitness) {
+                logger.info("Fitness function saw new best fitness! = " + trialFitness);
             }
 
-            if (trialFitness > bestFitness) {
+            // show the run visually
+            if (shouldPlayBack(trialFitness)) {
                 logRun(logger, trialFitness, nn);
+                String vizSimOptions = simOptions.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
+                playMario(agent, vizSimOptions);
             }
 
             updateBestFitness(trialFitness);
@@ -85,8 +90,8 @@ public abstract class AbstractMarioFitnessFunction<N> {
         return agent.getFitness();
     }
 
-    protected boolean shouldPlayback(double fitness) {
-        return !headless && fitness > bestFitness && fitness > 6000;
+    protected boolean shouldPlayBack(double fitness) {
+        return !headless && fitness > bestFitness && fitness > 8000;
     }
 
     private void updateBestFitness(double fitness) {
@@ -101,7 +106,6 @@ public abstract class AbstractMarioFitnessFunction<N> {
     }
 
     protected void logRun(Logger logger, double fitness, N n) {
-        logger.info("Fitness function saw new best fitness! = " + fitness);
     }
 
 }

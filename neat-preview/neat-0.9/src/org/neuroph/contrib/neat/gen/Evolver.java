@@ -147,7 +147,7 @@ public class Evolver {
 		this.innovations = innovations;
 		this.fitness = fitness;
 
-		setLogging(false);
+//		setLogging(false);
 	}
 
 	/**
@@ -162,15 +162,6 @@ public class Evolver {
 		List<Organism> organisms = currentGeneration.getOrganisms();
 		List<Specie> species = currentGeneration.getSpecies();
 
-		// writing to file
-/*		String resultsFilename = "results/neuroph/results-" + System.currentTimeMillis() + ".csv";
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(new File(resultsFilename)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-
 		// keep evolving until the exit criteria has been met.
 		while (!neatParameters.getTerminationCondition().exitCriteriaMet(
 				neatParameters, generationNumber, currentGeneration, fitness)) {
@@ -182,24 +173,6 @@ public class Evolver {
 
 			organisms = new ArrayList<Organism>(newGeneration);
 
-			// write stuff to file
-			// ----------------------
-/*			double averageConns = organisms.stream()
-					.mapToDouble(o -> o.getConnections().size())
-					.average()
-					.getAsDouble();
-
-			try {
-				writer.write(currentGeneration
-                        + "," + fitness.getBestFitness()
-                        + "," + averageConns
-                        + "\n"
-                );
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
-			// ---------------------
-
 			List<Specie> speciesClone = SpecieHelper.copy(species);
 
 			currentGeneration = new Generation(generationNumber, speciesClone, neatParameters.nextInnovationId());
@@ -210,21 +183,14 @@ public class Evolver {
 			neatParameters.getPersistence().addGeneration(innovations,
 					currentGeneration, fitness);
 
-
-//			logger.info("connections: " + organisms.stream().map(o ->
-//				 o.getConnections().size()
-//			).average());
+			logger.info("Connections: "
+					+ currentGeneration.getOrganisms().stream()
+                        .mapToInt(o -> o.getConnections().size())
+                        .average()
+                        .getAsDouble()
+			);
 		}
 
-/*
-		try {
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-*/
-
-//		System.out.println(getParams().getRandomGenerator().nextDouble());
 		Organism fittestOrganism = fitness.getFittestOrganism(organisms);
 		System.out.println("fittest num connections: " + fittestOrganism.getConnections().size());
 		return fittestOrganism;

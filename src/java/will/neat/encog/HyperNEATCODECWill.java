@@ -16,16 +16,21 @@ import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Created by willhs on 22/07/2016.
  */
 public class HyperNEATCODECWill extends HyperNEATCODEC {
 
-    private double minWeight = 0.2;
-    private double maxWeight = 5.0;
+    private double minWeight = 0.1;
+    private double maxWeight = 1.0;
+
+    Logger logger = Logger.getLogger(getClass().getSimpleName());
 
     /**
      * {@inheritDoc}
@@ -41,14 +46,27 @@ public class HyperNEATCODECWill extends HyperNEATCODEC {
                            final Genome genome) {
         // obtain the CPPN
         final NEATCODEC neatCodec = new NEATCODEC();
-        final NEATNetwork cppn = (NEATNetwork) neatCodec.decode(genome);
+        NEATNetwork cppn = (NEATNetwork) neatCodec.decode(genome);
 
-        final List<NEATLink> linkList = new ArrayList<NEATLink>();
+        // scale down weights
+        double scaleFactor = 0.2;
+        List<NEATLink> newLinks = Arrays.stream(cppn.getLinks())
+                .map(l -> new NEATLink(l.getFromNeuron(), l.getToNeuron(), l.getWeight() * scaleFactor))
+                .collect(Collectors.toList());
+
+        cppn = new NEATNetwork(cppn.getInputCount(), cppn.getOutputCount(), newLinks, cppn.getActivationFunctions());
+
+        // log weights
+        if (Math.random() < 0.01) {
+//            logger.info("CPPN links: (" + cppn.getLinks().length + ") : " + Arrays.toString(Arrays.stream(cppn.getLinks()).mapToDouble(l -> l.getWeight()).toArray()));
+        }
+
+        final List<NEATLink> linkList = new ArrayList<>();
 
         final ActivationFunction[] afs = new ActivationFunction[substrate
                 .getNodeCount()];
 
-        final ActivationFunction af = new ActivationSigmoid();
+        final ActivationFunction af = new ActivationClippedLinear();
         // all activation functions are the same
         for (int i = 0; i < afs.length; i++) {
             afs[i] = af;

@@ -9,23 +9,25 @@ import org.neuroph.contrib.neat.gen.operations.mutation.WeightMutationOperation;
 import org.neuroph.contrib.neat.gen.operations.selector.NaturalSelectionOrganismSelector;
 import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciator;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
+import org.neuroph.core.NeuralNetwork;
 import will.neat.neuroph.mutation.RemoveConnectionMutation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Will on 28/06/2016.
  */
-public class MarioEvolver {
+public class NeurophEvolver {
 
-    public static final int NUM_INPUT_NEURONS = 728;//1089; // 19*19 grid = 361
+    public static final int NUM_INPUT_NEURONS = 367; // 19*19 grid = 361, actions: 4
     public static final int NUM_OUTPUT_NEURONS = 4;
     public static final String PERSISTANCE_DIR = "db/neuroph";
 
-    public static final int POP_SIZE = 200;
+    public static final int POP_SIZE = 300;
     public static final double MAX_FITNESS = 30000; // for level length = 512
-    public static final long MAX_GENERATIONS = 100;
+    public static final long MAX_GENERATIONS = 500;
 
     public static final int MIN_PER_SPECIE = 10;
     public static final int MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;

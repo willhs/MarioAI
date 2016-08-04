@@ -11,7 +11,7 @@ import org.neuroph.contrib.neat.gen.operations.mutation.WeightMutationOperation;
 import org.neuroph.contrib.neat.gen.operations.selector.NaturalSelectionOrganismSelector;
 import org.neuroph.contrib.neat.gen.operations.speciator.DynamicThresholdSpeciator;
 import org.neuroph.contrib.neat.gen.persistence.PersistenceException;
-import will.neat.neuroph.MarioEvolver;
+import will.neat.neuroph.NeurophEvolver;
 import will.neat.neuroph.NeurophFitnessFunction;
 import will.neat.neuroph.mutation.RemoveConnectionMutation;
 
@@ -25,8 +25,8 @@ import java.util.List;
 public class MarioProblem extends WillProblem {
 
     // network io
-    private static final int NUM_INPUT_NEURONS = MarioEvolver.NUM_INPUT_NEURONS;
-    private static final int NUM_OUTPUT_NEURONS = MarioEvolver.NUM_OUTPUT_NEURONS;
+    private static final int NUM_INPUT_NEURONS = NeurophEvolver.NUM_INPUT_NEURONS;
+    private static final int NUM_OUTPUT_NEURONS = NeurophEvolver.NUM_OUTPUT_NEURONS;
 
     // constant neat parameters
     private static final int POP_SIZE =	200;

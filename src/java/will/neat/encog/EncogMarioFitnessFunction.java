@@ -14,6 +14,7 @@ import will.mario.agent.neuroph.NeurophAgent;
 import will.neat.AbstractMarioFitnessFunction;
 import will.neat.neuroph.Visualiser;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -52,17 +53,22 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     }
 
     @Override
-    protected boolean shouldPlayback(double fitness) {
+    protected boolean shouldPlayBack(double fitness) {
         return !headless
-//                && fitness > 5000
-                && Math.random() < 0.001;
+                && fitness > 5000
+                && Math.random() < 0.01;
     }
 
     @Override
     protected void logRun(Logger logger, double fitness, NEATNetwork nn) {
         super.logRun(logger, fitness, nn);
 
-//        logger.info("Num connections: " + nn.getLinks().length);
+        logger.info("connections: " + nn.getLinks().length + ", : " +  Arrays.toString(
+                Arrays.stream(nn.getLinks())
+                        .mapToDouble(l -> l.getWeight())
+                        .toArray()
+        ));
+        logger.info("connections: " + Arrays.toString(nn.getLinks()));
     }
 
     @Override
