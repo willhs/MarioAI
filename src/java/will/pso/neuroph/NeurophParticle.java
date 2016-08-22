@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package will.pso.anji;
+package will.pso.neuroph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
  *
  * @author xuebing + Will
  */
-public class ANJIParticle {
+public class NeurophParticle {
 
-    private List<ANJIFeature> features = new ArrayList<>();
+    private List<NeurophFeature> neurophFeatures = new ArrayList<>();
     private List<Double> pBestFeats = new ArrayList<>();
     private List<Double> nBestFeats = new ArrayList<>();
 
@@ -27,21 +27,21 @@ public class ANJIParticle {
     private double c1,  c2;
     private Random r1 = new Random(),  r2 = new Random();
 
-    public ANJIParticle(List<ANJIFeature> features) {
-        this.features = features.stream().map(f -> f.clone()).collect(Collectors.toList());
+    public NeurophParticle(List<NeurophFeature> neurophFeatures) {
+        this.neurophFeatures = neurophFeatures.stream().map(f -> f.clone()).collect(Collectors.toList());
 
-        for (ANJIFeature f : this.features) {
-            // add dummy features (just until old code is understood)
+        for (NeurophFeature f : this.neurophFeatures) {
+            // add dummy neurophFeatures (just until old code is understood)
             f.generateInitialVals();
             this.pBestFeats.add(0.0);
             this.nBestFeats.add(0.0);
         }
     }
 
-    public ANJIParticle(List<ANJIFeature> features, List<Double> pBestFeats, List<Double> nBestFeats,
-                        double fitness, double pBestFitness, double nBestFitness,
-                        double c1, double c2, double inertia) {
-        this.features = features;
+    public NeurophParticle(List<NeurophFeature> neurophFeatures, List<Double> pBestFeats, List<Double> nBestFeats,
+                           double fitness, double pBestFitness, double nBestFitness,
+                           double c1, double c2, double inertia) {
+        this.neurophFeatures = neurophFeatures;
         this.pBestFeats = pBestFeats;
         this.nBestFeats = nBestFeats;
 
@@ -55,27 +55,27 @@ public class ANJIParticle {
     }
 
     public int getSize() {
-        return features.size();
+        return neurophFeatures.size();
     }
 
     public void setPosition(int index, double value) {
-        this.features.get(index).setValue(value);
+        this.neurophFeatures.get(index).setValue(value);
     }
 
     public double getFeatures(int index) {
-        return features.get(index).getValue();
+        return neurophFeatures.get(index).getValue();
     }
 
-    public List<ANJIFeature> getFeatures() {
-        return features;
+    public List<NeurophFeature> getNeurophFeatures() {
+        return neurophFeatures;
     }
 
     public void setVelocity(int index, double value) {
-        features.get(index).setVel(value);
+        neurophFeatures.get(index).setVel(value);
     }
 
     public double getVelocity(int index) {
-        return features.get(index).getVel();
+        return neurophFeatures.get(index).getVel();
     }
 
     public double getFitness() {
@@ -94,7 +94,7 @@ public class ANJIParticle {
         return pBestFeats.get(index);
     }
 
-    public List<Double> getPBestfeatures() {
+    public List<Double> getPBestFeatures() {
         return pBestFeats;
     }
 
@@ -114,7 +114,7 @@ public class ANJIParticle {
         return nBestFeats.get(index);
     }
 
-    public List<Double> getNBestfeatures() {
+    public List<Double> getNBestFeatures() {
         return nBestFeats;
     }
 
@@ -168,10 +168,10 @@ public class ANJIParticle {
             v_i += secondMult;
 
 /*            System.out.println("--- updating " + i + "th feature ----");
-            System.out.println(getFeatures().get(i));
+            System.out.println(getNeurophFeatures().get(i));
             System.out.printf("vel: %4.2f, after inertia: %4.2f\n", getVelocity(i), (getVelocity(i) * getInertia()));
             System.out.println("distToPBest: " + distToPBest + ", distToNeighBest: " + distToNeighBest);
-            System.out.println("pBest: " + getPBestfeatures(i) + " nBest: " + getNBestFeat(i));
+            System.out.println("pBest: " + getPBestFeatures(i) + " nBest: " + getNBestFeat(i));
             System.out.printf("first mult: %4.2f, second: %4.2f \n", firstMult, secondMult);
             System.out.printf("final vel: %4.2f\n", v_i);
             System.out.println("----------------------------------");*/
@@ -181,7 +181,7 @@ public class ANJIParticle {
     }
 
     public void updatePosition() {
-        for (ANJIFeature f : features) {
+        for (NeurophFeature f : neurophFeatures) {
             double newVal = f.getValue() + f.getVel();
 
             // clamp
@@ -200,25 +200,52 @@ public class ANJIParticle {
      * prints the differences between each feature's initial and current value
      */
     public void printDiffs() {
-        features.forEach(f -> {
+        neurophFeatures.forEach(f -> {
             f.printDiffs();
         });
     }
 
     public String toString() {
         return "Particle. PBest: " + pBestFitness + ", NBest: " + nBestFitness
-                + "\nPBest position: " + pBestFeats
-                + "\nNBest position: " + nBestFeats
-                + "\nCurr. position: " + features.stream().map(f->f.getValue()).collect(Collectors.toList());
+                + "\n" + getParams()
+                + "\nCurr. position: " + values()
+                + "\nPBest position: " + formatVals(pBestFeats);
+//                + "\nNBest position: " + formatVals(nBestFeats)
+    }
+
+    public List<String> values() {
+        return neurophFeatures.stream().map(f->String.format("%4.2f", f.getValue())).collect(Collectors.toList());
+    }
+
+    public List<String> formatVals(List<Double> vals) {
+        return vals.stream().map(f->String.format("%4.2f", f)).collect(Collectors.toList());
+    }
+
+    public List<NeurophMarioProblem.PARAMS> getParams() {
+        return neurophFeatures.stream().map(f->f.getFeature()).collect(Collectors.toList());
+    }
+
+    public String keyValsString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        neurophFeatures.forEach(f -> {
+            sb.append(f.getFeature() + " = " + String.format("%4.2f", f.getValue()));
+            // if not last
+            if (neurophFeatures.indexOf(f) < neurophFeatures.size() -1) {
+                sb.append(", ");
+            }
+        } );
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ANJIParticle) {
-            ANJIParticle other = (ANJIParticle) o;
-            return features.equals(other.getFeatures())
-                    && pBestFeats.equals(other.getPBestfeatures())
-                    && nBestFeats.equals(other.getNBestfeatures())
+        if (o instanceof NeurophParticle) {
+            NeurophParticle other = (NeurophParticle) o;
+            return neurophFeatures.equals(other.getNeurophFeatures())
+                    && pBestFeats.equals(other.getPBestFeatures())
+                    && nBestFeats.equals(other.getNBestFeatures())
                     && fitness == other.fitness
                     && pBestFitness == other.getPBestFitness()
                     && nBestFitness == other.getNBestFitness()

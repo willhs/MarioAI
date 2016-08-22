@@ -1,4 +1,4 @@
-package will.pso.anji;
+package will.pso.neuroph;
 
 import vuw.pso.Math;
 
@@ -7,26 +7,26 @@ import vuw.pso.Math;
  *
  * Based on RingTopology
  */
-public class ANJIRingTopology extends ANJITopology {
+public class NeurophRingTopology extends NeurophTopology {
 
     private int _neighbors = 2;
 
-    public ANJIRingTopology() {
+    public NeurophRingTopology() {
     }
 
-    public ANJIRingTopology(int n) {
+    public NeurophRingTopology(int n) {
         setNeighbors(n);
     }
 
-    public void share(ANJIWillSwarm s) {
+    public void share(NeurophSwarm s) {
 
         for (int p = 0; p < s.getParticles().size(); p++) {
 
-            ANJIParticle particle = s.getParticle(p);
+            NeurophParticle particle = s.getParticle(p);
 
 //            System.out.println("* Setting neighbourhood bests for particle(" + p + "):");
 
-            ANJIParticle bestNeighbour = null;
+            NeurophParticle bestNeighbour = null;
             double bestNeighbourFitness = s.getProblem().getWorstFitness();
 
             for (int j = -getNeighbors() / 2; j <= getNeighbors() / 2; ++j) {
@@ -43,7 +43,7 @@ public class ANJIRingTopology extends ANJITopology {
 //            System.out.println("pBest fitness: \t\t" + particle.getPBestFitness());
 //            System.out.println("pBest :\t\t" + particle.getPBestFeatures());
 //            System.out.println("best_neighbor fitness:\t\t" + bestNeighbourFitness);
-//            System.out.println("best_neighbor:\t\t" + bestNeighbour.getANJIFeatures());
+//            System.out.println("best_neighbor:\t\t" + bestNeighbour.getNeurophFeatures());
 //            System.out.println();
 
             particle.setNBestFitness(bestNeighbourFitness);

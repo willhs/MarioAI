@@ -10,13 +10,13 @@ import java.util.List;
  *
  * @author xuebing
  */
-public abstract class WillProblem {
+public abstract class NeurophProblem {
 
     private boolean _minimization = true;
     private double _max_domain, _min_domain;
     private double _max_velocity;
 
-    public WillProblem() {
+    public NeurophProblem() {
     }
 
     /**
@@ -25,7 +25,7 @@ public abstract class WillProblem {
      * @param position
      * @return calucated fitness
      */
-    public abstract double fitness(List<Feature> position);
+    public abstract double fitness(List<NeurophFeature> position);
 
     public boolean isMinimization() {
         return _minimization;

@@ -1,10 +1,10 @@
 package will.pso;
 
+import will.pso.encog.EncogMarioProblem;
 import will.pso.io.PSOIO;
-import will.pso.neuroph.MarioProblem;
-import will.pso.neuroph.WillParticle;
-import will.pso.neuroph.WillRingTopology;
-import will.pso.neuroph.WillSwarm;
+import will.pso.io.PSOIONeuroph;
+import will.pso.neuroph.NeurophMarioProblem;
+import will.pso.neuroph.NeurophSwarm;
 
 import javax.swing.*;
 import java.io.*;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 /**
  * Created by Will on 18/05/2016.
- * Runs PSO with a specially created ANJIMarioProblem.
+ * Runs PSO with a specially created MarioProblem.
  * Copied main method from PSO main class as it has many magic numbers which seem important
  */
 public class PSORunner {
@@ -93,7 +93,7 @@ public class PSORunner {
         if (prevSwarmFilename == null) {
             // start new PSO run
             swarm = new WillSwarm(
-                    new MarioProblem(),
+                    new EncogMarioProblem(),
                     numParticles,
                     c1,
                     c2,
@@ -105,9 +105,9 @@ public class PSORunner {
         } else {
             // previous run should be continued
             // read swarm from particle
-            swarm = PSOIO.parseSwarm(new MarioProblem(), prevSwarmFilename);
+            swarm = PSOIO.parseSwarm(new EncogMarioProblem(), prevSwarmFilename);
             // todo: replace ugly separate parsing methods
-//            gBestFitness = PSOIO.parseBestFitness(swarmFilename);
+//            gBestFitness = PSOIONeuroph.parseBestFitness(swarmFilename);
             gBestFitness = swarm.getProblem().getWorstFitness();
             startingIter = PSOIO.parseStartingIter(prevSwarmFilename);
         }

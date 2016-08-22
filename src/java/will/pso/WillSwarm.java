@@ -1,7 +1,9 @@
-package will.pso.neuroph;/*
+package will.pso;/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+import will.pso.anji.ANJIMarioProblem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Random;
  */
 public class WillSwarm {
 
-    private MarioProblem problem;
+    private ANJIMarioProblem problem;
     private WillTopology topology;
     private List<WillParticle> particles = new ArrayList<>();
     private Random _random = new Random();
@@ -22,7 +24,7 @@ public class WillSwarm {
     private final double inertia;
     private final double c1, c2;
 
-    public WillSwarm(MarioProblem problem, int numParticles, double c1, double c2, double inertia) {
+    public WillSwarm(ANJIMarioProblem problem, int numParticles, double c1, double c2, double inertia) {
         this.problem = problem;
         this.inertia = inertia;
         this.c1 = c1;
@@ -43,7 +45,7 @@ public class WillSwarm {
         }
     }
 
-    public WillSwarm(MarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
+    public WillSwarm(ANJIMarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
         this.problem = problem;
         this.particles = particles;
         this.c1 = c1;
@@ -51,7 +53,7 @@ public class WillSwarm {
         this.inertia = inertia;
     }
 
-    public MarioProblem getProblem() {
+    public ANJIMarioProblem getProblem() {
         return problem;
     }
 
@@ -74,13 +76,11 @@ public class WillSwarm {
 
             int index = particles.indexOf(particle);
 
-            System.out.println("");
-            System.out.println("Getting fitness for particle: " + index + "...");
-            System.out.println(particle.keyValsString());
-
             // evaluate fitness
+            System.out.println("Getting fitness for particle: " + index + "...");
             double newFitness = getProblem().fitness(particle.getFeatures());
             particle.setFitness(newFitness);
+            System.out.println("Fitness gotten");
 
             System.out.println("Particle " + index + " fitness: " + newFitness);
 
@@ -91,11 +91,13 @@ public class WillSwarm {
                     particle.setPBestPosition(j, particle.getFeatures(j));
                 }
                 System.out.println("Particle " + index + " bet pBest. New pBest: " + newFitness);
+                System.out.println("Features: " + particle.getFeatures());
             } else {
 //                System.out.println();
 //                System.out.println("PFit<=");
             }
 
+//            System.out.println("\n");
         }
 
         getTopology().share(this);

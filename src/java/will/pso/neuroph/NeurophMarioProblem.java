@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Will on 1/07/2016.
  */
-public class MarioProblem extends WillProblem {
+public class NeurophMarioProblem extends NeurophProblem {
 
     // network io
     private static final int NUM_INPUT_NEURONS = NeurophEvolver.NUM_INPUT_NEURONS;
@@ -35,7 +35,7 @@ public class MarioProblem extends WillProblem {
     private static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
 
     private SimpleNeatParameters defaultParams;
-    private List<Feature> features;
+    private List<NeurophFeature> neurophFeatures;
 
     private List<NeuronGene> inputNeurons;
     private List<NeuronGene> outputNeurons;
@@ -45,7 +45,7 @@ public class MarioProblem extends WillProblem {
         ADD_NEURON_PROB, WEIGHT_ADJ_PROB, WEIGHT_PETURB, SPECIES_DROPOFF
     };
 
-    public MarioProblem() {
+    public NeurophMarioProblem() {
         // we are aiming for the HIGHEST score, not lowest
         setMinimization(false);
 
@@ -76,34 +76,34 @@ public class MarioProblem extends WillProblem {
             outputNeurons.add(new NeuronGene(NeuronType.OUTPUT, defaultParams));
         }
 
-        // initialise features
-        features = makeFeatures(defaultParams);
+        // initialise neurophFeatures
+        neurophFeatures = makeFeatures(defaultParams);
     }
 
-    private static List<Feature> makeFeatures(SimpleNeatParameters defaultParams) {
-        List<Feature> features = new ArrayList<>();
+    private static List<NeurophFeature> makeFeatures(SimpleNeatParameters defaultParams) {
+        List<NeurophFeature> neurophFeatures = new ArrayList<>();
         double maxSpecies = defaultParams.getPopulationSize() / MIN_INDIVIDUAL_PER_SPECIE;
 
         double maxSpeciesDropoff = MAX_GENS/2;
 
-        features.add(new Feature(PARAMS.ADD_CONN_PROB, 0, 1));
-        features.add(new Feature(PARAMS.ADD_NEURON_PROB, 0, 1));
-        features.add(new Feature(PARAMS.WEIGHT_ADJ_PROB, 0, 1));
-        features.add(new Feature(PARAMS.REMOVE_CONN_PROB, 0, 1));
-        features.add(new Feature(PARAMS.WEIGHT_PETURB, 0, 2.5));
-        features.add(new Feature(PARAMS.SURVIVAL_RATIO, 0, 0.5));
-        features.add(new Feature(PARAMS.MAX_SPECIES, 1, maxSpecies));
-        features.add(new Feature(PARAMS.SPECIES_DROPOFF, 5, maxSpeciesDropoff));
+        neurophFeatures.add(new NeurophFeature(PARAMS.ADD_CONN_PROB, 0, 1));
+        neurophFeatures.add(new NeurophFeature(PARAMS.ADD_NEURON_PROB, 0, 1));
+        neurophFeatures.add(new NeurophFeature(PARAMS.WEIGHT_ADJ_PROB, 0, 1));
+        neurophFeatures.add(new NeurophFeature(PARAMS.REMOVE_CONN_PROB, 0, 1));
+        neurophFeatures.add(new NeurophFeature(PARAMS.WEIGHT_PETURB, 0, 2.5));
+        neurophFeatures.add(new NeurophFeature(PARAMS.SURVIVAL_RATIO, 0, 0.5));
+        neurophFeatures.add(new NeurophFeature(PARAMS.MAX_SPECIES, 1, maxSpecies));
+        neurophFeatures.add(new NeurophFeature(PARAMS.SPECIES_DROPOFF, 5, maxSpeciesDropoff));
 
-        return features;
+        return neurophFeatures;
     }
 
-    public List<Feature> getFeatures() {
-        return features;
+    public List<NeurophFeature> getNeurophFeatures() {
+        return neurophFeatures;
     }
 
     @Override
-    public double fitness(List<Feature> position) {
+    public double fitness(List<NeurophFeature> position) {
 
         SimpleNeatParameters params = getParamsFromFeatures(position);
 
@@ -132,7 +132,7 @@ public class MarioProblem extends WillProblem {
         return averageFitness;
     }
 
-    private SimpleNeatParameters getParamsFromFeatures(List<Feature> position) {
+    private SimpleNeatParameters getParamsFromFeatures(List<NeurophFeature> position) {
         List<MutationOperation> ops = new ArrayList<>();
         position.forEach(feature -> {
             switch(feature.getFeature()) {

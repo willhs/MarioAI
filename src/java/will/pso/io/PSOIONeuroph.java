@@ -5,10 +5,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import will.pso.Feature;
-import will.pso.WillParticle;
-import will.pso.WillSwarm;
-import will.pso.encog.EncogMarioProblem;
+import will.pso.neuroph.NeurophParticle;
+import will.pso.neuroph.NeurophSwarm;
+import will.pso.neuroph.NeurophFeature;
+import will.pso.neuroph.NeurophMarioProblem;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,22 +19,22 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static will.pso.PSORunner.*;
+import static will.pso.PSORunner.c1;
+import static will.pso.PSORunner.c2;
+import static will.pso.PSORunner.inertia;
 import static will.pso.io.util.XMLUtil.asList;
 
 /**
- * Created by Will on 4/06/2016.
+ * Created by Neuroph on 4/06/2016.
  */
-public class PSOIO {
+public class PSOIONeuroph {
 
-    public static void writePSOIterationToFile(String filename, WillSwarm swarm, int iteration, double gBestFitness) {
+    public static void writePSOIterationToFile(String filename, NeurophSwarm swarm, int iteration, double gBestFitness) {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Document doc = null;
@@ -56,7 +56,7 @@ public class PSOIO {
 
             Element particleElem = doc.createElement("particles");
 
-            for (WillParticle particle : swarm.getParticles()) {
+            for (NeurophParticle particle : swarm.getParticles()) {
                 particleElem.appendChild(generateParticleXML(particle, doc));
             }
 
@@ -86,7 +86,7 @@ public class PSOIO {
         }
     }
 
-    private static Node generateParticleXML(WillParticle particle, Document dom) {
+    private static Node generateParticleXML(NeurophParticle particle, Document dom) {
         Element particleElem = dom.createElement("particle");
 
         particleElem.setAttribute("c1", particle.getC1() + "");
@@ -98,7 +98,7 @@ public class PSOIO {
 
         Element featuresElem = dom.createElement("features");
         particleElem.appendChild(featuresElem);
-        for (Feature feature : particle.getFeatures()) {
+        for (NeurophFeature feature : particle.getNeurophFeatures()) {
             featuresElem.appendChild(generateFeatureXML(feature, dom));
         }
 
@@ -121,10 +121,10 @@ public class PSOIO {
         return particleElem;
     }
 
-    private static Node generateFeatureXML(Feature feature, Document dom) {
+    private static Node generateFeatureXML(NeurophFeature feature, Document dom) {
         Element featElem = dom.createElement("feature");
 
-        featElem.setAttribute("name", feature.getName());
+        featElem.setAttribute("name", feature.getFeature().toString());
         featElem.setAttribute("value", feature.getValue() + "");
         featElem.setAttribute("velocity", feature.getVel() + "");
         featElem.setAttribute("min", feature.getMin() + "");
@@ -134,11 +134,11 @@ public class PSOIO {
         return featElem;
     }
 
-    public static WillSwarm parseSwarm(EncogMarioProblem problem, String filename) {
+    public static NeurophSwarm parseSwarm(NeurophMarioProblem problem, String filename) {
         double c1 = -1;
         double c2 = -1;
         double inertia = -1;
-        List<WillParticle> particles = new ArrayList<>();
+        List<NeurophParticle> particles = new ArrayList<>();
 
         // parse xml
         try {
@@ -165,10 +165,10 @@ public class PSOIO {
             e.printStackTrace();
         }
 
-        return new WillSwarm(problem, particles, c1, c2, inertia);
+        return new NeurophSwarm(problem, particles, c1, c2, inertia);
     }
 
-    private static WillParticle parseParticle(Element particleElem) {
+    private static NeurophParticle parseParticle(Element particleElem) {
         double c1 = getDoubleAttr(particleElem, "c1");
         double c2 = getDoubleAttr(particleElem, "c2");
         double inertia = getDoubleAttr(particleElem, "inertia");
@@ -176,7 +176,7 @@ public class PSOIO {
         double pBestFitness = getDoubleAttr(particleElem, "pBestFitness");
         double nBestFitness = getDoubleAttr(particleElem, "nBestFitness");
 
-        List<Feature> neurophFeatures = new ArrayList<>();
+        List<NeurophFeature> neurophFeatures = new ArrayList<>();
         Element featuresNode = (Element) particleElem.getElementsByTagName("neurophFeatures").item(0);
 
         for (Node featureNode : asList(featuresNode.getElementsByTagName("feature"))) {
@@ -187,7 +187,7 @@ public class PSOIO {
             double max = getDoubleAttr(featureNode, "max");
             double initialVal = getDoubleAttr(featureNode, "initialVal");
 
-            neurophFeatures.add(new Feature(name, val, vel, min, max, initialVal));
+            neurophFeatures.add(new NeurophFeature(NeurophMarioProblem.PARAMS.valueOf(name), val, vel, min, max, initialVal));
         }
 
         Element pBestFeaturesElem = (Element) particleElem.getElementsByTagName("pBestFeatures").item(0);
@@ -202,7 +202,7 @@ public class PSOIO {
             nBestFeatures.add(Double.parseDouble(nBestNode.getTextContent()));
         }
 
-        return new WillParticle(
+        return new NeurophParticle (
                 neurophFeatures, pBestFeatures, nBestFeatures, fitness, pBestFitness, nBestFitness, c1, c2, inertia
         );
     }

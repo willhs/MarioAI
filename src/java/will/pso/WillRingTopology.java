@@ -1,4 +1,4 @@
-package will.pso.neuroph;
+package will.pso;
 
 import vuw.pso.Math;
 

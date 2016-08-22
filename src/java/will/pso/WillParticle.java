@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package will.pso.neuroph;
+package will.pso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author xuebing + Will
+ * @author xuebing, modified by Will
  */
 public class WillParticle {
 
@@ -168,10 +168,10 @@ public class WillParticle {
             v_i += secondMult;
 
 /*            System.out.println("--- updating " + i + "th feature ----");
-            System.out.println(getFeatures().get(i));
+            System.out.println(getNeurophFeatures().get(i));
             System.out.printf("vel: %4.2f, after inertia: %4.2f\n", getVelocity(i), (getVelocity(i) * getInertia()));
             System.out.println("distToPBest: " + distToPBest + ", distToNeighBest: " + distToNeighBest);
-            System.out.println("pBest: " + getPBestfeatures(i) + " nBest: " + getNBestFeat(i));
+            System.out.println("pBest: " + getPBestFeatures(i) + " nBest: " + getNBestFeat(i));
             System.out.printf("first mult: %4.2f, second: %4.2f \n", firstMult, secondMult);
             System.out.printf("final vel: %4.2f\n", v_i);
             System.out.println("----------------------------------");*/
@@ -207,36 +207,9 @@ public class WillParticle {
 
     public String toString() {
         return "Particle. PBest: " + pBestFitness + ", NBest: " + nBestFitness
-                + "\n" + getParams()
-                + "\nCurr. position: " + values()
-                + "\nPBest position: " + formatVals(pBestFeats);
-//                + "\nNBest position: " + formatVals(nBestFeats)
-    }
-
-    public List<String> values() {
-        return features.stream().map(f->String.format("%4.2f", f.getValue())).collect(Collectors.toList());
-    }
-
-    public List<String> formatVals(List<Double> vals) {
-        return vals.stream().map(f->String.format("%4.2f", f)).collect(Collectors.toList());
-    }
-
-    public List<MarioProblem.PARAMS> getParams() {
-        return features.stream().map(f->f.getFeature()).collect(Collectors.toList());
-    }
-
-    public String keyValsString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        features.forEach(f -> {
-            sb.append(f.getFeature() + " = " + String.format("%4.2f", f.getValue()));
-            // if not last
-            if (features.indexOf(f) < features.size() -1) {
-                sb.append(", ");
-            }
-        } );
-        sb.append("]");
-        return sb.toString();
+                + "\nPBest position: " + pBestFeats
+                + "\nNBest position: " + nBestFeats
+                + "\nCurr. position: " + features.stream().map(f->f.getValue()).collect(Collectors.toList());
     }
 
     @Override

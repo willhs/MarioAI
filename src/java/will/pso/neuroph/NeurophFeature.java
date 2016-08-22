@@ -1,31 +1,37 @@
-package will.pso.anji;
+package will.pso.neuroph;
 
 /**
  * Created by Will on 18/05/2016.
  */
-public class ANJIFeature {
+public class NeurophFeature {
 
-    private final double initialVal;
+    private double initialVal;
 
-    private String name;
+    private NeurophMarioProblem.PARAMS feature;
     private double val;
     private double max;
     private double min;
     private double vel; // velocity
 
-    public ANJIFeature(double initialVal) {
+    public NeurophFeature(double initialVal) {
         this.initialVal = initialVal;
     }
 
-    public ANJIFeature(String name, double initialVal, double min, double max) {
-        this.name = name;
+    public NeurophFeature(NeurophMarioProblem.PARAMS feature, double min, double max) {
+        this.feature = feature;
+        this.max = max;
+        this.min = min;
+    }
+
+    public NeurophFeature(NeurophMarioProblem.PARAMS feature, double initialVal, double min, double max) {
+        this.feature = feature;
         this.initialVal = initialVal;
         this.max = max;
         this.min = min;
     }
 
-    public ANJIFeature(String name, double val, double vel, double min, double max, double initialVal) {
-        this.name = name;
+    public NeurophFeature(NeurophMarioProblem.PARAMS feature, double val, double vel, double min, double max, double initialVal) {
+        this.feature = feature;
         this.val = val;
         this.vel = vel;
         this.min = min;
@@ -64,8 +70,8 @@ public class ANJIFeature {
         return min;
     }
 
-    public String getName() {
-        return name;
+    public NeurophMarioProblem.PARAMS getFeature() {
+        return feature;
     }
 
     public double getVel() {
@@ -74,10 +80,10 @@ public class ANJIFeature {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ANJIFeature) {
-            ANJIFeature f = (ANJIFeature) o;
+        if (o instanceof NeurophFeature) {
+            NeurophFeature f = (NeurophFeature) o;
             return f.getValue() == this.val
-                    && f.getName().equals(this.name)
+                    && f.getFeature().equals(this.feature)
                     && f.getVel() == f.getVel()
                     && f.getInitialVal() == f.getInitialVal()
                     && f.getMin() == f.getMin()
@@ -93,20 +99,21 @@ public class ANJIFeature {
     public void printDiffs() {
         System.out.printf(
 //                "%s: %f, %4.2f%% difference%n",
-//                name, val, (((Math.abs(initialVal - val))/(Math.abs(max - min)))*100)
+//                feature, val, (((Math.abs(initialVal - val))/(Math.abs(max - min)))*100)
                 "%s: val: %4.2f, init: %4.2f, vel: %4.2f\n",
-                name, val, initialVal, vel
+                feature.name(), val, initialVal, vel
         );
     }
 
     public String toString(){
         return String.format(
-        "%s: [%f - %f] val, init: (%4.2f, %f), vel: %4.2f",
-                 name, min, max, val, initialVal, vel
+                "%s: [%f - %f] val, init: (%4.2f, %f), vel: %4.2f",
+                feature, min, max, val, initialVal, vel
         );
     }
 
-    public ANJIFeature clone() {
-        return new ANJIFeature(name, initialVal, min, max);
+    public NeurophFeature clone() {
+        return new NeurophFeature(feature, initialVal, min, max);
     }
 }
+

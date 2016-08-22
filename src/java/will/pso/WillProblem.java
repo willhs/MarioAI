@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package will.pso.anji;
+package will.pso;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import java.util.List;
  *
  * @author xuebing
  */
-public abstract class ANJIWillProblem {
+public abstract class WillProblem {
 
     private boolean _minimization = true;
     private double _max_domain, _min_domain;
     private double _max_velocity;
 
-    public ANJIWillProblem() {
+    public WillProblem() {
     }
 
     /**
@@ -25,7 +25,7 @@ public abstract class ANJIWillProblem {
      * @param position
      * @return calucated fitness
      */
-    public abstract double fitness(List<ANJIFeature> position);
+    public abstract double fitness(List<Feature> position);
 
     public boolean isMinimization() {
         return _minimization;
