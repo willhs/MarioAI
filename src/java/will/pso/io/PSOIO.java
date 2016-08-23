@@ -125,7 +125,7 @@ public class PSOIO {
         Element featElem = dom.createElement("feature");
 
         featElem.setAttribute("name", feature.getName());
-        featElem.setAttribute("value", feature.getValue() + "");
+        featElem.setAttribute("value", feature.getVal() + "");
         featElem.setAttribute("velocity", feature.getVel() + "");
         featElem.setAttribute("min", feature.getMin() + "");
         featElem.setAttribute("max", feature.getMax() + "");

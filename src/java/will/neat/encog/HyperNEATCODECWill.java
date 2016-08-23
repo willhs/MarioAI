@@ -27,10 +27,17 @@ import java.util.stream.Collectors;
  */
 public class HyperNEATCODECWill extends HyperNEATCODEC {
 
-    private double minWeight = 0.1;
+    private double minWeight = 0.6;
     private double maxWeight = 1.0;
 
     Logger logger = Logger.getLogger(getClass().getSimpleName());
+
+    public HyperNEATCODECWill() {}
+
+    public HyperNEATCODECWill(double minWeight, double maxWeight) {
+        this.minWeight = minWeight;
+        this.maxWeight = maxWeight;
+    }
 
     /**
      * {@inheritDoc}
@@ -47,14 +54,6 @@ public class HyperNEATCODECWill extends HyperNEATCODEC {
         // obtain the CPPN
         final NEATCODEC neatCodec = new NEATCODEC();
         NEATNetwork cppn = (NEATNetwork) neatCodec.decode(genome);
-
-        // scale down weights
-        double scaleFactor = 0.2;
-        List<NEATLink> newLinks = Arrays.stream(cppn.getLinks())
-                .map(l -> new NEATLink(l.getFromNeuron(), l.getToNeuron(), l.getWeight() * scaleFactor))
-                .collect(Collectors.toList());
-
-        cppn = new NEATNetwork(cppn.getInputCount(), cppn.getOutputCount(), newLinks, cppn.getActivationFunctions());
 
         // log weights
         if (Math.random() < 0.01) {

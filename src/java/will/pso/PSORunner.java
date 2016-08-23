@@ -2,9 +2,6 @@ package will.pso;
 
 import will.pso.encog.EncogMarioProblem;
 import will.pso.io.PSOIO;
-import will.pso.io.PSOIONeuroph;
-import will.pso.neuroph.NeurophMarioProblem;
-import will.pso.neuroph.NeurophSwarm;
 
 import javax.swing.*;
 import java.io.*;

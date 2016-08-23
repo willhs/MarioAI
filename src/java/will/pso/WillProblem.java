@@ -5,6 +5,7 @@
 package will.pso;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public abstract class WillProblem {
 
-    private boolean _minimization = true;
+    private boolean _minimization = false;
     private double _max_domain, _min_domain;
     private double _max_velocity;
 
@@ -25,7 +26,9 @@ public abstract class WillProblem {
      * @param position
      * @return calucated fitness
      */
-    public abstract double fitness(List<Feature> position);
+    public abstract double fitness(Map<String, Double> position);
+
+    public abstract List<Feature> getFeatures();
 
     public boolean isMinimization() {
         return _minimization;

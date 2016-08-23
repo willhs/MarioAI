@@ -1,14 +1,19 @@
 package will.neat.encog;
 
+import com.anji.neat.RemoveConnectionMutationOperator;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.CompoundOperator;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
+import org.encog.ml.train.MLTrain;
+import org.encog.ml.train.strategy.Strategy;
 import org.encog.neural.hyperneat.HyperNEATGenome;
 import org.encog.neural.hyperneat.substrate.Substrate;
 import org.encog.neural.hyperneat.substrate.SubstrateFactory;
 import org.encog.neural.hyperneat.substrate.SubstrateNode;
+import org.encog.neural.neat.NEATNeuronType;
 import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.neat.training.NEATNeuronGene;
 import org.encog.neural.neat.training.opp.*;
 import org.encog.neural.neat.training.opp.links.MutatePerturbLinkWeight;
 import org.encog.neural.neat.training.opp.links.MutateResetLinkWeight;
@@ -16,13 +21,19 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.SynchronousQueue;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Created by Will on 17/07/2016.
  */
 public class EncogHyperNEATEvolver {
+
+    public static long START_VIEWING_TIME = Long.MIN_VALUE;
 
     private static Logger logger = Logger.getLogger(EncogHyperNEATEvolver.class
             .getSimpleName());
@@ -31,9 +42,11 @@ public class EncogHyperNEATEvolver {
     public static final int NUM_OUTPUT_NEURONS = 4;
     private static final double INIT_CONNECTION_DENSITY = 0.1; // 1 for fully connected!
     private static final int ACTIVATION_CYCLES = 5;
+    private static final int NN_WEIGHT_RANGE = 3; //
+    private static final int CPPN_WEIGHT_RANGE = 3; // useful?
 
     // evolution
-    public static final int POP_SIZE = 200;
+    public static final int POP_SIZE = 100;
     public static final double MAX_FITNESS = 15000;
     public static final long MAX_GENERATIONS = 200;
 
@@ -50,7 +63,7 @@ public class EncogHyperNEATEvolver {
 
     // mutation probs
     private static final double ADD_CONN_PROB = 1;
-    private static final double ADD_NEURON_PROB = 1;
+    private static final double ADD_NEURON_PROB = 0.8;
     private static final double PERTURB_PROB = 1;
     private static final double REMOVE_CONN_PROB = 0.2;
 
@@ -64,14 +77,22 @@ public class EncogHyperNEATEvolver {
 
     private static final double PERTURB_SD = 0.92; // perturb standard deviation
 
-    public static void main(String[] args) {
+    public EncogHyperNEATEvolver() {
+    }
 
-        Substrate substrate = makeManualSubstrate();
+/*    public void start() {
+        start();
+    }*/
+
+    public void start() {
+
+        Substrate substrate = new SandwichHiddenLayer().makeSubstrate();
 
         NEATPopulation population = new NEATPopulation(substrate, POP_SIZE);
         population.setActivationCycles(ACTIVATION_CYCLES);
         population.setSurvivalRate(SURVIVAL_RATIO);
         population.setInitialConnectionDensity(INIT_CONNECTION_DENSITY);
+        population.setWeightRange(NN_WEIGHT_RANGE);
 
         // must reset before changing the codec or it won't be kept...
         population.reset();
@@ -108,33 +129,8 @@ public class EncogHyperNEATEvolver {
         // not sure if needed
         neat.setCODEC(new HyperNEATCODECWill());
 
-/*        neat.addStrategy(new Strategy() {
-
-            TrainEA train;
-
-            @Override
-            public void init(MLTrain train) {
-                this.train = (TrainEA) train;
-            }
-
-            @Override
-            public void preIteration() {
-
-            }
-
-            @Override
-            public void postIteration() {
-                HyperNEATGenome genome = (HyperNEATGenome) train.getBestGenome();
-                List<NEATNeuronGene> inputs = genome.getNeuronsChromosome().stream()
-                        .filter(c -> c.getNeuronType() == NEATNeuronType.Input)
-                        .collect(Collectors.toList());
-
-                inputs.forEach(i -> {
-                    System.out.println(i.getId() + ": " + i.get);
-                });
-            }
-        });*/
-
+        PrintStrategy printStrategy = new PrintStrategy();
+        neat.addStrategy(printStrategy);
 
         // evolve til done
         int gen = 0;
@@ -146,11 +142,7 @@ public class EncogHyperNEATEvolver {
 
             // report
             double bestFitness = population.getBestGenome().getScore();
-            double bestFitnessGen = population.getSpecies().stream()
-                    .flatMap(s -> s.getMembers().stream())
-                    .mapToDouble(g -> g.getScore())
-                    .max()
-                    .getAsDouble();
+            double bestFitnessGen = population.determineBestSpecies().getLeader().getScore();
 
             int numSpecies = population.getSpecies().size();
 
@@ -238,61 +230,59 @@ public class EncogHyperNEATEvolver {
         return weightMutation;
     }
 
-    private static Substrate makeManualSubstrate() {
+    public static void main(String[] args) {
+        double hours = 9;
+        START_VIEWING_TIME = System.currentTimeMillis() + (long)(hours * 60 * 60 * 1000);
 
-        Substrate substrate = new Substrate(3);
-
-        int gridWidth = 19;
-        int gridHeight = 19;
-        double hypercubeSize = 2;
-
-        double xStart = -1;
-        double yStart = -1;
-        double xTick = hypercubeSize / gridWidth;
-        double yTick = hypercubeSize / gridHeight;
-
-        // make inputs
-        for (int r = 0; r < gridWidth; r++ ) {
-            for (int c = 0; c < gridHeight; c++) {
-                SubstrateNode input = substrate.createInputNode();
-                input.getLocation()[0] = xStart + (c * xTick);
-                input.getLocation()[1] = yStart + (r * yTick);
-                input.getLocation()[2] = -1;
-            }
-        }
-
-        // make outputs
-        int middleX = 0;
-        int middleY = 0;
-        double variance = 1; // how far the node should vary from the centre
-
-        // coordinates for controls in order: left, right, up, speed
-        int controls = 4;
-
-        double[] xs = {
-                middleX - variance,
-                middleX + variance,
-                middleX,
-                middleX
-        };
-        double[] ys = {
-                middleY,
-                middleY,
-                middleY - variance,
-                middleY
-        };
-
-        for (int i = 0; i < controls; i++) {
-            SubstrateNode output = substrate.createOutputNode();
-            output.getLocation()[0] = xs[i];
-            output.getLocation()[1] = ys[i];
-            output.getLocation()[2] = 1;
-
-            // create connections to all input nodes
-            substrate.getInputNodes().forEach(input -> substrate.createLink(input, output));
-        }
-
-        return substrate;
+        new EncogHyperNEATEvolver().start();
     }
 
+    private class ChangeStrategy implements Strategy {
+        TrainEA train;
+
+        @Override
+        public void init(MLTrain train) {
+            this.train = (TrainEA) train;
+        }
+
+        @Override
+        public void preIteration() {
+
+        }
+
+        @Override
+        public void postIteration() {
+//            train.getPopulation().getSpecies().stream().flatMap(s -> s.getMembers().stream()).();
+            // TODO
+        }
+
+    }
+
+    private class PrintStrategy implements Strategy {
+        TrainEA train;
+
+        @Override
+        public void init(MLTrain train) {
+            this.train = (TrainEA) train;
+        }
+
+        @Override
+        public void preIteration() {
+
+        }
+
+        @Override
+        public void postIteration() {
+            HyperNEATGenome genome = (HyperNEATGenome) train.getBestGenome();
+            List<NEATNeuronGene> inputs = genome.getNeuronsChromosome().stream()
+                    .filter(c -> c.getNeuronType() == NEATNeuronType.Input)
+                    .collect(Collectors.toList());
+
+            inputs.forEach(i -> {
+//                System.out.println(i.getId() + ": " + i.get);
+            });
+        }
+
+    }
 }
+

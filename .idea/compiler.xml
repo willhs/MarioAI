@@ -22,10 +22,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="MarioAI" />
+        <module name="encog-java-core" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="encog-java-core" target="1.8" />
       <module name="MarioAI" target="1.8" />
     </bytecodeTargetLevel>
   </component>

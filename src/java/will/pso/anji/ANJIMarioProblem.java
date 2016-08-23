@@ -8,6 +8,7 @@ import will.pso.WillProblem;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Will on 16/05/2016.
@@ -15,7 +16,7 @@ import java.util.List;
 public class ANJIMarioProblem extends WillProblem {
 
     private Properties props;
-    private List<Feature> Features;
+    private List<Feature> features;
 
     public ANJIMarioProblem() {
 
@@ -37,30 +38,30 @@ public class ANJIMarioProblem extends WillProblem {
         props.setProperty("popul.size", "" + 120);
 
         // set default values and limits for each property that will be changed
-        Features = new ArrayList<>();
+        features = new ArrayList<>();
 
         // feature: (name, starting val, min, max)
-        Features.add(new Feature("add.connection.mutation.rate", 0.02, 0.0001, 0.5));
-        Features.add(new Feature("remove.connection.mutation.rate", 0.01, 0.01, 0.3));
-        Features.add(new Feature("remove.connection.max.weight", 100, 1, 500));
-        Features.add(new Feature("add.neuron.mutation.rate", 0.01, 0.0001, 0.5));
-        Features.add(new Feature("prune.mutation.rate", 1, 0, 1)); // lacking experimentation
-        Features.add(new Feature("weight.mutation.rate", 0.75, 0.5, 0.8));
-        Features.add(new Feature("weight.mutation.std.dev", 1.5, 1, 2));
-        Features.add(new Feature("weight.max", 100, 1, 500));
-        Features.add(new Feature("weight.min", -100, -500, -1));
-        Features.add(new Feature("survival.rate", 0.2, 0.1, 0.5));
+        features.add(new Feature("add.connection.mutation.rate", 0.02, 0.0001, 0.5));
+        features.add(new Feature("remove.connection.mutation.rate", 0.01, 0.01, 0.3));
+        features.add(new Feature("remove.connection.max.weight", 100, 1, 500));
+        features.add(new Feature("add.neuron.mutation.rate", 0.01, 0.0001, 0.5));
+        features.add(new Feature("prune.mutation.rate", 1, 0, 1)); // lacking experimentation
+        features.add(new Feature("weight.mutation.rate", 0.75, 0.5, 0.8));
+        features.add(new Feature("weight.mutation.std.dev", 1.5, 1, 2));
+        features.add(new Feature("weight.max", 100, 1, 500));
+        features.add(new Feature("weight.min", -100, -500, -1));
+        features.add(new Feature("survival.rate", 0.2, 0.1, 0.5));
 
         // speciation
-        Features.add(new Feature("chrom.compat.excess.coeff", 1, 0, 1)); // lacking exp
-        Features.add(new Feature("chrom.compat.disjoint.coeff", 1, 0, 1)); // lacking exp
-        Features.add(new Feature("chrom.compat.common.coeff", 0.04, 0, 1)); // lacking exp
-        Features.add(new Feature("speciation.threshold", 0.2, 0.1, 1));
+        features.add(new Feature("chrom.compat.excess.coeff", 1, 0, 1)); // lacking exp
+        features.add(new Feature("chrom.compat.disjoint.coeff", 1, 0, 1)); // lacking exp
+        features.add(new Feature("chrom.compat.common.coeff", 0.04, 0, 1)); // lacking exp
+        features.add(new Feature("speciation.threshold", 0.2, 0.1, 1));
     }
 
     @Override
-    public double fitness(List<Feature> Features) {
-        Features.forEach(f -> props.setProperty(f.getName(), "" + f.getValue()));
+    public double fitness(Map<String, Double> features) {
+        features.forEach((k,v) -> props.setProperty(k, "" + v));
 
         int NUM_TRIALS = 5;
         double total = 0;
@@ -84,7 +85,7 @@ public class ANJIMarioProblem extends WillProblem {
     }
 
     public List<Feature> getFeatures() {
-        return Features;
+        return features;
     }
 
     public Properties getProps() {

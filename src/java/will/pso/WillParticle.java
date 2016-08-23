@@ -4,9 +4,7 @@
  */
 package will.pso;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +61,7 @@ public class WillParticle {
     }
 
     public double getFeatures(int index) {
-        return features.get(index).getValue();
+        return features.get(index).getVal();
     }
 
     public List<Feature> getFeatures() {
@@ -182,7 +180,7 @@ public class WillParticle {
 
     public void updatePosition() {
         for (Feature f : features) {
-            double newVal = f.getValue() + f.getVel();
+            double newVal = f.getVal() + f.getVel();
 
             // clamp
             if (newVal > f.getMax()){
@@ -209,7 +207,7 @@ public class WillParticle {
         return "Particle. PBest: " + pBestFitness + ", NBest: " + nBestFitness
                 + "\nPBest position: " + pBestFeats
                 + "\nNBest position: " + nBestFeats
-                + "\nCurr. position: " + features.stream().map(f->f.getValue()).collect(Collectors.toList());
+                + "\nCurr. position: " + features.stream().map(f->f.getVal()).collect(Collectors.toList());
     }
 
     @Override
@@ -228,6 +226,11 @@ public class WillParticle {
         } else {
             return false;
         }
+    }
+
+    public Map<String, Double> getFeaturesMap() {
+        return features.stream()
+                .collect(Collectors.toMap(f -> f.getName(), f -> f.getVal()));
     }
 }
 

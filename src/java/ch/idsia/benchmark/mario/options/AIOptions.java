@@ -195,9 +195,9 @@ public final class AIOptions extends SimulationOptions {
 //		System.out.println("\n[MarioAI] : Options have been set to:");
 //		for (Map.Entry<String, String> el : optionsHashMap.entrySet())
 //			if (singleLine)
-//				System.out.print(el.getKey() + " " + el.getValue() + " ");
+//				System.out.print(el.getKey() + " " + el.getVal() + " ");
 //			else
-//				System.out.println(el.getKey() + " " + el.getValue() + " ");
+//				System.out.println(el.getKey() + " " + el.getVal() + " ");
 //	}
 //
 //	public static AIOptions getOptionsByString(String argString) {

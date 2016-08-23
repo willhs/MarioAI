@@ -31,13 +31,13 @@ public abstract class AbstractMarioFitnessFunction<N> {
             + LEVEL_LENGTH
             ;
 
-    protected final int TRIALS = 20;
+    protected final int TRIALS = 5;
 
     protected final boolean RUNNING_PSO = false;
 
     protected static double bestFitness = 0;
 
-    protected boolean headless = true;
+    public static boolean headless = false;
 
     public AbstractMarioFitnessFunction() {
         if (RUNNING_PSO) {
@@ -60,7 +60,7 @@ public abstract class AbstractMarioFitnessFunction<N> {
 
             float trialFitness = playMario(agent, simOptions);
 
-            // notify bet fitness
+            // notify best fitness
             if (trialFitness > bestFitness) {
                 logger.info("Fitness function saw new best fitness! = " + trialFitness);
             }

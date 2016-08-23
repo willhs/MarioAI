@@ -56,7 +56,7 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     protected boolean shouldPlayBack(double fitness) {
         return !headless
                 && fitness > 5000
-                && Math.random() < 0.01;
+                && Math.random() < 0.1;
     }
 
     @Override
@@ -69,6 +69,8 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
                         .toArray()
         ));
         logger.info("connections: " + Arrays.toString(nn.getLinks()));
+
+//        logger.info();
     }
 
     @Override

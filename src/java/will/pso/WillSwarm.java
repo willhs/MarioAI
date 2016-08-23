@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class WillSwarm {
 
-    private ANJIMarioProblem problem;
+    private WillProblem problem;
     private WillTopology topology;
     private List<WillParticle> particles = new ArrayList<>();
     private Random _random = new Random();
@@ -24,7 +24,7 @@ public class WillSwarm {
     private final double inertia;
     private final double c1, c2;
 
-    public WillSwarm(ANJIMarioProblem problem, int numParticles, double c1, double c2, double inertia) {
+    public WillSwarm(WillProblem problem, int numParticles, double c1, double c2, double inertia) {
         this.problem = problem;
         this.inertia = inertia;
         this.c1 = c1;
@@ -45,7 +45,7 @@ public class WillSwarm {
         }
     }
 
-    public WillSwarm(ANJIMarioProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
+    public WillSwarm(WillProblem problem, List<WillParticle> particles, double c1, double c2, double inertia) {
         this.problem = problem;
         this.particles = particles;
         this.c1 = c1;
@@ -53,8 +53,8 @@ public class WillSwarm {
         this.inertia = inertia;
     }
 
-    public ANJIMarioProblem getProblem() {
-        return problem;
+    public WillProblem getProblem() {
+        return this.problem;
     }
 
     public WillParticle getParticle(int index) {
@@ -78,7 +78,7 @@ public class WillSwarm {
 
             // evaluate fitness
             System.out.println("Getting fitness for particle: " + index + "...");
-            double newFitness = getProblem().fitness(particle.getFeatures());
+            double newFitness = getProblem().fitness(particle.getFeaturesMap());
             particle.setFitness(newFitness);
             System.out.println("Fitness gotten");
 

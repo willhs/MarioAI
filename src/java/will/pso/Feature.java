@@ -5,7 +5,7 @@ package will.pso;
  */
 public class Feature {
 
-    private final double initialVal;
+    private double initialVal;
 
     private String name;
     private double val;
@@ -15,6 +15,12 @@ public class Feature {
 
     public Feature(double initialVal) {
         this.initialVal = initialVal;
+    }
+
+    public Feature(String name, double min, double max) {
+        this.name = name;
+        this.min = min;
+        this.max = max;
     }
 
     public Feature(String name, double initialVal, double min, double max) {
@@ -35,8 +41,8 @@ public class Feature {
 
     public void generateInitialVals() {
         // calculate starting value and velocity (random)
-        // use same calculations as the vuw.vuw.pso code
         this.val = vuw.pso.Math.Scale(0, 1, Math.random(), min, max);
+        // use same starting vel calculations as the vuw.vuw.pso code
         this.vel = vuw.pso.Math.Scale(0, 1, Math.random(),
                 1.0 / 5.0 * -(max-min),
                 1.0 / 5.0 * (max-min)
@@ -48,7 +54,7 @@ public class Feature {
         return initialVal;
     }
 
-    public double getValue() {
+    public double getVal() {
         return val;
     }
 
@@ -76,7 +82,7 @@ public class Feature {
     public boolean equals(Object o) {
         if (o instanceof Feature) {
             Feature f = (Feature) o;
-            return f.getValue() == this.val
+            return f.getVal() == this.val
                     && f.getName().equals(this.name)
                     && f.getVel() == f.getVel()
                     && f.getInitialVal() == f.getInitialVal()

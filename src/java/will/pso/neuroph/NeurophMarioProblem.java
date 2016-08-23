@@ -19,6 +19,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import static will.pso.neuroph.NeurophMarioProblem.PARAMS.*;
+
 /**
  * Created by Will on 1/07/2016.
  */
@@ -86,13 +88,13 @@ public class NeurophMarioProblem extends NeurophProblem {
 
         double maxSpeciesDropoff = MAX_GENS/2;
 
-        neurophFeatures.add(new NeurophFeature(PARAMS.ADD_CONN_PROB, 0, 1));
+        neurophFeatures.add(new NeurophFeature(ADD_CONN_PROB, 0, 1));
         neurophFeatures.add(new NeurophFeature(PARAMS.ADD_NEURON_PROB, 0, 1));
         neurophFeatures.add(new NeurophFeature(PARAMS.WEIGHT_ADJ_PROB, 0, 1));
-        neurophFeatures.add(new NeurophFeature(PARAMS.REMOVE_CONN_PROB, 0, 1));
+        neurophFeatures.add(new NeurophFeature(REMOVE_CONN_PROB, 0, 1));
         neurophFeatures.add(new NeurophFeature(PARAMS.WEIGHT_PETURB, 0, 2.5));
-        neurophFeatures.add(new NeurophFeature(PARAMS.SURVIVAL_RATIO, 0, 0.5));
-        neurophFeatures.add(new NeurophFeature(PARAMS.MAX_SPECIES, 1, maxSpecies));
+        neurophFeatures.add(new NeurophFeature(SURVIVAL_RATIO, 0, 0.5));
+        neurophFeatures.add(new NeurophFeature(MAX_SPECIES, 1, maxSpecies));
         neurophFeatures.add(new NeurophFeature(PARAMS.SPECIES_DROPOFF, 5, maxSpeciesDropoff));
 
         return neurophFeatures;

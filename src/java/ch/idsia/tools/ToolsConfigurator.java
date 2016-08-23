@@ -346,11 +346,11 @@ public class ToolsConfigurator extends JFrame
 //    if (type == 4)
 //        type = (new Random()).nextInt(4);
 //    simulationOptions.setLevelType(type);
-//    simulationOptions.setLevelDifficulty(Integer.parseInt(JSpinnerLevelDifficulty.getValue().toString()));
-//    simulationOptions.setLevelRandSeed(Integer.parseInt(JSpinnerLevelRandomizationSeed.getValue().toString()));
-//    simulationOptions.setLevelLength(Integer.parseInt(JSpinnerLevelLength.getValue().toString()));
+//    simulationOptions.setLevelDifficulty(Integer.parseInt(JSpinnerLevelDifficulty.getVal().toString()));
+//    simulationOptions.setLevelRandSeed(Integer.parseInt(JSpinnerLevelRandomizationSeed.getVal().toString()));
+//    simulationOptions.setLevelLength(Integer.parseInt(JSpinnerLevelLength.getVal().toString()));
 //    simulationOptions.setVisualization(CheckboxShowVizualization.getState());
-////        simulationOptions.setEvaluationQuota(Integer.parseInt(JSpinnerMaxAttempts.getValue().toString()));
+////        simulationOptions.setEvaluationQuota(Integer.parseInt(JSpinnerMaxAttempts.getVal().toString()));
 //    simulationOptions.setPowerRestoration(CheckboxPowerRestoration.getState());
 //    simulationOptions.setExitProgramWhenFinished(CheckboxExitOnFinish.getState());
 ////        simulationOptions.setMatlabFileName(TextFieldMatLabFileName.getText());
@@ -481,7 +481,7 @@ public class ToolsConfigurator extends JFrame
 //
 //        } else if (ob == JSpinnerLevelLength)
 //        {
-//            if (Integer.parseInt(JSpinnerLevelLength.getValue().toString()) < LevelGenerator.LevelLengthMinThreshold)
+//            if (Integer.parseInt(JSpinnerLevelLength.getVal().toString()) < LevelGenerator.LevelLengthMinThreshold)
 //                JSpinnerLevelLength.setValue(LevelGenerator.LevelLengthMinThreshold);
 //        }
 //    }
