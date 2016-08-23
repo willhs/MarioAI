@@ -4,6 +4,7 @@ import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
 import org.encog.ml.train.strategy.end.EndIterationsStrategy;
+import org.encog.neural.hyperneat.HyperNEATCODEC;
 import org.encog.neural.hyperneat.substrate.Substrate;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.opp.*;
@@ -29,7 +30,7 @@ public class EncogMarioProblem extends WillProblem {
 
     // evolution
     public static final int POP_SIZE = 100;
-    public static final int MAX_GENERATIONS = 100;
+    public static final int MAX_GENERATIONS = 50;
 
     // species
     public static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
@@ -57,6 +58,7 @@ public class EncogMarioProblem extends WillProblem {
         // evolve til reached max num of iterations
         while (!neat.isTrainingDone()) {
             neat.iteration();
+            System.out.print(".");
         }
 
         return neat.getBestGenome().getScore();
@@ -66,6 +68,7 @@ public class EncogMarioProblem extends WillProblem {
         // static things
         Substrate substrate = new SandwichHiddenLayer().makeSubstrate();
         NEATPopulation population = new NEATPopulation(substrate, POP_SIZE);
+        population.reset();
 
         // dynamic things
         double weightRange = features.get(NN_WEIGHT_RANGE.name());
@@ -86,6 +89,7 @@ public class EncogMarioProblem extends WillProblem {
         OriginalNEATSpeciation speciation = new OriginalNEATSpeciation();
         speciation.setCompatibilityThreshold(COMPAT_THRESHOLD);
         neat.setSpeciation(speciation);
+        neat.setCODEC(new HyperNEATCODEC());
 
         // dynamic things
         // genetic

@@ -66,13 +66,15 @@ public abstract class MarioAIBase extends MarioAgentBase {
 
 	protected EvaluationInfo info = new EvaluationInfo();
 
+	protected IEnvironment environment;
+
 	protected int highestFitness;
 	
 	public MarioAIBase() {
 		super("MarioAIBase");
 		name = getClass().getSimpleName();
 	}
-	
+
 	public MarioAIBase(String agentName) {
 		super(agentName);
 	}	
@@ -98,6 +100,7 @@ public abstract class MarioAIBase extends MarioAgentBase {
 		entities.entityField = environment.getEntityField();
 		entities.entities = environment.getEntities();
 		info = environment.getEvaluationInfo();
+        this.environment = environment;
 
 		int fitness = info.computeBasicFitness();
 		if (fitness > highestFitness) {

@@ -83,7 +83,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 		}
 	}
 
-	private boolean doesSuck() {
+	protected boolean doesSuck() {
 		// determine whether mario has moved significantly
 		if (environment.getEvaluationInfo().distancePassedPhys == lastPos) {
 			framesInSamePos++;

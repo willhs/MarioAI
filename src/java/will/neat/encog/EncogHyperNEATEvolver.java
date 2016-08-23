@@ -7,6 +7,7 @@ import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
 import org.encog.ml.train.MLTrain;
 import org.encog.ml.train.strategy.Strategy;
+import org.encog.neural.hyperneat.HyperNEATCODEC;
 import org.encog.neural.hyperneat.HyperNEATGenome;
 import org.encog.neural.hyperneat.substrate.Substrate;
 import org.encog.neural.hyperneat.substrate.SubstrateFactory;
@@ -92,11 +93,11 @@ public class EncogHyperNEATEvolver {
         population.setActivationCycles(ACTIVATION_CYCLES);
         population.setSurvivalRate(SURVIVAL_RATIO);
         population.setInitialConnectionDensity(INIT_CONNECTION_DENSITY);
-        population.setWeightRange(NN_WEIGHT_RANGE);
+//        population.setWeightRange(NN_WEIGHT_RANGE);
 
         // must reset before changing the codec or it won't be kept...
         population.reset();
-        population.setCODEC(new HyperNEATCODECWill());
+        population.setCODEC(new HyperNEATCODEC());
 
         CalculateScore fitnessFunction = new EncogMarioFitnessFunction();
 
@@ -109,6 +110,7 @@ public class EncogHyperNEATEvolver {
         neat.setSpeciation(speciation);
         neat.setSelection(new TruncationSelection(neat, 0.2));
         neat.setEliteRate(ELITE_RATE);
+        neat.setCODEC(new HyperNEATCODEC());
 
         CompoundOperator compoundWeightMutation = composeWeightMutation();
         NEATMutateWeights weightMutation = new NEATMutateWeights(
@@ -126,8 +128,6 @@ public class EncogHyperNEATEvolver {
         neat.addOperation(REMOVE_CONN_PROB, new NEATMutateRemoveLink());
         neat.getOperators().finalizeStructure();
         neat.setThreadCount(1);
-        // not sure if needed
-        neat.setCODEC(new HyperNEATCODECWill());
 
         PrintStrategy printStrategy = new PrintStrategy();
         neat.addStrategy(printStrategy);

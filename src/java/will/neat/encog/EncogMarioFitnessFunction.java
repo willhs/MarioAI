@@ -33,6 +33,7 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     @Override
     public double calculateScore(MLMethod mlMethod) {
         NEATNetwork nn = (NEATNetwork) mlMethod;
+//        System.out.println(nn == null);
 
         NEATAgent agent = new EncogAgent(nn);
 
@@ -55,7 +56,7 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     @Override
     protected boolean shouldPlayBack(double fitness) {
         return !headless
-                && fitness > 5000
+                && fitness > 7000
                 && Math.random() < 0.1;
     }
 
@@ -63,12 +64,12 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     protected void logRun(Logger logger, double fitness, NEATNetwork nn) {
         super.logRun(logger, fitness, nn);
 
-        logger.info("connections: " + nn.getLinks().length + ", : " +  Arrays.toString(
+/*        logger.info("connections: " + nn.getLinks().length + ", : " +  Arrays.toString(
                 Arrays.stream(nn.getLinks())
                         .mapToDouble(l -> l.getWeight())
                         .toArray()
         ));
-        logger.info("connections: " + Arrays.toString(nn.getLinks()));
+        logger.info("connections: " + Arrays.toString(nn.getLinks()));*/
 
 //        logger.info();
     }

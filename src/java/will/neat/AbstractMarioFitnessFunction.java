@@ -18,9 +18,9 @@ public abstract class AbstractMarioFitnessFunction<N> {
 
     public static String LEVEL = FastOpts.LEVEL_05_GAPS;
     public static String TIME_LIMIT = " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 200";
-    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(2);
+    public static String DIFFICULTY = FastOpts.L_DIFFICULTY(1);
     public static String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
-    public static String LEVEL_LENGTH = FastOpts.L_LENGTH_512;
+    public static String LEVEL_LENGTH = FastOpts.L_LENGTH_1024;
 
     public static String DEFAULT_SIM_OPTIONS = ""
             + FastOpts.VIS_OFF
@@ -33,7 +33,7 @@ public abstract class AbstractMarioFitnessFunction<N> {
 
     protected final int TRIALS = 5;
 
-    protected final boolean RUNNING_PSO = false;
+    protected final boolean RUNNING_PSO = true;
 
     protected static double bestFitness = 0;
 

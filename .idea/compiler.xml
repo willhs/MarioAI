@@ -23,6 +23,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="encog-java-core" />
+        <module name="MarioAI" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

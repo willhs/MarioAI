@@ -127,6 +127,7 @@ public class HyperNEATCODECWill extends HyperNEATCODEC {
                 substrate.getOutputCount(), linkList, afs);
 
         network.setActivationCycles(substrate.getActivationCycles());
+        System.out.println("during method: " + (network == null));
         return network;
 
     }
