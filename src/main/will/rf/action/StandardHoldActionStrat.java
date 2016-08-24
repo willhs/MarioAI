@@ -28,7 +28,7 @@ public class StandardHoldActionStrat extends AbstractHoldActionStrat{
             MarioKey key = marioKeys[i];
 
             // if key is already held, skip it
-            if (keysHeld.get(key) != null && keysHeld.get(key) >= 0) {
+            if (keysHeld.containsKey(key) && keysHeld.get(key) >= 0) {
                 continue;
             }
 

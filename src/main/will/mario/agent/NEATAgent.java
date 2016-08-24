@@ -22,10 +22,14 @@ public abstract class NEATAgent extends MarioAIBase2 {
             .getSimpleName());
 
     // how many frames should each key be held for
-    private Map<MarioKey, Integer> keysHeld;
+    private Map<MarioKey, Integer> keysHeld = new HashMap<>();
 
-    public NEATAgent() {
-        keysHeld = new HashMap<>();
+    private boolean shouldPrint = false;
+
+    public NEATAgent(){}
+
+    public NEATAgent(boolean shouldPrint) {
+        this.shouldPrint = shouldPrint;
     }
 
     protected abstract double[] activateNetwork(double[] inputs);
@@ -52,16 +56,19 @@ public abstract class NEATAgent extends MarioAIBase2 {
         // 1 or 0 for each of the game inputs: [left,right,down,jump,speed/attack,up(useless)]
         double[] networkOutput = activateNetwork(inputs);
 
+        if (shouldPrint) {
+            // print environment grid
+            System.out.println("-----------------------------------------------------------");
+            for (int r = 0; r < 19; r++) {
+                double[] col = Arrays.copyOfRange(inputs, r * 19, (r + 1) * 19);
+                System.out.println(Arrays.toString(col));
+            }
+            System.out.println("-----------------------------------------------------------");
+
+            System.out.println("Network output: " + Arrays.toString(networkOutput));
+        }
+
         MarioInput action = mapNeuronsToAction(networkOutput);
-
-        if (action.getPressed().size() >= 2) {
-//            System.out.println("Pressed " + action.getPressed());
-//            System.out.println(Arrays.toString(networkOutput));
-        }
-
-        if (Math.random() < 0.001) {
-//            logger.info(Arrays.toString(networkOutput));
-        }
 
         lastInput = action;
 
@@ -86,5 +93,9 @@ public abstract class NEATAgent extends MarioAIBase2 {
     public void reset(AgentOptions options) {
         super.reset(options);
         keysHeld = new HashMap<>();
+    }
+
+    public void shouldPrint(boolean shouldPrint) {
+        this.shouldPrint = shouldPrint;
     }
 }

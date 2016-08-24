@@ -26,6 +26,9 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     private static Logger logger = Logger.getLogger(EncogMarioFitnessFunction.class
             .getSimpleName());
 
+    private static double total = 0;
+    private static int runs = 0;
+
     public EncogMarioFitnessFunction() {
         super();
     }
@@ -37,8 +40,45 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
 
         NEATAgent agent = new EncogAgent(nn);
 
-        return evaluate(agent, nn, logger);
+        double score = evaluate(agent, nn, logger);
+        runs++;
+        total += score;
+        return score;
     }
+    @Override
+    protected boolean shouldPlayBack(double fitness) {
+        return super.shouldPlayBack(fitness)
+                && fitness > (total/runs)
+                && Math.random() < 0.005;
+    }
+
+    @Override
+    protected void logRun(Logger logger, double fitness, NEATNetwork nn) {
+        super.logRun(logger, fitness, nn);
+
+        int numConnections = nn.getLinks().length;
+
+        String weights = Arrays.toString(
+                Arrays.stream(nn.getLinks())
+                        .mapToDouble(l -> l.getWeight())
+                        .toArray()
+        );
+
+        logger.info("connections: " + numConnections);
+//        logger.info("connection weights: " + weights);
+//        logger.info("connections: " + Arrays.toString(nn.getLinks()));
+    }
+
+    @Override
+    public boolean shouldMinimize() {
+        return false;
+    }
+
+    @Override
+    public boolean requireSingleThreaded() {
+        return true;
+    }
+
 
     protected void visualise(MarioSimulator sim, NEATAgent agent, NEATNetwork nn, double fitness) {
         Task<Void> runMarioTask = new Task<Void>() {
@@ -53,35 +93,5 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
         viz.launch();
     }
 
-    @Override
-    protected boolean shouldPlayBack(double fitness) {
-        return !headless
-                && fitness > 7000
-                && Math.random() < 0.1;
-    }
-
-    @Override
-    protected void logRun(Logger logger, double fitness, NEATNetwork nn) {
-        super.logRun(logger, fitness, nn);
-
-/*        logger.info("connections: " + nn.getLinks().length + ", : " +  Arrays.toString(
-                Arrays.stream(nn.getLinks())
-                        .mapToDouble(l -> l.getWeight())
-                        .toArray()
-        ));
-        logger.info("connections: " + Arrays.toString(nn.getLinks()));*/
-
-//        logger.info();
-    }
-
-    @Override
-    public boolean shouldMinimize() {
-        return false;
-    }
-
-    @Override
-    public boolean requireSingleThreaded() {
-        return true;
-    }
 
 }

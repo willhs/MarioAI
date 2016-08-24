@@ -6,7 +6,7 @@ import org.encog.neural.hyperneat.substrate.SubstrateNode;
 /**
  * Created by Will on 21/08/2016.
  */
-public class SandwichHiddenLayer implements SubstrateFactory{
+public class SandwichHiddenLayer implements SubstrateFactory {
     @Override
     public Substrate makeSubstrate() {
         Substrate substrate = new Substrate(3);
@@ -57,9 +57,9 @@ public class SandwichHiddenLayer implements SubstrateFactory{
         int middleY = 0;
         double variance = 1; // how far the node should vary from the centre
 
-        // coordinates for controls in order: left, right, up, speed
         int controls = 4;
 
+        // coordinates for controls in order: left, right, jump, speed
         double[] xs = {
                 middleX - variance,
                 middleX + variance,

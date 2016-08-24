@@ -30,10 +30,9 @@ public class EncogMarioProblem extends WillProblem {
 
     // evolution
     public static final int POP_SIZE = 100;
-    public static final int MAX_GENERATIONS = 50;
+    public static final int MAX_GENERATIONS = 100;
 
     // species
-    public static final boolean KILL_UNPRODUCTIVE_SPECIES = true;
     private static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
     private static final double COMPAT_THRESHOLD = 6;
 

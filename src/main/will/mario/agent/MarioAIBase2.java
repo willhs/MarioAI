@@ -72,7 +72,8 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	public void observe(IEnvironment environment) {
 		this.environment = environment;
 
-		int fitness = environment.getEvaluationInfo().computeWeightedFitness();
+//		int fitness = environment.getEvaluationInfo().computeWeightedFitness();
+		int fitness =environment.getEvaluationInfo().distancePassedCells;
 		if (fitness > highestFitness) {
 			highestFitness = fitness;
 		}
