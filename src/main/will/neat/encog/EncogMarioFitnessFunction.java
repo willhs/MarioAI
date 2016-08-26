@@ -47,9 +47,11 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     }
     @Override
     protected boolean shouldPlayBack(double fitness) {
-        return super.shouldPlayBack(fitness)
-                && fitness > (total/runs)
-                && Math.random() < 0.005;
+        boolean should = super.shouldPlayBack(fitness)
+                && fitness > (total/runs) * 2
+                && Math.random() < 0.02;
+        if (should) logger.info("playing run with score: " + fitness);
+        return should;
     }
 
     @Override

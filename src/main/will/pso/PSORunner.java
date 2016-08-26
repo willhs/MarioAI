@@ -79,7 +79,7 @@ public class PSORunner {
         } else {
             String filenameInput = JOptionPane.showInputDialog("name the file?");
             if (filenameInput == null) {
-                chosenFilename = SWARM_DIR + File.separator + filenameInput;
+                chosenFilename = SWARM_DIR + File.separator + filenameInput + ".xml";
             }
         }
 
@@ -112,9 +112,9 @@ public class PSORunner {
         // if filename has been chosen, use that or if previous filename has been
         // specified, use that, otherwise use default filename
         if (chosenFilename == null) {
-            chosenFilename = prevSwarmFilename == null ?
-                    SWARM_DIR + File.separator + "swarm-" + System.currentTimeMillis() :
-                    prevSwarmFilename
+            chosenFilename = prevSwarmFilename == null
+                    ? SWARM_DIR + File.separator + "swarm-" + System.currentTimeMillis() + ".xml"
+                    : prevSwarmFilename
             ;
         }
 

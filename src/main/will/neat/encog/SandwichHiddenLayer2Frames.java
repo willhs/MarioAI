@@ -4,9 +4,10 @@ import org.encog.neural.hyperneat.substrate.Substrate;
 import org.encog.neural.hyperneat.substrate.SubstrateNode;
 
 /**
- * Created by Will on 21/08/2016.
+ * Created by Will on 26/08/2016.
  */
-public class SandwichHiddenLayer implements SubstrateFactory {
+public class SandwichHiddenLayer2Frames extends SandwichHiddenLayer{
+
     @Override
     public Substrate makeSubstrate() {
         Substrate substrate = new Substrate(3);
@@ -36,6 +37,16 @@ public class SandwichHiddenLayer implements SubstrateFactory {
                 input.getLocation()[0] = xStartInput + (c * xTickInput);
                 input.getLocation()[1] = yStartInput + (r * yTickInput);
                 input.getLocation()[2] = -1;
+            }
+        }
+
+        // make inputs
+        for (int r = 0; r < gridWidthInput; r++ ) {
+            for (int c = 0; c < gridHeightInput; c++) {
+                SubstrateNode input = substrate.createInputNode();
+                input.getLocation()[0] = xStartInput + (c * xTickInput);
+                input.getLocation()[1] = yStartInput + (r * yTickInput);
+                input.getLocation()[2] = -0.8;
             }
         }
 

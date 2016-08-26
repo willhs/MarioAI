@@ -31,6 +31,7 @@ import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.controllers.MarioAgentBase;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
+import ch.idsia.tools.EvaluationInfo;
 
 /**
  * Abstract class that serves as a basis for implementing new Mario-AI agents.
@@ -48,7 +49,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	// fields to help determine if mario has moved much
 	private int lastPos = -1;
 	private int framesInSamePos = 0;
-	private int STAYS_STILL_THRESHOLD = 36; // 1.5 seconds
+	private int STAYS_STILL_THRESHOLD = 48; // 2 seconds
 
 	public MarioAIBase2() {
 		super("MarioAIBase");
@@ -72,8 +73,9 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	public void observe(IEnvironment environment) {
 		this.environment = environment;
 
+		EvaluationInfo info = environment.getEvaluationInfo();
 //		int fitness = environment.getEvaluationInfo().computeWeightedFitness();
-		int fitness =environment.getEvaluationInfo().distancePassedCells;
+		int fitness = info.distancePassedCells - info.timeSpent + (info.killsTotal * 5);
 		if (fitness > highestFitness) {
 			highestFitness = fitness;
 		}

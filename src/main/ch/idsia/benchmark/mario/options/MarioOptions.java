@@ -448,7 +448,7 @@ public class MarioOptions {
 			index += 2;			
 		}
 		
-		//System.out.println("[MarioOptions] Parameters parsed.");
+		//System.out.println("[MarioOptions] NEATParameters parsed.");
 	}
 	
 	// ==============

@@ -1,6 +1,8 @@
 package will.mario.agent.encog;
 
+import ch.idsia.agents.AgentOptions;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
+import ch.idsia.benchmark.mario.options.MarioOptions;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.neural.neat.NEATNetwork;

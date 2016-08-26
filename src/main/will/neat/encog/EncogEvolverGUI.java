@@ -49,7 +49,7 @@ public class EncogEvolverGUI extends Application {
         @Override
         protected Void call() throws Exception {
             EncogHyperNEATEvolver evolver = new EncogHyperNEATEvolver();
-            evolver.start();
+            evolver.start(null);
             return null;
         }
     }
