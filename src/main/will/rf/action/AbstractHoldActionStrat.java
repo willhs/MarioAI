@@ -15,7 +15,8 @@ public abstract class AbstractHoldActionStrat implements HoldActionStrat {
             MarioKey.SPEED
     };
 
-    protected double threshold = 0;
+    protected double pressThreshold = 0;
+    protected double cancelThreshold = -0.5;
 
     protected MarioInput action = new MarioInput();
 }

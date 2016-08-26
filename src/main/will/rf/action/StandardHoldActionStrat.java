@@ -27,14 +27,16 @@ public class StandardHoldActionStrat extends AbstractHoldActionStrat{
             double input = inputs[i];
             MarioKey key = marioKeys[i];
 
-            // if key is already held, skip it
+            // if key is already held
             if (keysHeld.containsKey(key) && keysHeld.get(key) >= 0) {
-                continue;
+                if (input < cancelThreshold) {
+                    keysHeld.put(key, 0);
+                } else continue;
             }
 
-            if (input > threshold) {
+            if (input > pressThreshold) {
                 int holdFor = (int) Algorithms.scaleToRange(
-                        input, threshold, 1, MIN_HOLD_FOR, MAX_HOLD_FOR
+                        input, pressThreshold, 1, MIN_HOLD_FOR, MAX_HOLD_FOR
                 );
                 toHold.put(key, holdFor);
             }
