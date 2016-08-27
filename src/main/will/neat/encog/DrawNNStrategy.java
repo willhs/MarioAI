@@ -147,6 +147,7 @@ public class DrawNNStrategy implements Strategy {
                 .compose(Transform.newXRotation(Math.PI/4))
                 .compose(Transform.newYRotation(Math.PI/4))
                 .compose(Transform.newTranslation(canvas.getWidth()/2, canvas.getHeight()/2, 0))
+                .compose(Transform.newTranslation(canvas.getWidth()*0.2, 0, 0))
                 .compose(Transform.newScale(WIDTH/2, HEIGHT/2, WIDTH/4))
                 ;
 

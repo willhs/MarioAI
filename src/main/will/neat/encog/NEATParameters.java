@@ -14,7 +14,8 @@ public class NEATParameters {
 
     // nn
     public int ACTIVATION_CYCLES = 3;
-    public double NN_WEIGHT_RANGE = 1.0; //
+    public double CPPN_WEIGHT_RANGE = 1.0; //
+    public double HYPERNEAT_WEIGHT_RANGE = 3.0;
     public double CPPN_MIN_WEIGHT = 0.5;
     public double INIT_CONNECTION_DENSITY = 1; // 1 for fully connected!
     public ActivationFunction ACTIVATION_FUNCTION = new ActivationClippedLinear();

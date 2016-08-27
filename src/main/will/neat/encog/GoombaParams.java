@@ -10,7 +10,7 @@ public class GoombaParams extends NEATParameters {
     public GoombaParams() {
         // nn
         ACTIVATION_CYCLES = 4;
-        NN_WEIGHT_RANGE = 4.99; //
+        CPPN_WEIGHT_RANGE = 4.99; //
         CPPN_MIN_WEIGHT = 0.5;
         INIT_CONNECTION_DENSITY = 0.0; // 1 for fully connected!
         ACTIVATION_FUNCTION = new ActivationBipolarSteepenedSigmoid();

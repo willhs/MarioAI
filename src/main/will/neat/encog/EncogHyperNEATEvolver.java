@@ -4,41 +4,23 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
-import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.ml.CalculateScore;
-import org.encog.ml.ea.genome.Genome;
-import org.encog.ml.ea.opp.CompoundOperator;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
-import org.encog.ml.train.MLTrain;
-import org.encog.ml.train.strategy.Strategy;
 import org.encog.neural.hyperneat.HyperNEATCODEC;
 import org.encog.neural.hyperneat.HyperNEATGenome;
 import org.encog.neural.hyperneat.substrate.Substrate;
-import org.encog.neural.neat.NEATNeuronType;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.training.NEATNeuronGene;
 import org.encog.neural.neat.training.opp.*;
-import org.encog.neural.neat.training.opp.links.MutatePerturbLinkWeight;
-import org.encog.neural.neat.training.opp.links.MutateResetLinkWeight;
 import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
-import org.neuroph.contrib.neat.gen.operations.fitness.AbstractFitnessFunction;
 import will.neat.AbstractMarioFitnessFunction;
 
-import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Created by Will on 17/07/2016.
@@ -137,8 +119,9 @@ public class EncogHyperNEATEvolver extends Application {
         NEATPopulation population = new NEATPopulation(substrate, params.POP_SIZE);
         population.setActivationCycles(params.ACTIVATION_CYCLES);
         population.setInitialConnectionDensity(params.INIT_CONNECTION_DENSITY);
-        population.setWeightRange(params.NN_WEIGHT_RANGE);
+        population.setWeightRange(params.CPPN_WEIGHT_RANGE);
         population.setCPPNMinWeight(params.CPPN_MIN_WEIGHT);
+        population.setHyperNEATWeightRange(params.HYPERNEAT_WEIGHT_RANGE);
         population.setActivationFunction(params.ACTIVATION_FUNCTION);
 
         population.reset();
@@ -159,7 +142,7 @@ public class EncogHyperNEATEvolver extends Application {
         neat.setCODEC(new HyperNEATCODEC());
 
         double perturbProp = params.WEIGHT_PERTURB_PROP;
-        double weightRange = params.NN_WEIGHT_RANGE;
+        double weightRange = params.CPPN_WEIGHT_RANGE;
         double perturbSD = params.PERTURB_SD * weightRange;
         double resetWeightProb = params.RESET_WEIGHT_PROB;
         // either perturb a proportion of all weights or just one weight
