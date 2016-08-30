@@ -1,5 +1,7 @@
 package will.pso.encog;
 
+import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
+import org.encog.engine.network.activation.ActivationClippedLinear;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
@@ -71,12 +73,16 @@ public class EncogMarioProblem extends WillProblem {
         population.reset();
 
         // dynamic things
-        double weightRange = features.get(NN_WEIGHT_RANGE.name());
         population.setInitialConnectionDensity(features.get(INITIAL_CONNECTION_DENSITY.name()));
 //        population.setSurvivalRate(features.get(SURVIVAL_RATIO.name()));
         population.setActivationCycles((int)(double)features.get(ACTIVATION_CYCLES.name()));
-        population.setWeightRange(weightRange);
-        population.setCPPNMinWeight(features.get(CPPN_MIN_WEIGHT.name()) * weightRange);
+        population.setWeightRange(features.get(CPPN_WEIGHT_RANGE.name()));
+        population.setHyperNEATNNWeightRange(features.get(NN_WEIGHT_RANGE.name()));
+        population.setCPPNMinWeight(features.get(CPPN_MIN_WEIGHT.name()));
+        population.setHyperNEATNNActivationFunction(features.get(ACTIVATION_TYPE.name()) < 0.5
+                ? new ActivationBipolarSteepenedSigmoid()
+                : new ActivationClippedLinear()
+        );
 
         return population;
     }
@@ -166,9 +172,11 @@ public class EncogMarioProblem extends WillProblem {
 
         // nn
         features.add(new Feature(ACTIVATION_CYCLES.name(), 1, 5));
-        features.add(new Feature(NN_WEIGHT_RANGE.name(), 1, 5));
+        features.add(new Feature(NN_WEIGHT_RANGE.name(), 0, 5));
+        features.add(new Feature(CPPN_WEIGHT_RANGE.name(), 0, 5));
         features.add(new Feature(CPPN_MIN_WEIGHT.name(), 0, 1)); // scales with max weight
         features.add(new Feature(INITIAL_CONNECTION_DENSITY.name(), 0, 1)); // not as useful since CPPN starts with only a few nodes?
+        features.add(new Feature(ACTIVATION_TYPE.name(), 0, 1));
 
         return features;
     }

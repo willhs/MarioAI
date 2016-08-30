@@ -4,7 +4,9 @@ import ch.idsia.agents.AgentOptions;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import will.rf.action.ActionStrategy;
+import will.rf.action.StandardActionStrat;
 import will.rf.action.StandardHoldActionStrat;
+import will.rf.action.TimedActionToggle;
 import will.rf.environment.BinaryEnvGridEnvironment;
 import will.rf.environment.EnvEnemyGrid;
 import will.rf.environment.GameEnvironment;
@@ -46,8 +48,8 @@ public abstract class NEATAgent extends MarioAIBase2 {
                 EntityType.SPIKY
         );*/
 
-        GameEnvironment env = new BinaryEnvGridEnvironment();
-//        GameEnvironment env = new EnvEnemyGrid();
+//        GameEnvironment env = new BinaryEnvGridEnvironment();
+        GameEnvironment env = new EnvEnemyGrid();
 
         return actionSelection(env);
     }
@@ -56,10 +58,6 @@ public abstract class NEATAgent extends MarioAIBase2 {
         updateActionsHeld();
 
         double[] environment = env.asInputNeurons(this.environment, lastInput);
-//        if (lastFrame == null) {
-//            lastFrame = environment;
-//        }
-//        double[] percepts = DoubleStream.concat(Arrays.stream(environment), Arrays.stream(lastFrame)).toArray();
 
         // put tiles through the neural network to receive game inputs
         // 1 or 0 for each of the game inputs: [left,right,down,jump,speed/attack,up(useless)]
@@ -68,12 +66,13 @@ public abstract class NEATAgent extends MarioAIBase2 {
 
         if (shouldPrint) {
             // print environment grid
-/*            System.out.println("-----------------------------------------------------------");
-            for (int r = 0; r < 19; r++) {
-                double[] col = Arrays.copyOfRange(environment, r * 19, (r + 1) * 19);
+            System.out.println("-----------------------------------------------------------");
+            int gridLength = 10;
+            for (int r = 0; r < gridLength; r++) {
+                double[] col = Arrays.copyOfRange(environment, r * gridLength, (r + 1) * gridLength);
                 System.out.println(Arrays.toString(col));
             }
-            System.out.println("-----------------------------------------------------------");*/
+            System.out.println("-----------------------------------------------------------");
 
             System.out.println("Network output: " + Arrays.toString(networkOutput));
         }
@@ -87,7 +86,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
 
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
 
-        ActionStrategy actionStrat = new StandardHoldActionStrat();
+        ActionStrategy actionStrat = new StandardHoldActionStrat();//new StandardHoldActionStrat();
         MarioInput action = actionStrat.makeAction(outputNeurons, lastInput, keysHeld);
 
         return action;

@@ -33,6 +33,8 @@ import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
 import ch.idsia.tools.EvaluationInfo;
 
+import static java.awt.SystemColor.info;
+
 /**
  * Abstract class that serves as a basis for implementing new Mario-AI agents.
  *
@@ -73,9 +75,8 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	public void observe(IEnvironment environment) {
 		this.environment = environment;
 
-		EvaluationInfo info = environment.getEvaluationInfo();
-//		int fitness = environment.getEvaluationInfo().computeWeightedFitness();
-		int fitness = info.distancePassedCells - info.timeSpent + (info.killsTotal * 5);
+		int fitness = fitness(environment.getEvaluationInfo());
+
 		if (fitness > highestFitness) {
 			highestFitness = fitness;
 		}
@@ -84,6 +85,12 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 		if (doesSuck()) {
 			sucks = true;
 		}
+	}
+
+	private int fitness(EvaluationInfo info) {
+        return info.distancePassedCells
+				- (info.timeSpent / 2)
+				+ (info.killsTotal * 5);
 	}
 
 	protected boolean doesSuck() {

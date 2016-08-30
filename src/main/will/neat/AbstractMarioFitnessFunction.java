@@ -16,11 +16,16 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractMarioFitnessFunction<N> {
 
-    public static final String LEVEL = FastOpts.LEVEL_06_GOOMBA;
+    public static final String LEVEL = FastOpts.LEVEL_07_SPIKY;
     public static final String TIME_LIMIT = " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 60";
     public static final String DIFFICULTY = FastOpts.L_DIFFICULTY(0);
     public static final String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
-    public static final String LEVEL_LENGTH = FastOpts.L_LENGTH_1024;
+    public static final String LEVEL_LENGTH = FastOpts.L_LENGTH_256;
+
+    public static final String RECEPTIVE_FIELD_WIDTH = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_WIDTH.getParam() + " 10";
+    public static final String RECEPTIVE_FIELD_HEIGHT = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_HEIGHT.getParam() + " 10";
+    public static final String RECEPTIVE_FIELD_MARIO_ROW = " " + MarioOptions.IntOption.AI_MARIO_EGO_ROW.getParam() + " 4";
+    public static final String RECEPTIVE_FIELD_MARIO_COL = " " + MarioOptions.IntOption.AI_MARIO_EGO_COLUMN.getParam() + " 4";
 
     public static String DEFAULT_SIM_OPTIONS = ""
             + FastOpts.VIS_OFF
@@ -29,9 +34,14 @@ public abstract class AbstractMarioFitnessFunction<N> {
             + MARIO_TYPE
             + TIME_LIMIT
             + LEVEL_LENGTH
+
+            + RECEPTIVE_FIELD_WIDTH
+            + RECEPTIVE_FIELD_HEIGHT
+            + RECEPTIVE_FIELD_MARIO_ROW
+            + RECEPTIVE_FIELD_MARIO_COL
             ;
 
-    protected final int TRIALS = 3;
+    protected final int TRIALS = 1;
 
     protected final boolean RUNNING_PSO = false;
     public static boolean headless = true;
@@ -50,11 +60,9 @@ public abstract class AbstractMarioFitnessFunction<N> {
         double fitnessSum = 0;
 
         for (int t = 0; t < TRIALS; t++) {
-            // reset agent
-//            agent.reset(null);
-
             // do trial with new random seed
-            int seed = new Random().nextInt();
+            int seed = 0;
+//            int seed = new Random().nextInt();
             String simOptions = getSimOptions(seed);
 
             float trialFitness = playMario(agent, simOptions);

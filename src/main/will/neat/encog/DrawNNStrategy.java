@@ -28,7 +28,7 @@ public class DrawNNStrategy implements Strategy {
     private final double MIN_LINK_WIDTH = 0.4;
     private final double MAX_LINK_WIDTH = 2;
     private final Paint INPUT_NEURON_COLOUR = Color.AQUA;
-    private final Paint HIDDEN_NEURON_COLOUR = Color.BROWN;
+    private final Paint HIDDEN_NEURON_COLOUR = Color.PURPLE;
     private final Paint OUTPUT_NEURON_COLOUR = Color.RED;
     private final Paint BIAS_NEURON_COLOUR = Color.YELLOW;
 
@@ -39,6 +39,8 @@ public class DrawNNStrategy implements Strategy {
 
     private TrainEA train;
     private Canvas canvas;
+
+    private double rotateX = Math.PI/4, rotateY = Math.PI/4;
 
     private final int NEURON_SIZE = 5;
 
@@ -60,7 +62,6 @@ public class DrawNNStrategy implements Strategy {
 
     private void draw() {
         try {
-            System.out.println("drawing");
             if (train.getIteration() < 1) { return; }
 
             GraphicsContext g = canvas.getGraphicsContext2D();
@@ -93,8 +94,8 @@ public class DrawNNStrategy implements Strategy {
                         .findFirst()
                         .get();
 
-                double NNWeightRange = 3.0;
-                double weightProp = link.getWeight() / NNWeightRange;
+                double NNWeightRange = pop.getHyperNEATNNWeightRange();
+                double weightProp = Algorithms.clamp(link.getWeight() / NNWeightRange, -1, 1);
                 double weightPropAbs = Math.abs(weightProp);
                 double lineWidth = MIN_LINK_WIDTH + (weightPropAbs * MAX_LINK_WIDTH-MIN_LINK_WIDTH);
 
@@ -144,8 +145,8 @@ public class DrawNNStrategy implements Strategy {
     private double[] transform(double[] point) {
         Vector3D vec = new Vector3D(point[0], point[1], point[2]);
         Transform isometric = Transform.identity()
-                .compose(Transform.newXRotation(Math.PI/4))
-                .compose(Transform.newYRotation(Math.PI/4))
+                .compose(Transform.newXRotation(rotateX))
+                .compose(Transform.newYRotation(rotateY))
                 .compose(Transform.newTranslation(canvas.getWidth()/2, canvas.getHeight()/2, 0))
                 .compose(Transform.newTranslation(canvas.getWidth()*0.2, 0, 0))
                 .compose(Transform.newScale(WIDTH/2, HEIGHT/2, WIDTH/4))
@@ -153,6 +154,20 @@ public class DrawNNStrategy implements Strategy {
 
         Vector3D result = isometric.multiply(vec);
         return new double[]{ result.x, result.y, result.z };
+    }
+
+    public double getRotateX() {
+        return rotateX;
+    }
+    public double getRotateY() {
+        return rotateY;
+    }
+
+    public void setRotateX(double rotateX) {
+        this.rotateX = rotateX;
+    }
+    public void setRotateY(double rotateY) {
+        this.rotateY = rotateY;
     }
 
     @Override

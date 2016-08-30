@@ -11,8 +11,8 @@ public class SandwichHiddenLayer implements SubstrateFactory {
     public Substrate makeSubstrate() {
         Substrate substrate = new Substrate(3);
 
-        int gridWidthInput = 19;
-        int gridHeightInput = 19;
+        int gridWidthInput = 10;
+        int gridHeightInput = 10;
 
         int gridWidthHidden = 5;
         int gridHeightHidden = 5;
@@ -24,10 +24,10 @@ public class SandwichHiddenLayer implements SubstrateFactory {
         double xStartInput = -1 + xTickInput/2;
         double yStartInput = -1 + yTickInput/2;
 
-        double xTickHidden = hypercubeSize / gridWidthInput; // temporarily using input width/height
-        double yTickHidden = hypercubeSize / gridHeightInput;
-        double xStartHidden = -(gridWidthHidden/(double)gridWidthInput) + xTickHidden/2;
-        double yStartHidden = -(gridHeightHidden/(double)gridHeightInput) + yTickHidden/2;
+        double xTickHidden = hypercubeSize / gridWidthHidden; // temporarily using input width/height
+        double yTickHidden = hypercubeSize / gridHeightHidden;
+        double xStartHidden = -1 + xTickHidden/2;
+        double yStartHidden = -1 + yTickHidden/2;
 
         // make inputs
         for (int r = 0; r < gridWidthInput; r++ ) {
@@ -52,17 +52,20 @@ public class SandwichHiddenLayer implements SubstrateFactory {
             }
         }
 
+        System.out.println(substrate.getHiddenNodes());
+
         // make outputs
         int middleX = 0;
         int middleY = 0;
         double variance = 1; // how far the node should vary from the centre
 
-        int controls = 4;
+        int outputNodes = 4;
 
         // coordinates for controls in order: left, right, jump, speed
         double[] xs = {
                 middleX - variance,
                 middleX + variance,
+                middleX,
                 middleX,
                 middleX
         };
@@ -70,10 +73,11 @@ public class SandwichHiddenLayer implements SubstrateFactory {
                 middleY,
                 middleY,
                 middleY - variance,
-                middleY
+                middleY,
+                middleY + variance
         };
 
-        for (int i = 0; i < controls; i++) {
+        for (int i = 0; i < outputNodes; i++) {
             SubstrateNode output = substrate.createOutputNode();
             output.getLocation()[0] = xs[i];
             output.getLocation()[1] = ys[i];

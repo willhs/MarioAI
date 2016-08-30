@@ -19,6 +19,7 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 import will.neat.AbstractMarioFitnessFunction;
+import will.neat.HyperNEATParameters;
 
 import java.util.logging.Logger;
 
@@ -30,7 +31,7 @@ public class EncogHyperNEATEvolver extends Application {
     private static Logger logger = Logger.getLogger(EncogHyperNEATEvolver.class
             .getSimpleName());
 
-    private NEATParameters params = new NEATParameters();
+    private HyperNEATParameters params = new HyperNEATParameters();
 
     public EncogHyperNEATEvolver() {
     }
@@ -46,8 +47,8 @@ public class EncogHyperNEATEvolver extends Application {
         // headless checkbox
         CheckBox checkbox = new CheckBox("Headless");
         checkbox.setSelected(true);
-        checkbox.selectedProperty().addListener((obs, old, nw) ->
-            AbstractMarioFitnessFunction.headless = nw
+        checkbox.selectedProperty().addListener((obs, old, newVal) ->
+            AbstractMarioFitnessFunction.headless = newVal
         );
         root.setLeft(checkbox);
 
@@ -121,8 +122,8 @@ public class EncogHyperNEATEvolver extends Application {
         population.setInitialConnectionDensity(params.INIT_CONNECTION_DENSITY);
         population.setWeightRange(params.CPPN_WEIGHT_RANGE);
         population.setCPPNMinWeight(params.CPPN_MIN_WEIGHT);
-        population.setHyperNEATWeightRange(params.HYPERNEAT_WEIGHT_RANGE);
-        population.setActivationFunction(params.ACTIVATION_FUNCTION);
+        population.setHyperNEATNNWeightRange(params.NN_WEIGHT_RANGE);
+        population.setHyperNEATNNActivationFunction(params.ACTIVATION_FUNCTION);
 
         population.reset();
         // must reset before changing the codec or it won't be kept...
@@ -142,12 +143,11 @@ public class EncogHyperNEATEvolver extends Application {
         neat.setCODEC(new HyperNEATCODEC());
 
         double perturbProp = params.WEIGHT_PERTURB_PROP;
-        double weightRange = params.CPPN_WEIGHT_RANGE;
-        double perturbSD = params.PERTURB_SD * weightRange;
+        double perturbSD = params.PERTURB_SD;
         double resetWeightProb = params.RESET_WEIGHT_PROB;
         // either perturb a proportion of all weights or just one weight
         NEATMutateWeights weightMutation = new NEATMutateWeights(
-                params.WEIGHT_MUT_TYPE == NEATParameters.WeightMutType.PROPORTIONAL
+                params.WEIGHT_MUT_TYPE == HyperNEATParameters.WeightMutType.PROPORTIONAL
                         ? new SelectProportion(perturbProp)
                         : new SelectFixed(1),
                 new MutatePerturbOrResetLinkWeight(resetWeightProb, perturbSD)
