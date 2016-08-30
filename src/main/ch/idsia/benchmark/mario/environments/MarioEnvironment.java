@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ch.idsia.agents.AgentOptions;
@@ -262,6 +263,26 @@ public final class MarioEnvironment implements IEnvironment {
 
 	public Tile[][] getTileField() {
 		return tileField;
+	}
+
+	/*
+		19x19 by default
+	 */
+	public Tile[][] getTileField(int newLength) {
+		if (newLength % 2 != 0) {
+			throw new IllegalArgumentException("Grid should be of odd size");
+		}
+		int oldLength = this.tileField.length;
+
+		int start = (oldLength - newLength)/2;
+		int end = oldLength - (oldLength - newLength)/2;
+        Tile[][] newField = new Tile[newLength][];
+
+		for (int i = start; i < end; i++) {
+			newField[i] = Arrays.copyOfRange(this.tileField[i], start, end);
+		}
+
+	    return newField;
 	}
 	
 	private void computeEntities(int ZLevel) {

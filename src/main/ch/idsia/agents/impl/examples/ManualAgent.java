@@ -3,6 +3,7 @@ package ch.idsia.agents.impl.examples;
 import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.controllers.MarioHijackAIBase;
 import ch.idsia.benchmark.mario.MarioSimulator;
+import ch.idsia.benchmark.mario.engine.SimulatorOptions;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.tools.EvaluationInfo;
@@ -27,17 +28,21 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 	}
 
 	public MarioInput actionSelectionAI() {
-//		System.out.println(info.distancePassedPhys);
-//		System.out.println(info.distancePassedCells);
-		int fitness = environment.getEvaluationInfo().distancePassedCells + environment.getEvaluationInfo().killsTotal * 10;
+
+		int fitness = info.distancePassedCells
+				- info.timeSpent
+				+ info.killsTotal * 10;
+
 		System.out.println(fitness);
+
 		return action;
 	}
 
 	public static void main(String[] args) {
 		// IMPLEMENTS END-LESS RUNS
 		while (true) {
-			String options = DEFAULT_SIM_OPTIONS.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
+			String options = DEFAULT_SIM_OPTIONS.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X)
+					+ FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID);
 
 			MarioSimulator simulator = new MarioSimulator(options);
 			
