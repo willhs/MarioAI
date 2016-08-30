@@ -17,9 +17,9 @@ public class ProbabilisticActionStrat extends AbstractActionStrat{
     public MarioInput makeAction(double[] inputs, MarioInput currentAction, Map<MarioKey, Integer> keysHeld) {
         for (int i = 0; i < marioKeys.length; i++ ){
             double outputVal = inputs[i];
-            if (outputVal > threshold) {
+            if (outputVal > pressThreshold) {
                 double chanceToPress = Algorithms.scaleToRange(
-                        outputVal, threshold, 1, minChanceToPress, 1
+                        outputVal, pressThreshold, 1, minChanceToPress, 1
                 );
 
                 if (Math.random() < chanceToPress) {

@@ -9,13 +9,13 @@ import ch.idsia.benchmark.mario.engine.input.MarioKey;
 public abstract class AbstractActionStrat implements ActionStrategy{
 
     protected MarioKey[] marioKeys = new MarioKey[]{
-            MarioKey.RIGHT,
             MarioKey.LEFT,
+            MarioKey.RIGHT,
             MarioKey.JUMP,
             MarioKey.SPEED
     };
 
-    protected double threshold = 0.50;
+    protected double pressThreshold = 0.00;
 
     protected MarioInput action = new MarioInput();
 }

@@ -13,7 +13,7 @@ public class StandardActionStrat extends AbstractActionStrat {
     public MarioInput makeAction(double[] inputs, MarioInput currentAction, Map<MarioKey, Integer> keysHeld) {
         for (int i = 0; i < marioKeys.length; i++) {
             double val = inputs[i];
-            if (val > threshold) {
+            if (val > pressThreshold) {
                 action.press(marioKeys[i]);
             }
         }

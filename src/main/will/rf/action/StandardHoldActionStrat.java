@@ -12,24 +12,31 @@ import java.util.Map;
  */
 public class StandardHoldActionStrat extends AbstractHoldActionStrat{
 
-    private static final int MIN_HOLD_FOR = 1;
-    private static final int MAX_HOLD_FOR = 24;
+    private Map<MarioKey, Integer> toHold = new HashMap<>();
 
-    private Map<MarioKey, Integer> toHold;
 
-    public StandardHoldActionStrat() {
-        toHold = new HashMap<>();
+    private boolean enableCancellation = false;
+    protected double cancelThreshold = -0.5;
+
+    public StandardHoldActionStrat() { }
+
+    public StandardHoldActionStrat(boolean enableCancel) {
+        this.enableCancellation = enableCancel;
     }
 
     @Override
     public MarioInput makeAction(double[] inputs, MarioInput currentAction, Map<MarioKey, Integer> keysHeld) {
+        if (inputs.length != 4) {
+            throw new IllegalArgumentException("this strategy takes 4 input nodes, was given " + inputs.length);
+        }
+
         for (int i = 0; i < marioKeys.length; i++) {
             double input = inputs[i];
             MarioKey key = marioKeys[i];
 
             // if key is already held
             if (keysHeld.containsKey(key) && keysHeld.get(key) >= 0) {
-                if (input < cancelThreshold) {
+                if (enableCancellation && input < cancelThreshold) {
                     keysHeld.put(key, 0);
                 } else continue;
             }
@@ -56,10 +63,5 @@ public class StandardHoldActionStrat extends AbstractHoldActionStrat{
             }
         });
         return action;
-    }
-
-    @Override
-    public Map<MarioKey, Integer> getActionsToHold() {
-        return toHold;
     }
 }
