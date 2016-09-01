@@ -22,10 +22,10 @@ public abstract class AbstractMarioFitnessFunction<N> {
     public static final String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
     public static final String LEVEL_LENGTH = FastOpts.L_LENGTH_256;
 
-    public static final String RECEPTIVE_FIELD_WIDTH = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_WIDTH.getParam() + " 10";
-    public static final String RECEPTIVE_FIELD_HEIGHT = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_HEIGHT.getParam() + " 10";
-    public static final String RECEPTIVE_FIELD_MARIO_ROW = " " + MarioOptions.IntOption.AI_MARIO_EGO_ROW.getParam() + " 4";
-    public static final String RECEPTIVE_FIELD_MARIO_COL = " " + MarioOptions.IntOption.AI_MARIO_EGO_COLUMN.getParam() + " 4";
+    public static final String RECEPTIVE_FIELD_WIDTH = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_WIDTH.getParam() + " 13";
+    public static final String RECEPTIVE_FIELD_HEIGHT = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_HEIGHT.getParam() + " 13";
+    public static final String RECEPTIVE_FIELD_MARIO_ROW = " " + MarioOptions.IntOption.AI_MARIO_EGO_ROW.getParam() + " 6";
+    public static final String RECEPTIVE_FIELD_MARIO_COL = " " + MarioOptions.IntOption.AI_MARIO_EGO_COLUMN.getParam() + " 6";
 
     public static String DEFAULT_SIM_OPTIONS = ""
             + FastOpts.VIS_OFF
@@ -41,28 +41,29 @@ public abstract class AbstractMarioFitnessFunction<N> {
             + RECEPTIVE_FIELD_MARIO_COL
             ;
 
-    protected final int TRIALS = 1;
+    protected final int TRIALS = 3;
 
-    protected final boolean RUNNING_PSO = false;
     public static boolean headless = true;
 
     protected static double bestFitness = 0;
 
-    public AbstractMarioFitnessFunction() {
-        if (RUNNING_PSO) {
+    public AbstractMarioFitnessFunction(boolean runningPSO) {
+        if (runningPSO) {
             headless = true;
             Logger.getGlobal().setLevel(Level.OFF);
             LogManager.getLogManager().reset();
         }
     }
 
+    public AbstractMarioFitnessFunction() { }
+
     protected double evaluate(NEATAgent agent, N nn, Logger logger) {
         double fitnessSum = 0;
 
         for (int t = 0; t < TRIALS; t++) {
             // do trial with new random seed
-            int seed = 0;
-//            int seed = new Random().nextInt();
+//            int seed = 0;
+            int seed = new Random().nextInt();
             String simOptions = getSimOptions(seed);
 
             float trialFitness = playMario(agent, simOptions);
@@ -76,9 +77,7 @@ public abstract class AbstractMarioFitnessFunction<N> {
             if (shouldPlayBack(trialFitness)) {
                 logRun(logger, trialFitness, nn);
                 String vizSimOptions = simOptions.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
-                if (!RUNNING_PSO) {
-                    agent.shouldPrint(true);
-                }
+                agent.shouldPrint(true);
                 float score = playMario(agent, vizSimOptions);
                 logger.info("playback got score: " + score);
                 agent.shouldPrint(false);

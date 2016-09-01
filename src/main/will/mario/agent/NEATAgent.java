@@ -67,7 +67,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
         if (shouldPrint) {
             // print environment grid
             System.out.println("-----------------------------------------------------------");
-            int gridLength = 10;
+            int gridLength = 13;
             for (int r = 0; r < gridLength; r++) {
                 double[] col = Arrays.copyOfRange(environment, r * gridLength, (r + 1) * gridLength);
                 System.out.println(Arrays.toString(col));
@@ -86,7 +86,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
 
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
 
-        ActionStrategy actionStrat = new StandardHoldActionStrat();//new StandardHoldActionStrat();
+        ActionStrategy actionStrat = new TimedActionToggle();//new StandardHoldActionStrat();
         MarioInput action = actionStrat.makeAction(outputNeurons, lastInput, keysHeld);
 
         return action;

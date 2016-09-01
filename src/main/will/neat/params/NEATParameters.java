@@ -1,4 +1,4 @@
-package will.neat;
+package will.neat.params;
 
 import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
 import org.encog.engine.network.activation.ActivationClippedLinear;
@@ -9,19 +9,14 @@ import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
  * Created by Will on 30/08/2016.
  */
 public class NEATParameters {
-    // defaults
+
+    public int POP_SIZE = 200;
 
     // nn
     public int ACTIVATION_CYCLES = 5;
     public double NN_WEIGHT_RANGE = 1.0;
     public double INIT_CONNECTION_DENSITY = 0.0; // 1 for fully connected!
     public ActivationFunction ACTIVATION_FUNCTION = new ActivationClippedLinear();
-
-    public int INPUT_NEURONS = 100;
-    public int OUTPUT_NEURONS = 4;
-
-    // evolution
-    public int POP_SIZE = 200;
 
     public double SELECTION_PROP = 0.4;
     public double ELITE_RATE = 0.1;

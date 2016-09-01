@@ -51,7 +51,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	// fields to help determine if mario has moved much
 	private int lastPos = -1;
 	private int framesInSamePos = 0;
-	private int STAYS_STILL_THRESHOLD = 48; // 2 seconds
+	private int STAYS_STILL_THRESHOLD = 72; // 3 seconds
 
 	public MarioAIBase2() {
 		super("MarioAIBase");
@@ -89,7 +89,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 
 	private int fitness(EvaluationInfo info) {
         return info.distancePassedCells
-				- (info.timeSpent / 2)
+				- (info.timeSpent / 10)
 				+ (info.killsTotal * 5);
 	}
 
