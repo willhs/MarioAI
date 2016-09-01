@@ -8,7 +8,7 @@ import org.xml.sax.SAXException;
 import will.pso.Feature;
 import will.pso.WillParticle;
 import will.pso.WillSwarm;
-import will.pso.encog.EncogMarioProblem;
+import will.pso.encog.EncogHyperMarioProblem;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -134,7 +134,7 @@ public class PSOIO {
         return featElem;
     }
 
-    public static WillSwarm parseSwarm(EncogMarioProblem problem, String filename) {
+    public static WillSwarm parseSwarm(EncogHyperMarioProblem problem, String filename) {
         double c1 = -1;
         double c2 = -1;
         double inertia = -1;

@@ -23,20 +23,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static will.pso.encog.EncogMarioProblem.PARAMS.*;
+import static will.pso.encog.EncogHyperMarioProblem.PARAMS.*;
 
 /**
  * Created by Will on 22/08/2016.
  */
-public class EncogMarioProblem extends WillProblem {
+public class EncogHyperMarioProblem extends EncogNEATMarioProblem {
 
     // evolution
-    public static final int POP_SIZE = 100;
-    public static final int MAX_GENERATIONS = 50;
+    public static final int POP_SIZE = 150;
+    public static final int MAX_GENERATIONS = 150;
 
     // species
     private static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
-    private static final double COMPAT_THRESHOLD = 10;
+    private static final double COMPAT_THRESHOLD = 8;
 
     // variable parameters
     public enum PARAMS {
@@ -47,7 +47,7 @@ public class EncogMarioProblem extends WillProblem {
         ACTIVATION_TYPE
     }
 
-    public EncogMarioProblem() {
+    public EncogHyperMarioProblem() {
         // we are aiming for the HIGHEST score, not lowest
         setMinimization(false);
     }
@@ -89,7 +89,7 @@ public class EncogMarioProblem extends WillProblem {
 
     private TrainEA makeNEAT(NEATPopulation pop, Map<String, Double> features) {
         // static things
-        CalculateScore fitnessFunction = new EncogMarioFitnessFunction();
+        CalculateScore fitnessFunction = new EncogMarioFitnessFunction(true);
         final TrainEA neat = new TrainEA(pop, fitnessFunction);
 
         OriginalNEATSpeciation speciation = new OriginalNEATSpeciation();
@@ -138,7 +138,7 @@ public class EncogMarioProblem extends WillProblem {
 /*        // variable parameters
         public enum PARAMS {
             MAX_SPECIES, MAX_SPECIE_GENS, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
-            ADD_NEURON_PROB, WEIGHT_PERTURB_PROP, PERTURB_SD, RESET_WEIGHT_PROB,
+            ADD_NEURON_PROB, PERTURB_PROP, PERTURB_SD, RESET_WEIGHT_PROB,
             ELITE_RATE, CROSSOVER_PROB, CPPN_WEIGHT_RANGE, CPPN_MIN_WEIGHT,
             INITIAL_CONNECTION_DENSITY, ACTIVATION_CYCLES, SELECTION_PROP, WEIGHT_MUT_TYPE
         }*/

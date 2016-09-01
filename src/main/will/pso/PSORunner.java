@@ -1,6 +1,7 @@
 package will.pso;
 
-import will.pso.encog.EncogMarioProblem;
+import will.pso.encog.EncogHyperMarioProblem;
+import will.pso.encog.EncogNEATMarioProblem;
 import will.pso.io.PSOIO;
 
 import javax.swing.*;
@@ -78,7 +79,7 @@ public class PSORunner {
             new IllegalArgumentException("Can't have more than one arg");
         } else {
             String filenameInput = JOptionPane.showInputDialog("name the file?");
-            if (filenameInput == null) {
+            if (filenameInput != null) {
                 chosenFilename = SWARM_DIR + File.separator + filenameInput + ".xml";
             }
         }
@@ -90,7 +91,7 @@ public class PSORunner {
         if (prevSwarmFilename == null) {
             // start new PSO run
             swarm = new WillSwarm(
-                    new EncogMarioProblem(),
+                    new EncogHyperMarioProblem(),
                     numParticles,
                     c1,
                     c2,
@@ -102,7 +103,7 @@ public class PSORunner {
         } else {
             // previous run should be continued
             // read swarm from particle
-            swarm = PSOIO.parseSwarm(new EncogMarioProblem(), prevSwarmFilename);
+            swarm = PSOIO.parseSwarm(new EncogHyperMarioProblem(), prevSwarmFilename);
             // todo: replace ugly separate parsing methods
 //            gBestFitness = PSOIONeuroph.parseBestFitness(swarmFilename);
             gBestFitness = swarm.getProblem().getWorstFitness();
