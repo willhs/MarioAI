@@ -17,8 +17,9 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 import will.neat.AbstractMarioFitnessFunction;
-import will.neat.HyperNEATParameters;
-import will.neat.NEATParameters;
+import will.neat.params.HyperNEATParameters;
+import will.neat.params.NEATParameters;
+import will.neat.params.SpikeyNEATParameters;
 
 import java.util.logging.Logger;
 
@@ -27,10 +28,14 @@ import java.util.logging.Logger;
  */
 public class EncogNEATEvolver extends Application{
     // io
-    private static Logger logger = Logger.getLogger(EncogHyperNEATEvolver.class
+    private static Logger logger = Logger.getLogger(HyperNEATGUI.class
             .getSimpleName());
 
-    private NEATParameters params = new NEATParameters();
+    private static final int NUM_INPUTS = 169;
+    private static final int NUM_OUTPUTS = 5;
+    private static final int POP_SIZE = 200;
+
+    private NEATParameters params = new SpikeyNEATParameters();
 
     public EncogNEATEvolver() {
     }
@@ -106,7 +111,7 @@ public class EncogNEATEvolver extends Application{
     }
 
     private TrainEA setupNEAT() {
-        NEATPopulation population = new NEATPopulation(params.INPUT_NEURONS, params.OUTPUT_NEURONS, params.POP_SIZE);
+        NEATPopulation population = new NEATPopulation(NUM_INPUTS, NUM_OUTPUTS, POP_SIZE);
         population.setActivationCycles(params.ACTIVATION_CYCLES);
         population.setInitialConnectionDensity(params.INIT_CONNECTION_DENSITY);
         population.setWeightRange(params.NN_WEIGHT_RANGE);
@@ -116,7 +121,7 @@ public class EncogNEATEvolver extends Application{
         CalculateScore fitnessFunction = new EncogMarioFitnessFunction();
 
         OriginalNEATSpeciation speciation = new OriginalNEATSpeciation();
-        speciation.setCompatibilityThreshold(params.COMPAT_THRESHOLD);
+        speciation.setCompatibilityThreshold(params.INIT_COMPAT_THRESHOLD);
         speciation.setMaxNumberOfSpecies(params.MAX_SPECIES);
         speciation.setNumGensAllowedNoImprovement(params.MAX_GENS_SPECIES);
 

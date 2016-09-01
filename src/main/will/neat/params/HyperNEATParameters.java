@@ -1,8 +1,6 @@
 package will.neat.params;
 
 import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
-import org.encog.engine.network.activation.ActivationClippedLinear;
-import org.encog.engine.network.activation.ActivationFunction;
 
 /**
  * Created by Will on 26/08/2016.
@@ -30,7 +28,7 @@ public class HyperNEATParameters extends NEATParameters {
         MIN_PER_SPECIE = 10;
         MAX_SPECIES = 15;//POP_SIZE / MIN_PER_SPECIE;
         MAX_GENS_SPECIES = 50;
-        COMPAT_THRESHOLD = 8;
+        INIT_COMPAT_THRESHOLD = 8;
 
         // mutation probs
         ADD_CONN_PROB = 0.5;

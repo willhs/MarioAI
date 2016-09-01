@@ -1,7 +1,10 @@
 package will.neat.encog;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.encog.ml.ea.genome.Genome;
@@ -28,11 +31,10 @@ public class DrawNNStrategy implements Strategy {
     private final double MIN_LINK_WIDTH = 0.4;
     private final double MAX_LINK_WIDTH = 2;
     private final Paint INPUT_NEURON_COLOUR = Color.AQUA;
-    private final Paint HIDDEN_NEURON_COLOUR = Color.PURPLE;
+    private final Paint HIDDEN_NEURON_COLOUR = Color.GREENYELLOW;
     private final Paint OUTPUT_NEURON_COLOUR = Color.RED;
     private final Paint BIAS_NEURON_COLOUR = Color.YELLOW;
 
-    private final double PADDING = 20;
     private final double WIDTH, HEIGHT;
 
 //    private final Paint CONNECTION_LOW
@@ -40,14 +42,16 @@ public class DrawNNStrategy implements Strategy {
     private TrainEA train;
     private Canvas canvas;
 
-    private double rotateX = Math.PI/4, rotateY = Math.PI/4;
+    private double  rotateX = Math.PI/4,
+                    rotateY = Math.PI/4,
+                    rotateZ = 0;
 
-    private final int NEURON_SIZE = 5;
+    private final int NEURON_SIZE = 10;
 
     public DrawNNStrategy(Canvas canvas) {
         this.canvas = canvas;
-        this.WIDTH = canvas.getWidth() * 0.6;
-        this.HEIGHT = canvas.getHeight() * 0.6;
+        this.WIDTH = canvas.getWidth() * 0.3;
+        this.HEIGHT = canvas.getHeight() * 0.3;
     }
 
     @Override
@@ -57,7 +61,13 @@ public class DrawNNStrategy implements Strategy {
 
     @Override
     public void preIteration() {
-        draw();
+        if (train.getIteration() > 0) {
+            NEATPopulation pop = (NEATPopulation) train.getPopulation();
+            Genome champ = pop.getBestGenome();
+            NEATNetwork nn = (NEATNetwork) new HyperNEATCODEC().decode(champ);
+            // initiate draw when JavaFX thread is ready (otherwise weird stuff happens)
+            Platform.runLater(() -> draw());
+        }
     }
 
     private void draw() {
@@ -83,7 +93,6 @@ public class DrawNNStrategy implements Strategy {
             // draw links
             Arrays.stream(nn.getLinks()).forEach(link -> {
                 if (link.getFromNeuron() == 0) return;
-//                System.out.println(link.getFromNeuron() + " " + link.getToNeuron());
                 SubstrateNode from = allNodes.stream()
                         .filter(n -> n.getId() == link.getFromNeuron())
                         .findFirst()
@@ -95,20 +104,23 @@ public class DrawNNStrategy implements Strategy {
                         .get();
 
                 double NNWeightRange = pop.getHyperNEATNNWeightRange();
-                double weightProp = Algorithms.clamp(link.getWeight() / NNWeightRange, -1, 1);
-                double weightPropAbs = Math.abs(weightProp);
-                double lineWidth = MIN_LINK_WIDTH + (weightPropAbs * MAX_LINK_WIDTH-MIN_LINK_WIDTH);
+                // weight normalised
+                double weight = Algorithms.clamp(link.getWeight() / NNWeightRange, -1, 1);
+                double weightAbs = Math.abs(weight);
+                // scale a little up so that small connections can be seen
+                double weightAbsAlpha = Algorithms.scaleToRange(weightAbs, 0, 1, 0.1, 1);
+                double lineWidth = MIN_LINK_WIDTH + (weightAbs * MAX_LINK_WIDTH-MIN_LINK_WIDTH);
 
-
-                double greenAmount = Algorithms.clamp(weightProp, 0, 1);
-                double redAmount = Math.abs(Algorithms.clamp(weightProp, -1, 0));
-                g.setStroke(Color.color(redAmount, greenAmount, 0, weightPropAbs));
+                double positiveAmount = Algorithms.clamp(weight, 0, 1);
+                double negativeAmount = Math.abs(Algorithms.clamp(weight, -1, 0));
+                double scaledAmount = Algorithms.scaleToRange(weight, -1, 1, 0, 1);
+                g.setStroke(Color.color(scaledAmount, scaledAmount, scaledAmount, weightAbsAlpha));
 
                 double[] transformedFrom = transform(from.getLocation());
                 double[] transformedTo = transform(to.getLocation());
                 g.setLineWidth(1);
-                g.strokeLine(transformedFrom[0], transformedFrom[1],
-                        transformedTo[0], transformedTo[1]);
+                g.strokeLine(transformedFrom[0] + (NEURON_SIZE/2), transformedFrom[1] + (NEURON_SIZE/2),
+                        transformedTo[0] + (NEURON_SIZE/2), transformedTo[1] + (NEURON_SIZE/2));
             });
 
             // draw nodes
@@ -131,6 +143,7 @@ public class DrawNNStrategy implements Strategy {
                 double[] locTrans = transform(loc);
                 g.setFill(OUTPUT_NEURON_COLOUR);
                 g.fillOval(locTrans[0], locTrans[1], NEURON_SIZE, NEURON_SIZE);
+//                g.fillText(Arrays.toString(n.getLocation()), locTrans[0], locTrans[1]);
             });
 
             // bias node
@@ -144,33 +157,49 @@ public class DrawNNStrategy implements Strategy {
 
     private double[] transform(double[] point) {
         Vector3D vec = new Vector3D(point[0], point[1], point[2]);
-        Transform isometric = Transform.identity()
+
+        Transform translate = Transform.identity()
                 .compose(Transform.newXRotation(rotateX))
                 .compose(Transform.newYRotation(rotateY))
-                .compose(Transform.newTranslation(canvas.getWidth()/2, canvas.getHeight()/2, 0))
-                .compose(Transform.newTranslation(canvas.getWidth()*0.2, 0, 0))
-                .compose(Transform.newScale(WIDTH/2, HEIGHT/2, WIDTH/4))
+                .compose(Transform.newZRotation(rotateZ));
+
+        Transform other = Transform.identity()
+                .compose(Transform.newTranslation(canvas.getWidth()/2 , canvas.getHeight()/2, 0))
+//                .compose(Transform.newTranslation(canvas.getWidth()*0.2, 0, 0))
+                .compose(Transform.newScale(WIDTH, HEIGHT, WIDTH))
                 ;
 
-        Vector3D result = isometric.multiply(vec);
+        Vector3D translated = translate.multiply(vec);
+        Vector3D result = other.multiply(translated);
+
         return new double[]{ result.x, result.y, result.z };
-    }
-
-    public double getRotateX() {
-        return rotateX;
-    }
-    public double getRotateY() {
-        return rotateY;
-    }
-
-    public void setRotateX(double rotateX) {
-        this.rotateX = rotateX;
-    }
-    public void setRotateY(double rotateY) {
-        this.rotateY = rotateY;
     }
 
     @Override
     public void postIteration() { }
+
+    // rotation mouse drag handling stuff
+    private double prevX;
+    private double prevY;
+    private boolean released = true;
+    private final double DRAG_SCALE = 0.015;
+
+    public void rotateWithDrag(MouseEvent event) {
+        if (event.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
+            released = true;
+        } else {
+            if (!released) {
+                double rotateAmountY = (event.getX() - prevX) * DRAG_SCALE;
+                double rotateAmountX = (event.getY() - prevY) * DRAG_SCALE;
+                rotateY -= rotateAmountY;
+                rotateX += rotateAmountX;
+                draw();
+            }
+            prevX = event.getX();
+            prevY = event.getY();
+
+            released = false;
+        }
+    }
 }
 

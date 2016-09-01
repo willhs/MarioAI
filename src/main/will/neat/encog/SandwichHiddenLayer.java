@@ -11,8 +11,8 @@ public class SandwichHiddenLayer implements SubstrateFactory {
     public Substrate makeSubstrate() {
         Substrate substrate = new Substrate(3);
 
-        int gridWidthInput = 10;
-        int gridHeightInput = 10;
+        int gridWidthInput = 13;
+        int gridHeightInput = 13;
 
         int gridWidthHidden = 5;
         int gridHeightHidden = 5;
@@ -52,14 +52,12 @@ public class SandwichHiddenLayer implements SubstrateFactory {
             }
         }
 
-        System.out.println(substrate.getHiddenNodes());
-
         // make outputs
         int middleX = 0;
         int middleY = 0;
         double variance = 1; // how far the node should vary from the centre
 
-        int outputNodes = 4;
+        int outputNodes = 5;
 
         // coordinates for controls in order: left, right, jump, speed
         double[] xs = {

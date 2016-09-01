@@ -27,7 +27,7 @@ public class GoombaParams extends HyperNEATParameters {
         MIN_PER_SPECIE = 10;
         MAX_SPECIES = (int)(POP_SIZE * 0.0732);
         MAX_GENS_SPECIES = 10; // questionable
-        COMPAT_THRESHOLD = 10; // 6
+        INIT_COMPAT_THRESHOLD = 10; // 6
 
         // mutation probs
         ADD_CONN_PROB = 0.64;

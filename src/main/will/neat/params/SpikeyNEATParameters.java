@@ -1,9 +1,6 @@
 package will.neat.params;
 
 import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
-import org.encog.engine.network.activation.ActivationClippedLinear;
-import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
 
 /**
  * Created by Will on 1/09/2016.
@@ -24,7 +21,7 @@ public class SpikeyNEATParameters extends NEATParameters {
         MIN_PER_SPECIE = 10;
         MAX_SPECIES = (int)(POP_SIZE * 0.0959);
         MAX_GENS_SPECIES = 44; // questionable
-        COMPAT_THRESHOLD = 10; // 6
+        INIT_COMPAT_THRESHOLD = 10; // 6
 
         // mutation probs
         ADD_CONN_PROB = 0.67;

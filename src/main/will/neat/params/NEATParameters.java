@@ -26,7 +26,7 @@ public class NEATParameters {
     public int MIN_PER_SPECIE = 10;
     public int MAX_SPECIES = 15;//POP_SIZE / MIN_PER_SPECIE;
     public int MAX_GENS_SPECIES = 50;
-    public double COMPAT_THRESHOLD = 8;
+    public double INIT_COMPAT_THRESHOLD = 8;
 
     // mutation probs
     public enum WeightMutType { PROPORTIONAL, ONCE }

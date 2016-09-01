@@ -4,6 +4,7 @@ import ch.idsia.benchmark.mario.MarioSimulator;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.benchmark.mario.options.MarioOptions;
 import javafx.concurrent.Task;
+import org.encog.Encog;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.MLMethod;
 import org.encog.ml.ea.train.EvolutionaryAlgorithm;
@@ -31,6 +32,10 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
 
     public EncogMarioFitnessFunction() {
         super();
+    }
+
+    public EncogMarioFitnessFunction(boolean pso) {
+        super(pso);
     }
 
     @Override

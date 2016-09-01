@@ -1,6 +1,5 @@
 package will.neat.encog;
 
-import com.sun.jndi.cosnaming.CNCtx;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.scene.Group;
@@ -48,7 +47,7 @@ public class EncogEvolverGUI extends Application {
 
         @Override
         protected Void call() throws Exception {
-            EncogHyperNEATEvolver evolver = new EncogHyperNEATEvolver();
+            HyperNEATGUI evolver = new HyperNEATGUI();
             evolver.start(null);
             return null;
         }
