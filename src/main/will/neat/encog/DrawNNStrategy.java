@@ -47,6 +47,7 @@ public class DrawNNStrategy implements Strategy {
                     rotateZ = 0;
 
     private final int NEURON_SIZE = 10;
+    private Genome genome;
 
     public DrawNNStrategy(Canvas canvas) {
         this.canvas = canvas;
@@ -64,23 +65,24 @@ public class DrawNNStrategy implements Strategy {
         if (train.getIteration() > 0) {
             NEATPopulation pop = (NEATPopulation) train.getPopulation();
             Genome champ = pop.getBestGenome();
+            genome = champ;
             NEATNetwork nn = (NEATNetwork) new HyperNEATCODEC().decode(champ);
             // initiate draw when JavaFX thread is ready (otherwise weird stuff happens)
             Platform.runLater(() -> draw());
         }
     }
 
-    private void draw() {
+    public void draw() {
         try {
-            if (train.getIteration() < 1) { return; }
+            if (train.getIteration() < 1
+                    || genome == null) { return; }
 
             GraphicsContext g = canvas.getGraphicsContext2D();
             g.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
 
             NEATPopulation pop = (NEATPopulation) train.getPopulation();
             Substrate substrate = pop.getSubstrate();
-            Genome champ = pop.getBestGenome();
-            NEATNetwork nn = (NEATNetwork) new HyperNEATCODEC().decode(champ);
+            NEATNetwork nn = (NEATNetwork) new HyperNEATCODEC().decode(genome);
 
             List<SubstrateNode> allNodes = Stream.concat(
                     Stream.concat(
@@ -177,6 +179,10 @@ public class DrawNNStrategy implements Strategy {
 
     @Override
     public void postIteration() { }
+
+    public void setGenome(Genome genome) {
+        this.genome = genome;
+    }
 
     // rotation mouse drag handling stuff
     private double prevX;

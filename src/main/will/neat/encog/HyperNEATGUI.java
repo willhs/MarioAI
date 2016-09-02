@@ -1,21 +1,28 @@
 package will.neat.encog;
 
+import ch.idsia.benchmark.mario.options.FastOpts;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
+import org.encog.ml.ea.genome.Genome;
 import org.encog.ml.ea.train.basic.TrainEA;
+import org.encog.neural.hyperneat.HyperNEATCODEC;
 import org.encog.neural.hyperneat.HyperNEATGenome;
+import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
+import will.mario.agent.encog.EncogAgent;
 import will.neat.AbstractMarioFitnessFunction;
 import will.neat.params.HyperNEATParameters;
 
@@ -29,6 +36,7 @@ public class HyperNEATGUI extends Application {
     private static final double PADDING = 10;
     private static Logger logger = Logger.getLogger(HyperNEATGUI.class
             .getSimpleName());
+    private Genome selectedGenome;
 
     public HyperNEATGUI() {
     }
@@ -37,6 +45,8 @@ public class HyperNEATGUI extends Application {
     private final double SCENE_HEIGHT = 600;
     private final double CANVAS_HEIGHT = 600;
     private final double CANVAS_WIDTH = 600;
+
+    private boolean playbackMode = false;
 
     @Override
     public void start(Stage primaryStage) {
@@ -47,25 +57,13 @@ public class HyperNEATGUI extends Application {
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
         primaryStage.setScene(scene);
 
-        // top pane
-        // checkbox for headless mode
-        HBox top = new HBox();
-        top.setPadding(new Insets(PADDING));
-        CheckBox headless = new CheckBox("Headless");
-        headless.setSelected(true);
-        headless.selectedProperty().addListener((obs, old, newVal) ->
-            AbstractMarioFitnessFunction.headless = newVal
-        );
-        top.getChildren().add(headless);
-        root.setTop(top);
+        // define neat
+        HyperNEATEvolver evolver = new HyperNEATEvolver();
+        TrainEA neat = evolver.getNEAT();
 
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         root.setCenter(canvas);
         root.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
-
-        // define neat
-        HyperNEATEvolver evolver = new HyperNEATEvolver();
-        TrainEA neat = evolver.getNEAT();
 
         DrawNNStrategy draw = new DrawNNStrategy(canvas);
         neat.addStrategy(draw);
@@ -76,7 +74,7 @@ public class HyperNEATGUI extends Application {
         // left info pane
         VBox left = new VBox();
         left.setPadding(new Insets(PADDING));
-        populatLeftPane(left, evolver.getParams());
+        populateLeftPane(left, evolver.getParams());
         root.setLeft(left);
 
         Task<Void> evolve = new Task<Void>() {
@@ -84,6 +82,11 @@ public class HyperNEATGUI extends Application {
             protected Void call() throws Exception {
                 // evolve til done
                 while (!neat.isTrainingDone()) {
+                    // don't progress if we have initiated replaying
+                    if (playbackMode) {
+                        Thread.sleep(100);
+                        continue;
+                    }
                     neat.iteration();
                     logIteration(neat);
                 }
@@ -98,10 +101,59 @@ public class HyperNEATGUI extends Application {
         thread.setDaemon(true);
         thread.start();
 
+        // top pane
+        // checkbox for headless mode
+        HBox top = new HBox();
+        top.setPadding(new Insets(PADDING));
+        top.setSpacing(PADDING);
+
+        // play genomes as it is evolving
+        CheckBox liveToggle = new CheckBox("Play live");
+        liveToggle.setSelected(false);
+        liveToggle.selectedProperty().addListener((obs, old, newVal) ->
+                AbstractMarioFitnessFunction.headless = !newVal
+        );
+
+        // start playbackMode mode
+        CheckBox playbackToggle = new CheckBox("Playback mode");
+        playbackToggle.setSelected(false);
+        playbackToggle.selectedProperty().addListener((obs, old, newVal) ->
+                playbackMode = newVal
+        );
+
+        ComboBox<Genome> specieChamps = new ComboBox<>();
+        specieChamps.setOnAction(a -> {
+            selectedGenome = specieChamps.getValue();
+            draw.setGenome(selectedGenome);
+            draw.draw();
+        });
+        neat.addStrategy(new UpdateComboBoxChamps(specieChamps));
+
+        Button playButton = new Button("Play");
+        playButton.setOnAction(e -> {
+            if (playbackMode) {
+                Genome genome = selectedGenome == null ? neat.getBestGenome() : selectedGenome;
+                startPlayback(genome, draw, (EncogMarioFitnessFunction) neat.getScoreFunction());
+            }
+        });
+
+        top.getChildren().add(liveToggle);
+        top.getChildren().add(playbackToggle);
+        top.getChildren().add(specieChamps);
+        top.getChildren().add(playButton);
+        root.setTop(top);
+
         primaryStage.show();
     }
 
-    private void populatLeftPane(VBox left, HyperNEATParameters params) {
+    private void startPlayback(Genome genome, DrawNNStrategy draw, EncogMarioFitnessFunction ff) {
+        Playback playback = new Playback(genome, draw, ff);
+        Thread thread = new Thread(playback);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void populateLeftPane(VBox left, HyperNEATParameters params) {
         left.getChildren().add(new Text("-- Network --")); // spacing
         addTextField(left, "Activation cycles", params.ACTIVATION_CYCLES);
         addTextField(left, "NN weight range", params.NN_WEIGHT_RANGE);
@@ -173,6 +225,32 @@ public class HyperNEATGUI extends Application {
 
     public static void main(String[] args) {
         Application.launch(args);
+    }
+
+    private class Playback extends Task<Void> {
+
+        private Genome genome;
+        private DrawNNStrategy drawer;
+        private EncogMarioFitnessFunction ff;
+
+        public Playback(Genome genome, DrawNNStrategy drawer, EncogMarioFitnessFunction ff) {
+            this.genome = genome;
+            this.drawer = drawer;
+            this.ff = ff;
+        }
+
+        @Override
+        protected Void call() throws Exception {
+            NEATNetwork nn = (NEATNetwork) new HyperNEATCODEC().decode(genome);
+            drawer.setGenome(genome);
+            Platform.runLater(() -> drawer.draw());
+
+            String simOptions = AbstractMarioFitnessFunction.DEFAULT_SIM_OPTIONS
+                    .replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X);
+            float score = ff.playMario(new EncogAgent(nn), simOptions);
+            System.out.println("score: " + score);
+            return null;
+        }
     }
 
 }

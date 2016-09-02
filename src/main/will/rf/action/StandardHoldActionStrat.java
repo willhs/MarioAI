@@ -18,7 +18,7 @@ public class StandardHoldActionStrat extends AbstractHoldActionStrat{
     private boolean enableCancellation = false;
     protected double cancelThreshold = -0.5;
 
-    public StandardHoldActionStrat() { }
+    public StandardHoldActionStrat() {}
 
     public StandardHoldActionStrat(boolean enableCancel) {
         this.enableCancellation = enableCancel;

@@ -94,7 +94,7 @@ public abstract class AbstractMarioFitnessFunction<N> {
         return fitnessVal;
     }
 
-    protected float playMario(NEATAgent agent, String simOptions) {
+    public float playMario(NEATAgent agent, String simOptions) {
         MarioSimulator simulator = new MarioSimulator(simOptions);
         simulator.run(agent);
 

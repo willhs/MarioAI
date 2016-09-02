@@ -16,7 +16,7 @@ public class HyperNEATParameters extends NEATParameters {
 
         // nn
         ACTIVATION_CYCLES = 3;
-        NN_WEIGHT_RANGE = 5.0;
+        NN_WEIGHT_RANGE = 3.0;
         INIT_CONNECTION_DENSITY = 0.3; // 1 for fully connected!
         ACTIVATION_FUNCTION = new ActivationBipolarSteepenedSigmoid();
 
