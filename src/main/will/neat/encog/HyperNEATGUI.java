@@ -155,6 +155,7 @@ public class HyperNEATGUI extends Application {
 
     private void populateLeftPane(VBox left, HyperNEATParameters params) {
         left.getChildren().add(new Text("-- Network --")); // spacing
+        addTextField(left, "Population size", params.POP_SIZE);
         addTextField(left, "NN weight range", params.NN_WEIGHT_RANGE);
         addTextField(left, "CPPN weight range", params.CPPN_WEIGHT_RANGE);
         addTextField(left, "CPPN min weight", params.CPPN_MIN_WEIGHT);
@@ -170,6 +171,7 @@ public class HyperNEATGUI extends Application {
         addTextField(left, "Selection prop", params.SELECTION_PROP);
         addTextField(left, "Elite rate", params.ELITE_RATE);
         addTextField(left, "Crossover prob", params.CROSSOVER_PROB);
+
         left.getChildren().add(new Text(""));
         left.getChildren().add(new Text("-- Mutations --")); // spacing
         addTextField(left, "Add conn prob", params.ADD_CONN_PROB);
@@ -179,6 +181,7 @@ public class HyperNEATGUI extends Application {
         addTextField(left, "Perturb type", params.WEIGHT_MUT_TYPE.name());
         addTextField(left, "Perturb prop*", params.WEIGHT_PERTURB_PROP);
         addTextField(left, "Perturb reset prob", params.RESET_WEIGHT_PROB);
+
         left.getChildren().add(new Text("")); // spacing
         left.getChildren().add(new Text("-- Speciation -- ")); // spacing
         addTextField(left, "Max species", params.MAX_SPECIES);

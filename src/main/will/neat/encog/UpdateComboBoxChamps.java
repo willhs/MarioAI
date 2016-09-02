@@ -37,10 +37,15 @@ public class UpdateComboBoxChamps implements Strategy {
     }
 
     private void updatePane() {
+        // to use later
+        int selectedIndex = comboBox.getSelectionModel().getSelectedIndex();
+
         List<Genome> genomeList = neat.getPopulation().getSpecies().stream()
                         .map(s -> s.getLeader())
                         .collect(Collectors.toList());
         comboBox.setItems(FXCollections.observableArrayList(genomeList));
+
+        comboBox.getSelectionModel().select(selectedIndex);
     }
 
     @Override

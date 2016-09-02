@@ -25,8 +25,16 @@
         <module name="encog-java-core" />
         <module name="MarioAI" />
       </profile>
+      <profile default="false" name="Annotation profile for encog-core" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="encog-core" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="encog-core" target="1.8" />
       <module name="encog-java-core" target="1.8" />
       <module name="MarioAI" target="1.8" />
     </bytecodeTargetLevel>
