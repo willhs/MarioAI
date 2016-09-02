@@ -155,7 +155,6 @@ public class HyperNEATGUI extends Application {
 
     private void populateLeftPane(VBox left, HyperNEATParameters params) {
         left.getChildren().add(new Text("-- Network --")); // spacing
-        addTextField(left, "Activation cycles", params.ACTIVATION_CYCLES);
         addTextField(left, "NN weight range", params.NN_WEIGHT_RANGE);
         addTextField(left, "CPPN weight range", params.CPPN_WEIGHT_RANGE);
         addTextField(left, "CPPN min weight", params.CPPN_MIN_WEIGHT);

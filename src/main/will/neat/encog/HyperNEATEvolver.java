@@ -11,6 +11,8 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 import will.neat.params.HyperNEATParameters;
+import will.neat.params.SpikeyHyperParams;
+import will.neat.params.SpikeyNEATParameters;
 
 /**
  * Created by Will on 2/09/2016.
@@ -18,7 +20,7 @@ import will.neat.params.HyperNEATParameters;
 public class HyperNEATEvolver {
 
     private TrainEA neat;
-    private HyperNEATParameters params = new HyperNEATParameters();
+    private HyperNEATParameters params = new SpikeyHyperParams();
 
     public HyperNEATEvolver() {
         Substrate substrate = new SandwichHiddenLayer().makeSubstrate();

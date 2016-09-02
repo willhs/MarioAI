@@ -41,7 +41,7 @@ public abstract class AbstractMarioFitnessFunction<N> {
             + RECEPTIVE_FIELD_MARIO_COL
             ;
 
-    protected final int TRIALS = 3;
+    protected final int TRIALS = 1;
 
     public static boolean headless = true;
 
@@ -62,8 +62,8 @@ public abstract class AbstractMarioFitnessFunction<N> {
 
         for (int t = 0; t < TRIALS; t++) {
             // do trial with new random seed
-//            int seed = 0;
-            int seed = new Random().nextInt();
+            int seed = 1;
+//            int seed = new Random().nextInt();
             String simOptions = getSimOptions(seed);
 
             float trialFitness = playMario(agent, simOptions);

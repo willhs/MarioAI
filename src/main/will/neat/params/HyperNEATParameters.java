@@ -1,6 +1,7 @@
 package will.neat.params;
 
 import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
+import org.encog.engine.network.activation.ActivationClippedLinear;
 
 /**
  * Created by Will on 26/08/2016.
@@ -18,7 +19,7 @@ public class HyperNEATParameters extends NEATParameters {
         ACTIVATION_CYCLES = 3;
         NN_WEIGHT_RANGE = 3.0;
         INIT_CONNECTION_DENSITY = 0.3; // 1 for fully connected!
-        ACTIVATION_FUNCTION = new ActivationBipolarSteepenedSigmoid();
+        ACTIVATION_FUNCTION = new ActivationClippedLinear();
 
         SELECTION_PROP = 0.4;
         ELITE_RATE = 0.1;

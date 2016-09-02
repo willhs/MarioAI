@@ -68,7 +68,7 @@ public class DrawNNStrategy implements Strategy {
             genome = champ;
             NEATNetwork nn = (NEATNetwork) new HyperNEATCODEC().decode(champ);
             // initiate draw when JavaFX thread is ready (otherwise weird stuff happens)
-            Platform.runLater(() -> draw());
+//            Platform.runLater(() -> draw());
         }
     }
 
