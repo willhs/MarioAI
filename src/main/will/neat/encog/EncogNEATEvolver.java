@@ -17,6 +17,7 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 import will.neat.AbstractMarioFitnessFunction;
+import will.neat.encog.gui.HyperNEATGUI;
 import will.neat.params.HyperNEATParameters;
 import will.neat.params.NEATParameters;
 import will.neat.params.SpikeyNEATParameters;
@@ -115,7 +116,7 @@ public class EncogNEATEvolver extends Application{
         population.setActivationCycles(params.ACTIVATION_CYCLES);
         population.setInitialConnectionDensity(params.INIT_CONNECTION_DENSITY);
         population.setWeightRange(params.NN_WEIGHT_RANGE);
-        population.setNEATActivationFunction(params.ACTIVATION_FUNCTION);
+        population.setNEATActivationFunction(params.NN_ACTIVATION_FUNCTION);
         population.reset();
 
         CalculateScore fitnessFunction = new EncogMarioFitnessFunction();

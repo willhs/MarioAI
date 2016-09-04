@@ -3,19 +3,14 @@ package will.neat.neuroph;
 import ch.idsia.benchmark.mario.MarioSimulator;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.benchmark.mario.options.MarioOptions;
-import org.neuroph.contrib.neat.gen.NeuronType;
 import org.neuroph.contrib.neat.gen.operations.FitnessFunction;
 import org.neuroph.contrib.neat.gen.operations.OrganismFitnessScore;
-import org.neuroph.contrib.neat.gen.operations.fitness.AbstractFitnessFunction;
 import org.neuroph.core.NeuralNetwork;
 import will.mario.agent.NEATAgent;
 import will.mario.agent.neuroph.NeurophAgent;
 import will.neat.AbstractMarioFitnessFunction;
 
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**

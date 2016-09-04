@@ -1,4 +1,4 @@
-package will.neat.encog;
+package will.neat.encog.gui;
 
 /* Code for COMP261 Assignment
  * Author: pondy

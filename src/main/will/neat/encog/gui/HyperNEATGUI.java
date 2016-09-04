@@ -1,4 +1,4 @@
-package will.neat.encog;
+package will.neat.encog.gui;
 
 import ch.idsia.benchmark.mario.options.FastOpts;
 import javafx.application.Application;
@@ -24,6 +24,8 @@ import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
 import will.mario.agent.encog.EncogAgent;
 import will.neat.AbstractMarioFitnessFunction;
+import will.neat.encog.EncogMarioFitnessFunction;
+import will.neat.encog.HyperNEATEvolver;
 import will.neat.params.HyperNEATParameters;
 
 import java.util.logging.Logger;
@@ -75,6 +77,7 @@ public class HyperNEATGUI extends Application {
         VBox left = new VBox();
         left.setPadding(new Insets(PADDING));
         populateLeftPane(left, evolver.getParams());
+        left.setPrefWidth(SCENE_WIDTH/4);
         root.setLeft(left);
 
         Task<Void> evolve = new Task<Void>() {
@@ -161,7 +164,7 @@ public class HyperNEATGUI extends Application {
         addTextField(left, "CPPN min weight", params.CPPN_MIN_WEIGHT);
         addTextField(left, "Initial conn density", params.CPPN_MIN_WEIGHT);
         addTextField(left, "Activation function",
-                params.ACTIVATION_FUNCTION instanceof ActivationBipolarSteepenedSigmoid
+                params.NN_ACTIVATION_FUNCTION instanceof ActivationBipolarSteepenedSigmoid
                 ? "Steepened sigmoid"
                 : "Clipped Linear"
         );
@@ -187,6 +190,12 @@ public class HyperNEATGUI extends Application {
         addTextField(left, "Max species", params.MAX_SPECIES);
         addTextField(left, "No improve gens", params.MAX_GENS_SPECIES);
         addTextField(left, "Init compat thresh", params.INIT_COMPAT_THRESHOLD);
+
+        left.getChildren().add(new Text("")); // spacing
+        left.getChildren().add(new Text("-- Level -- ")); // spacing
+        Text simOptions = new Text(AbstractMarioFitnessFunction.DEFAULT_SIM_OPTIONS);
+        simOptions.setWrappingWidth(SCENE_WIDTH/4);
+        left.getChildren().add(simOptions); // spacing
     }
 
     private void addTextField(Pane pane, String name, Object val) {
@@ -229,7 +238,7 @@ public class HyperNEATGUI extends Application {
         Application.launch(args);
     }
 
-    private class Playback extends Task<Void> {
+    private static class Playback extends Task<Void> {
 
         private Genome genome;
         private DrawNNStrategy drawer;

@@ -4,19 +4,15 @@ import ch.idsia.benchmark.mario.MarioSimulator;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.benchmark.mario.options.MarioOptions;
 import javafx.concurrent.Task;
-import org.encog.Encog;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.MLMethod;
-import org.encog.ml.ea.train.EvolutionaryAlgorithm;
 import org.encog.neural.neat.NEATNetwork;
 import will.mario.agent.NEATAgent;
 import will.mario.agent.encog.EncogAgent;
-import will.mario.agent.neuroph.NeurophAgent;
 import will.neat.AbstractMarioFitnessFunction;
 import will.neat.neuroph.Visualiser;
 
 import java.util.Arrays;
-import java.util.Random;
 import java.util.logging.Logger;
 
 /**

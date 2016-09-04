@@ -1,9 +1,7 @@
-package will.neat.encog;
+package will.neat.encog.gui;
 
-import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -28,8 +26,8 @@ import java.util.stream.Stream;
  */
 public class DrawNNStrategy implements Strategy {
 
-    private final double MIN_LINK_WIDTH = 0.4;
-    private final double MAX_LINK_WIDTH = 2;
+    private static final double MIN_LINK_WIDTH = 0.4;
+    private static final double MAX_LINK_WIDTH = 2;
     private final Paint INPUT_NEURON_COLOUR = Color.AQUA;
     private final Paint HIDDEN_NEURON_COLOUR = Color.GREENYELLOW;
     private final Paint OUTPUT_NEURON_COLOUR = Color.RED;
@@ -46,7 +44,7 @@ public class DrawNNStrategy implements Strategy {
                     rotateY = Math.PI/4,
                     rotateZ = 0;
 
-    private final int NEURON_SIZE = 10;
+    private static final int NEURON_SIZE = 10;
     private Genome genome;
 
     public DrawNNStrategy(Canvas canvas) {
@@ -188,7 +186,7 @@ public class DrawNNStrategy implements Strategy {
     private double prevX;
     private double prevY;
     private boolean released = true;
-    private final double DRAG_SCALE = 0.015;
+    private static final double DRAG_SCALE = 0.015;
 
     public void rotateWithDrag(MouseEvent event) {
         if (event.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {

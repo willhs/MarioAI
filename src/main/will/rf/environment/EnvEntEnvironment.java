@@ -5,7 +5,6 @@ import ch.idsia.benchmark.mario.environments.IEnvironment;
 
 import java.util.Arrays;
 import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 /**
  * Created by Will on 15/07/2016.

@@ -1,6 +1,6 @@
 package will.neat.params;
 
-import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
+import org.encog.engine.network.activation.ActivationBiPolar;
 import org.encog.engine.network.activation.ActivationClippedLinear;
 
 /**
@@ -11,15 +11,15 @@ public class HyperNEATParameters extends NEATParameters {
 
     // defaults
     public double CPPN_WEIGHT_RANGE = 1.0; //
-    public double CPPN_MIN_WEIGHT = 0.2;
+    public double CPPN_MIN_WEIGHT = 0.5;
 
     public HyperNEATParameters() {
 
         // nn
-        ACTIVATION_CYCLES = 3;
+        ACTIVATION_CYCLES = 3; // for CPPN
         NN_WEIGHT_RANGE = 3.0;
         INIT_CONNECTION_DENSITY = 0.3; // 1 for fully connected!
-        ACTIVATION_FUNCTION = new ActivationClippedLinear();
+        NN_ACTIVATION_FUNCTION = new ActivationBiPolar();//new ActivationBiPolar();
 
         SELECTION_PROP = 0.4;
         ELITE_RATE = 0.1;
@@ -31,7 +31,7 @@ public class HyperNEATParameters extends NEATParameters {
         MAX_GENS_SPECIES = 50;
         INIT_COMPAT_THRESHOLD = 8;
 
-        // mutation probs
+        // mutation pr2obs
         ADD_CONN_PROB = 0.5;
         ADD_NEURON_PROB = 0.9;
         REMOVE_CONN_PROB = 0.1;

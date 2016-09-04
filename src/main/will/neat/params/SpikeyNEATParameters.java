@@ -11,7 +11,7 @@ public class SpikeyNEATParameters extends NEATParameters {
         ACTIVATION_CYCLES = 3;
         NN_WEIGHT_RANGE = 4.97;
         INIT_CONNECTION_DENSITY = 0.00;
-        ACTIVATION_FUNCTION = new ActivationBipolarSteepenedSigmoid();
+        NN_ACTIVATION_FUNCTION = new ActivationBipolarSteepenedSigmoid();
 
         SELECTION_PROP = 0.27;
         ELITE_RATE = 0.12;

@@ -1,4 +1,4 @@
-package will.neat.encog;
+package will.neat.encog.gui;
 
 /* Code for COMP261 Assignment
  * Author: pondy
@@ -20,7 +20,7 @@ public class Transform{
     /** Construct a Transformation given 3x4 array of elements */
     private Transform(double[][] v){
         if (v.length != 3 || v[0].length!=4)
-            throw new IllegalArgumentException("Transform: Wrong size array for argument: "+v);
+            throw new IllegalArgumentException("Transform: Wrong size array for argument: "+ v.length + "," + v[0].length);
         else
             values = v;
     }

@@ -1,4 +1,4 @@
-package will.neat.encog;
+package will.neat.encog.substrate;
 
 import org.encog.neural.hyperneat.substrate.Substrate;
 
@@ -7,5 +7,5 @@ import org.encog.neural.hyperneat.substrate.Substrate;
  */
 public interface SubstrateFactory {
 
-    public abstract Substrate makeSubstrate();
+    Substrate makeSubstrate();
 }

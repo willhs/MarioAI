@@ -10,9 +10,8 @@ import org.encog.neural.neat.training.opp.*;
 import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
+import will.neat.encog.substrate.SimpleMarioSubstrate;
 import will.neat.params.HyperNEATParameters;
-import will.neat.params.SpikeyHyperParams;
-import will.neat.params.SpikeyNEATParameters;
 
 /**
  * Created by Will on 2/09/2016.
@@ -20,10 +19,10 @@ import will.neat.params.SpikeyNEATParameters;
 public class HyperNEATEvolver {
 
     private TrainEA neat;
-    private HyperNEATParameters params = new SpikeyHyperParams();
+    private HyperNEATParameters params = new HyperNEATParameters();
 
     public HyperNEATEvolver() {
-        Substrate substrate = new SandwichHiddenLayer().makeSubstrate();
+        Substrate substrate = new SimpleMarioSubstrate().makeSubstrate();
 
         NEATPopulation population = new NEATPopulation(substrate, params.POP_SIZE);
         population.setActivationCycles(params.ACTIVATION_CYCLES);
@@ -31,7 +30,7 @@ public class HyperNEATEvolver {
         population.setWeightRange(params.CPPN_WEIGHT_RANGE);
         population.setCPPNMinWeight(params.CPPN_MIN_WEIGHT);
         population.setHyperNEATNNWeightRange(params.NN_WEIGHT_RANGE);
-        population.setHyperNEATNNActivationFunction(params.ACTIVATION_FUNCTION);
+        population.setHyperNEATNNActivationFunction(params.NN_ACTIVATION_FUNCTION);
 
         population.reset();
 

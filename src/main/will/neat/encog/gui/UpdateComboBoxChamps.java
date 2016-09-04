@@ -1,4 +1,4 @@
-package will.neat.encog;
+package will.neat.encog.gui;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
