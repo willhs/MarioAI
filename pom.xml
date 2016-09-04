@@ -6,7 +6,11 @@
 
     <groupId>will</groupId>
     <artifactId>MarioAI</artifactId>
+    <packaging>pom</packaging>
     <version>experimental</version>
+    <modules>
+        <module>MarioAI4J</module>
+    </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

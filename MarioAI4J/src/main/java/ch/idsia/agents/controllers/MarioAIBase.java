@@ -25,90 +25,92 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package will.mario.agent;
+package ch.idsia.agents.controllers;
 
 import ch.idsia.agents.AgentOptions;
-import ch.idsia.agents.controllers.MarioAgentBase;
+import ch.idsia.agents.IAgent;
+import ch.idsia.agents.controllers.modules.Entities;
+import ch.idsia.benchmark.mario.engine.generalization.MarioEntity;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
 import ch.idsia.tools.EvaluationInfo;
+import ch.idsia.agents.controllers.modules.Tiles;
 
 /**
- * Abstract class that serves as a basis for implementing new Mario-AI agents.
- *
- * Based on MarioAIBase class
- *
- * @author Will Hardwick-Smith
+ * Abstract class that serves as a basis for implementing new Mario-AI agents. 
+ * 
+ * Created by IntelliJ IDEA. 
+ * User: Sergey Karakovskiy 
+ * Date: Apr 25, 2009 
+ * Time: 12:30:41 AM 
+ * Package: ch.ch.ch.idsia.agents.controllers
+ * 
+ * @author Sergey Karakovskiy
+ * @author Jakub 'Jimmy' Gemrot, gemrot@gamedev.cuni.cz
  */
-public abstract class MarioAIBase2 extends MarioAgentBase {
+public abstract class MarioAIBase extends MarioAgentBase {
+	
+	/**
+	 * Information about Mario's body.
+	 */
+	protected MarioEntity mario;
+	
+	/**
+	 * Actions an {@link IAgent} wants to perform.
+	 */
+	protected MarioInput action = new MarioInput();
+	
+	protected Entities entities = new Entities();
+	
+	protected Tiles tiles = new Tiles();
+
+	protected EvaluationInfo info = new EvaluationInfo();
 
 	protected IEnvironment environment;
-	protected MarioInput lastInput = new MarioInput();
+
 	protected int highestFitness;
-
-	// fields to help determine if mario has moved much
-	private int lastPos = -1;
-	private int framesInSamePos = 0;
-	private int STAYS_STILL_THRESHOLD = 48; // 2 seconds
-
-	public MarioAIBase2() {
+	
+	public MarioAIBase() {
 		super("MarioAIBase");
 		name = getClass().getSimpleName();
 	}
 
-	public MarioAIBase2(String agentName) {
+	public MarioAIBase(String agentName) {
 		super(agentName);
 	}	
 	
 	@Override
 	public void reset(AgentOptions options) {
 		super.reset(options);
+		action.reset();
+		entities.reset(options);
+		tiles.reset(options);
+		info.reset();
 		highestFitness = 0;
-        lastPos = -1;
-		framesInSamePos = 0;
-		lastInput = new MarioInput();
 	}
 
 	@Override
+	public MarioInput actionSelection() {
+		return action;
+	}
+	
 	public void observe(IEnvironment environment) {
-		this.environment = environment;
+		mario = environment.getMario();
+		tiles.tileField = environment.getTileField();
+		entities.entityField = environment.getEntityField();
+		entities.entities = environment.getEntities();
+		info = environment.getEvaluationInfo();
+        this.environment = environment;
 
-		int fitness = fitness(environment.getEvaluationInfo());
-
+		int fitness = info.computeBasicFitness();
 		if (fitness > highestFitness) {
 			highestFitness = fitness;
 		}
-
-		// if this agent shows no promise at this stage, acknowledge that it sucks
-		if (doesSuck()) {
-			sucks = true;
-		}
 	}
 
-	private int fitness(EvaluationInfo info) {
-        return info.distancePassedCells
-				- (info.timeSpent / 10)
-				+ (info.killsTotal * 5);
-	}
-
-	protected boolean doesSuck() {
-		// determine whether mario has moved significantly
-		if (environment.getEvaluationInfo().distancePassedPhys == lastPos) {
-			framesInSamePos++;
-			if (framesInSamePos >= STAYS_STILL_THRESHOLD) {
-				return true;
-			}
-		} else {
-			framesInSamePos = 0;
-		}
-
-		lastPos = environment.getEvaluationInfo().distancePassedPhys;
-
+	@Override
+	public boolean sucks(){
 		return false;
-	}
-
-	public float getFitness() {
-		return highestFitness;
 	}
 
 }
