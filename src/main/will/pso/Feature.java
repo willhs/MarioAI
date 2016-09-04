@@ -3,7 +3,7 @@ package will.pso;
 /**
  * Created by Will on 18/05/2016.
  */
-public class Feature {
+public class Feature implements Cloneable{
 
     private double initialVal;
 
@@ -92,6 +92,11 @@ public class Feature {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return (int)(name.hashCode() * val);
+    }
+
     public void setVel(double vel) {
         this.vel = vel;
     }
@@ -100,7 +105,7 @@ public class Feature {
         System.out.printf(
 //                "%s: %f, %4.2f%% difference%n",
 //                name, val, (((Math.abs(initialVal - val))/(Math.abs(max - min)))*100)
-                "%s: val: %4.2f, init: %4.2f, vel: %4.2f\n",
+                "%s: val: %4.2f, init: %4.2f, vel: %4.2f%n",
                 name, val, initialVal, vel
         );
     }

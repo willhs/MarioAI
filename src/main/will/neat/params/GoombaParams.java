@@ -14,7 +14,7 @@ public class GoombaParams extends HyperNEATParameters {
         NN_WEIGHT_RANGE = 3.08;
         CPPN_MIN_WEIGHT = 0.14;
         INIT_CONNECTION_DENSITY = 0.03; // 1 for fully connected!
-        ACTIVATION_FUNCTION = new ActivationClippedLinear();
+        NN_ACTIVATION_FUNCTION = new ActivationClippedLinear();
 
         // evolution
         POP_SIZE = 200;

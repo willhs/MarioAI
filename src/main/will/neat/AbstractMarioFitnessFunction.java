@@ -5,7 +5,6 @@ import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.benchmark.mario.options.MarioOptions;
 import will.mario.agent.NEATAgent;
 
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractMarioFitnessFunction<N> {
 
-    public static final String LEVEL = FastOpts.LEVEL_07_SPIKY;
+    public static final String LEVEL = FastOpts.LEVEL_06_GOOMBA;
     public static final String TIME_LIMIT = " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 60";
     public static final String DIFFICULTY = FastOpts.L_DIFFICULTY(0);
     public static final String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
@@ -27,7 +26,7 @@ public abstract class AbstractMarioFitnessFunction<N> {
     public static final String RECEPTIVE_FIELD_MARIO_ROW = " " + MarioOptions.IntOption.AI_MARIO_EGO_ROW.getParam() + " 6";
     public static final String RECEPTIVE_FIELD_MARIO_COL = " " + MarioOptions.IntOption.AI_MARIO_EGO_COLUMN.getParam() + " 6";
 
-    public static String DEFAULT_SIM_OPTIONS = ""
+    public final static String DEFAULT_SIM_OPTIONS = ""
             + FastOpts.VIS_OFF
             + LEVEL
             + DIFFICULTY

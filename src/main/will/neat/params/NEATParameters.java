@@ -16,7 +16,7 @@ public class NEATParameters {
     public int ACTIVATION_CYCLES = 5;
     public double NN_WEIGHT_RANGE = 1.0;
     public double INIT_CONNECTION_DENSITY = 0.0; // 1 for fully connected!
-    public ActivationFunction ACTIVATION_FUNCTION = new ActivationClippedLinear();
+    public ActivationFunction NN_ACTIVATION_FUNCTION = new ActivationClippedLinear();
 
     public double SELECTION_PROP = 0.4;
     public double ELITE_RATE = 0.1;

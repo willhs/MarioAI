@@ -9,7 +9,6 @@ import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 /**
  * Created by Will on 16/07/2016.

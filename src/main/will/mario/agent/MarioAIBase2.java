@@ -33,8 +33,6 @@ import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.environments.IEnvironment;
 import ch.idsia.tools.EvaluationInfo;
 
-import static java.awt.SystemColor.info;
-
 /**
  * Abstract class that serves as a basis for implementing new Mario-AI agents.
  *
@@ -51,7 +49,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 	// fields to help determine if mario has moved much
 	private int lastPos = -1;
 	private int framesInSamePos = 0;
-	private int STAYS_STILL_THRESHOLD = 72; // 3 seconds
+	private int STAYS_STILL_THRESHOLD = 48; // 2 seconds
 
 	public MarioAIBase2() {
 		super("MarioAIBase");

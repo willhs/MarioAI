@@ -15,7 +15,7 @@ public class SpikeyHyperParams extends HyperNEATParameters {
         CPPN_MIN_WEIGHT = 0.67;
         CPPN_WEIGHT_RANGE = 2.4;
         INIT_CONNECTION_DENSITY = 0.0; // 1 for fully connected!
-        ACTIVATION_FUNCTION = new ActivationClippedLinear();
+        NN_ACTIVATION_FUNCTION = new ActivationClippedLinear();
 
         SELECTION_PROP = 0.43;
         ELITE_RATE = 0.0;

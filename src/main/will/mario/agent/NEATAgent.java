@@ -7,7 +7,6 @@ import will.rf.action.ActionStrategy;
 import will.rf.action.StandardActionStrat;
 import will.rf.action.StandardHoldActionStrat;
 import will.rf.action.TimedActionToggle;
-import will.rf.environment.BinaryEnvGridEnvironment;
 import will.rf.environment.EnvEnemyGrid;
 import will.rf.environment.GameEnvironment;
 
@@ -15,8 +14,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 /**
  * Created by Will on 29/06/2016.
@@ -56,7 +53,6 @@ public abstract class NEATAgent extends MarioAIBase2 {
 
     protected MarioInput actionSelection(GameEnvironment env) {
         updateActionsHeld();
-
         double[] environment = env.asInputNeurons(this.environment, lastInput);
 
         // put tiles through the neural network to receive game inputs
@@ -73,7 +69,6 @@ public abstract class NEATAgent extends MarioAIBase2 {
                 System.out.println(Arrays.toString(col));
             }
             System.out.println("-----------------------------------------------------------");
-
             System.out.println("Network output: " + Arrays.toString(networkOutput));
         }
 
@@ -85,8 +80,7 @@ public abstract class NEATAgent extends MarioAIBase2 {
     }
 
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
-
-        ActionStrategy actionStrat = new TimedActionToggle();//new StandardHoldActionStrat();
+        ActionStrategy actionStrat = new StandardHoldActionStrat();//new StandardHoldActionStrat();
         MarioInput action = actionStrat.makeAction(outputNeurons, lastInput, keysHeld);
 
         return action;
