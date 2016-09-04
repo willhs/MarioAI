@@ -62,3 +62,6 @@ fabric.properties
 !/neat-preview/neat-0.9/src
 /anji_2_01-modified
 /log4j_jgap.log
+
+.idea/*
+MarioAI.iml
