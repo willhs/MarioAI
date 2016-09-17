@@ -1,7 +1,6 @@
 package will.pso;
 
 import will.pso.encog.EncogHyperMarioProblem;
-import will.pso.encog.EncogNEATMarioProblem;
 import will.pso.io.PSOIO;
 
 import javax.swing.*;
@@ -15,18 +14,18 @@ import java.util.Arrays;
  */
 public class PSORunner {
 
+    private static int numIterations = 50;
     // the highly sought-after golden PSO parameter values
     private static final int numParticles = 10;
-    private static final int numIterations = 3000;
     public static final double c1 = 1.49618;
     public static final double c2 = 1.49618;
     public static final double inertia = 0.7298;
     private static final int neighbours = 4;
-    private static final String SWARM_DIR = "swarm";
+    private static String outputDir = "swarm";
 
     // generation to start on (only differs when continuing PSO runs)
     private static int startingIter = 0;
-    private static final File swarmDir = new File("swarm");
+    private static boolean WRITE_OUT = true;
 
     public static void main(String[] args) {
 
@@ -37,7 +36,7 @@ public class PSORunner {
         if (args.length == 1) {
             if (args[0].equals("-l")) {
                 // arg is "continue last run"
-                File newest = Arrays.stream(swarmDir.listFiles())
+                File newest = Arrays.stream(new File(outputDir).listFiles())
                         .filter(f -> {
                             // true if file has valid particle file naming convention
                             String[] parts = f.getName().split("-");
@@ -60,7 +59,7 @@ public class PSORunner {
             } else if (args[0].equals("-f")) {
                 // continue from a previous instance of PSO from a file
                 JFileChooser chooser = new JFileChooser();
-                chooser.setSelectedFile(swarmDir);
+                chooser.setSelectedFile(new File(outputDir));
                 int response = chooser.showDialog(null, "Pick PSO file");
 
                 if (response == JFileChooser.APPROVE_OPTION) {
@@ -74,13 +73,18 @@ public class PSORunner {
                 // loading specific run
                 prevSwarmFilename = args[0];
             }
-
-        } else if (args.length > 1) {
-            new IllegalArgumentException("Can't have more than one arg");
+            // // TODO: 8/09/2016  
+        } else if (args.length == 2) {
+            if (args[0].equals("-o")) {
+                // specifying the output directory
+                chosenFilename = args[1];
+            } else if (args[0].equals("-i")) {
+                numIterations = Integer.parseInt(args[1]);
+            }
         } else {
             String filenameInput = JOptionPane.showInputDialog("name the file?");
             if (filenameInput != null) {
-                chosenFilename = SWARM_DIR + File.separator + filenameInput + ".xml";
+                chosenFilename = outputDir + File.separator + filenameInput + ".xml";
             }
         }
 
@@ -114,7 +118,7 @@ public class PSORunner {
         // specified, use that, otherwise use default filename
         if (chosenFilename == null) {
             chosenFilename = prevSwarmFilename == null
-                    ? SWARM_DIR + File.separator + "swarm-" + System.currentTimeMillis() + ".xml"
+                    ? outputDir + File.separator + "swarm-" + System.currentTimeMillis() + ".xml"
                     : prevSwarmFilename
             ;
         }
@@ -146,9 +150,12 @@ public class PSORunner {
                 }
             }
 
-            PSOIO.writePSOIterationToFile(chosenFilename, swarm, iter, gBestFitness);
-            System.out.println("PSO Iteration written to " + chosenFilename);
+            if (WRITE_OUT) {
+                PSOIO.writePSOIterationToFile(chosenFilename, swarm, iter, gBestFitness);
+                System.out.println("PSO Iteration written to " + chosenFilename);
+            }
             System.out.println("Global best fitness: " + gBestFitness);
         }
+        System.exit(0); // sometimes there are still threads running at this point
     }
 }

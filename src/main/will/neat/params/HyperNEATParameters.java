@@ -17,9 +17,9 @@ public class HyperNEATParameters extends NEATParameters {
 
         // nn
         ACTIVATION_CYCLES = 3; // for CPPN
-        NN_WEIGHT_RANGE = 3.0;
+        NN_WEIGHT_RANGE = 5.0;
         INIT_CONNECTION_DENSITY = 0.3; // 1 for fully connected!
-        NN_ACTIVATION_FUNCTION = new ActivationBiPolar();//new ActivationBiPolar();
+        NN_ACTIVATION_FUNCTION = new ActivationClippedLinear();//new ActivationBiPolar();
 
         SELECTION_PROP = 0.4;
         ELITE_RATE = 0.1;

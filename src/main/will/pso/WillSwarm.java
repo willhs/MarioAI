@@ -77,7 +77,7 @@ public class WillSwarm {
             int index = particles.indexOf(particle);
 
             // evaluate fitness
-            System.out.println("Getting fitness for particle: " + index + "...");
+            System.out.println("Getting fitness for particle: " + index + ":");
             double newFitness = getProblem().fitness(particle.getFeaturesMap());
             particle.setFitness(newFitness);
             System.out.println("Fitness gotten");

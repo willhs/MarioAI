@@ -30,16 +30,18 @@ import static will.pso.encog.EncogHyperMarioProblem.PARAMS.*;
 public class EncogHyperMarioProblem extends EncogNEATMarioProblem {
 
     // evolution
-    public static final int POP_SIZE = 150;
-    public static final int MAX_GENERATIONS = 150;
+    public static final int POP_SIZE = 100;
+    public static final int GENERATIONS = 70;
 
     // species
-    private static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
-    private static final double COMPAT_THRESHOLD = 8;
+    public static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
+    public static final int MAX_MAX_SPECIES = POP_SIZE/MIN_INDIVIDUAL_PER_SPECIE;
+    public static final int MAX_SPECIES_DROPOFF = POP_SIZE;
+    public static final double COMPAT_THRESHOLD = 8;
 
     // variable parameters
     public enum PARAMS {
-        MAX_SPECIES, MAX_SPECIE_GENS, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
+        MAX_SPECIES, SPECIES_DROPOFF, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
         REMOVE_NEURON_PROB, ADD_NEURON_PROB, WEIGHT_PERTURB_PROP, PERTURB_SD, RESET_WEIGHT_PROB,
         ELITE_RATE, CROSSOVER_PROB, NN_WEIGHT_RANGE, CPPN_WEIGHT_RANGE, CPPN_MIN_WEIGHT,
         INITIAL_CONNECTION_DENSITY, ACTIVATION_CYCLES, SELECTION_PROP, WEIGHT_MUT_TYPE,
@@ -98,8 +100,10 @@ public class EncogHyperMarioProblem extends EncogNEATMarioProblem {
 
         // dynamic things
         // genetic
-        speciation.setMaxNumberOfSpecies((int)(double)features.get(MAX_SPECIES.name()));
-        speciation.setNumGensAllowedNoImprovement((int)(double)features.get(MAX_SPECIE_GENS.name()));
+        final int MAX_SPECIES_NUM = (int)(features.get(MAX_SPECIES.name()) * POP_SIZE);
+        final int SPECIES_DROPOFF = (int)(features.get(PARAMS.SPECIES_DROPOFF.name()) * POP_SIZE);
+        speciation.setMaxNumberOfSpecies(MAX_SPECIES_NUM);
+        speciation.setNumGensAllowedNoImprovement(SPECIES_DROPOFF);
         neat.setSelection(new TruncationSelection(neat, features.get(SELECTION_PROP.name())));
         neat.setEliteRate(features.get(ELITE_RATE.name()));
         neat.addOperation(features.get(CROSSOVER_PROB.name()), new NEATCrossover());
@@ -126,21 +130,13 @@ public class EncogHyperMarioProblem extends EncogNEATMarioProblem {
         neat.setThreadCount(1);
 
         // end after some number of generations
-        neat.addStrategy(new EndIterationsStrategy(MAX_GENERATIONS));
+        neat.addStrategy(new EndIterationsStrategy(GENERATIONS));
 
         return neat;
     }
 
     private static List<Feature> makeFeatures() {
         List<Feature> features = new ArrayList<>();
-
-/*        // variable parameters
-        public enum PARAMS {
-            MAX_SPECIES, MAX_SPECIE_GENS, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
-            ADD_NEURON_PROB, PERTURB_PROP, PERTURB_SD, RESET_WEIGHT_PROB,
-            ELITE_RATE, CROSSOVER_PROB, CPPN_WEIGHT_RANGE, CPPN_MIN_WEIGHT,
-            INITIAL_CONNECTION_DENSITY, ACTIVATION_CYCLES, SELECTION_PROP, WEIGHT_MUT_TYPE
-        }*/
 
         //  TODO:
         // disjoint, excess and matched components of speciation
@@ -149,7 +145,7 @@ public class EncogHyperMarioProblem extends EncogNEATMarioProblem {
 
         double maxSpecies = POP_SIZE / MIN_INDIVIDUAL_PER_SPECIE;
 
-        double maxSpeciesDropoff = MAX_GENERATIONS/2;
+        double maxSpeciesDropoff = GENERATIONS /2;
 
         // muts
         features.add(new Feature(ADD_CONN_PROB.name(), 0, 1));
@@ -162,8 +158,11 @@ public class EncogHyperMarioProblem extends EncogNEATMarioProblem {
         features.add(new Feature(RESET_WEIGHT_PROB.name(), 0, 1));
 
         // species
-        features.add(new Feature(MAX_SPECIES.name(), 1, maxSpecies));
-        features.add(new Feature(MAX_SPECIE_GENS.name(), 1, maxSpeciesDropoff));
+        // these vals are proportional to pop size
+        double MAX_SPECIES_PROP = MAX_MAX_SPECIES / (double)POP_SIZE;
+        double MAX_SPECIES_DROPOFF_PROP = MAX_SPECIES_DROPOFF / (double)POP_SIZE;
+        features.add(new Feature(MAX_SPECIES.name(), 0, MAX_SPECIES_PROP));
+        features.add(new Feature(SPECIES_DROPOFF.name(), 0, MAX_SPECIES_DROPOFF_PROP));
 //        features.add(new Feature(SURVIVAL_RATIO.name(), 0, 0.5)); // useless
         features.add(new Feature(ELITE_RATE.name(), 0, 1));
         features.add(new Feature(SELECTION_PROP.name(), 0, 1));

@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
+import org.encog.ml.train.strategy.end.EndIterationsStrategy;
 import org.encog.neural.neat.NEATCODEC;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
@@ -27,13 +28,13 @@ import java.util.logging.Logger;
 /**
  * Created by Will on 4/08/2016.
  */
-public class EncogNEATEvolver extends Application{
+public class EncogNEATEvolver extends Application {
     // io
     private static Logger logger = Logger.getLogger(HyperNEATGUI.class
             .getSimpleName());
 
     private static final int NUM_INPUTS = 169;
-    private static final int NUM_OUTPUTS = 5;
+    private static final int NUM_OUTPUTS = 4;
     private static final int POP_SIZE = 200;
 
     private NEATParameters params = new SpikeyNEATParameters();
@@ -150,6 +151,8 @@ public class EncogNEATEvolver extends Application{
         neat.addOperation(params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
         neat.getOperators().finalizeStructure();
         neat.setThreadCount(1);
+
+        neat.addStrategy(new EndIterationsStrategy(1500));
 
         return neat;
     }

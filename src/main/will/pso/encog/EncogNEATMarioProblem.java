@@ -2,7 +2,6 @@ package will.pso.encog;
 
 import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
 import org.encog.engine.network.activation.ActivationClippedLinear;
-import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
@@ -22,9 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static will.pso.encog.EncogHyperMarioProblem.PARAMS.CPPN_MIN_WEIGHT;
-import static will.pso.encog.EncogHyperMarioProblem.PARAMS.CPPN_WEIGHT_RANGE;
-import static will.pso.encog.EncogHyperMarioProblem.PARAMS.MAX_SPECIE_GENS;
+import static will.pso.encog.EncogHyperMarioProblem.PARAMS.SPECIES_DROPOFF;
 import static will.pso.encog.EncogNEATMarioProblem.PARAMS.*;
 
 /**
@@ -84,7 +81,7 @@ public class EncogNEATMarioProblem extends WillProblem {
         OriginalNEATSpeciation speciation = new OriginalNEATSpeciation();
         speciation.setCompatibilityThreshold(COMPAT_THRESHOLD);
         speciation.setMaxNumberOfSpecies((int) (double) features.get(MAX_SPECIES.name()));
-        speciation.setNumGensAllowedNoImprovement((int) (double) features.get(MAX_SPECIE_GENS.name()));
+        speciation.setNumGensAllowedNoImprovement((int) (double) features.get(SPECIES_DROPOFF.name()));
 
         final TrainEA neat = new TrainEA(population, fitnessFunction);
         neat.setSpeciation(speciation);
@@ -124,7 +121,7 @@ public class EncogNEATMarioProblem extends WillProblem {
 
 /*        // variable parameters
         public enum PARAMS {
-            MAX_SPECIES, MAX_SPECIE_GENS, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
+            MAX_SPECIES, SPECIES_DROPOFF, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
             ADD_NEURON_PROB, PERTURB_PROP, PERTURB_SD, RESET_WEIGHT_PROB,
             ELITE_RATE, CROSSOVER_PROB, CPPN_WEIGHT_RANGE, CPPN_MIN_WEIGHT,
             INITIAL_CONNECTION_DENSITY, ACTIVATION_CYCLES, SELECTION_PROP, WEIGHT_MUT_TYPE
@@ -151,7 +148,7 @@ public class EncogNEATMarioProblem extends WillProblem {
 
         // species
         features.add(new Feature(MAX_SPECIES.name(), 1, maxSpecies));
-        features.add(new Feature(MAX_SPECIE_GENS.name(), 1, maxSpeciesDropoff));
+        features.add(new Feature(SPECIES_DROPOFF.name(), 1, maxSpeciesDropoff));
 //        features.add(new Feature(SURVIVAL_RATIO.name(), 0, 0.5)); // useless
         features.add(new Feature(ELITE_RATE.name(), 0, 1));
         features.add(new Feature(SELECTION_PROP.name(), 0, 1));

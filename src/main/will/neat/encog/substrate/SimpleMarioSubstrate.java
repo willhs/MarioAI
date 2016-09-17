@@ -19,18 +19,23 @@ public class SimpleMarioSubstrate implements SubstrateFactory {
     public Substrate makeSubstrate() {
         Substrate substrate = new Substrate(3);
 
-        List<SubstrateNode> inputs = inputs(substrate, new ArrayList<>(), 13, 13, -1);
-        List<SubstrateNode> hidden1 = layer(substrate, () -> substrate.createHiddenNode(), inputs, 8, 8, 0);
-        outputLayer(substrate, hidden1, 5);
+        List<SubstrateNode> inputs = inputs(substrate, 13, 13, -1);
+        List<SubstrateNode> hidden1 = hidden(substrate, inputs);
+        outputLayer(substrate, hidden1, 4);
         substrate.setActivationCycles(2);
         return substrate;
     }
 
-    private List<SubstrateNode> inputs(Substrate substrate, List<SubstrateNode> prevLayer, int width, int height, double z) {
-        return layer(substrate, () -> substrate.createInputNode(), prevLayer, width, height, z);
+    protected List<SubstrateNode> inputs(Substrate substrate, int width, int height, double z) {
+        return layer(substrate, () -> substrate.createInputNode(), new ArrayList<>(), width, height, z);
     }
 
-    private void outputLayer(Substrate substrate, List<SubstrateNode> prevNodes, int outputNodes) {
+    protected List<SubstrateNode> hidden(Substrate substrate, List<SubstrateNode> prevNodes) {
+        List<SubstrateNode> first = layer(substrate, () -> substrate.createHiddenNode(), prevNodes, 8, 8, 0);
+        return first;
+    }
+
+    protected void outputLayer(Substrate substrate, List<SubstrateNode> prevNodes, int outputNodes) {
         int middleX = 0;
         int middleY = 0;
         double variance = 1; // how far the node should vary from the centre
@@ -63,7 +68,7 @@ public class SimpleMarioSubstrate implements SubstrateFactory {
     }
 
     // helper functions
-    private List<SubstrateNode> layer(Substrate substrate, Supplier<SubstrateNode> node, List<SubstrateNode> prevLayer, int width, int height, double z) {
+    protected List<SubstrateNode> layer(Substrate substrate, Supplier<SubstrateNode> node, List<SubstrateNode> prevLayer, int width, int height, double z) {
 
         double xTickInput = HYPERCUBE_LENGTH / width;
         double yTickInput = HYPERCUBE_LENGTH / height;

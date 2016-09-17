@@ -10,6 +10,7 @@ import org.encog.neural.neat.training.opp.*;
 import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
+import will.neat.encog.substrate.MultiHiddenLayerSubstrate;
 import will.neat.encog.substrate.SimpleMarioSubstrate;
 import will.neat.params.HyperNEATParameters;
 
@@ -22,7 +23,7 @@ public class HyperNEATEvolver {
     private HyperNEATParameters params = new HyperNEATParameters();
 
     public HyperNEATEvolver() {
-        Substrate substrate = new SimpleMarioSubstrate().makeSubstrate();
+        Substrate substrate = new MultiHiddenLayerSubstrate().makeSubstrate();
 
         NEATPopulation population = new NEATPopulation(substrate, params.POP_SIZE);
         population.setActivationCycles(params.ACTIVATION_CYCLES);
