@@ -13,6 +13,8 @@ public class HyperNEATParameters extends NEATParameters {
     public double CPPN_WEIGHT_RANGE = 1.0; //
     public double CPPN_MIN_WEIGHT = 0.5;
 
+    public static final double REMOVE_NEURON_PROB = 0.1;
+
     public HyperNEATParameters() {
 
         // nn
@@ -31,7 +33,7 @@ public class HyperNEATParameters extends NEATParameters {
         MAX_GENS_SPECIES = 50;
         INIT_COMPAT_THRESHOLD = 8;
 
-        // mutation pr2obs
+        // mutation probs
         ADD_CONN_PROB = 0.5;
         ADD_NEURON_PROB = 0.9;
         REMOVE_CONN_PROB = 0.1;

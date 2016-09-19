@@ -15,6 +15,7 @@ import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 import will.neat.encog.EncogMarioFitnessFunction;
 import will.neat.encog.MutatePerturbOrResetLinkWeight;
+import will.neat.encog.substrate.MultiHiddenLayerSubstrate;
 import will.neat.encog.substrate.SimpleMarioSubstrate;
 import will.pso.Feature;
 
@@ -69,7 +70,7 @@ public class EncogHyperMarioProblem extends EncogNEATMarioProblem {
 
     private NEATPopulation makePopulation(Map<String, Double> features) {
         // static things
-        Substrate substrate = new SimpleMarioSubstrate().makeSubstrate();
+        Substrate substrate = new MultiHiddenLayerSubstrate().makeSubstrate();
         NEATPopulation population = new NEATPopulation(substrate, POP_SIZE);
         population.reset();
 

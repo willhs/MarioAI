@@ -64,6 +64,7 @@ public class HyperNEATEvolver {
         neat.addOperation(params.ADD_NEURON_PROB, new NEATMutateAddNode());
         neat.addOperation(params.ADD_CONN_PROB, new NEATMutateAddLink());
         neat.addOperation(params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
+        neat.addOperation(params.REMOVE_NEURON_PROB, new NEATMutateRemoveNeuron());
         neat.getOperators().finalizeStructure();
         neat.setThreadCount(1);
     }
