@@ -13,12 +13,13 @@ public class HyperNEATParameters extends NEATParameters {
     public double CPPN_WEIGHT_RANGE = 1.0; //
     public double CPPN_MIN_WEIGHT = 0.5;
 
-    public static final double REMOVE_NEURON_PROB = 0.1;
 
     public HyperNEATParameters() {
 
+        POP_SIZE = 100;
+
         // nn
-        ACTIVATION_CYCLES = 3; // for CPPN
+        ACTIVATION_CYCLES = 4; // for CPPN
         NN_WEIGHT_RANGE = 5.0;
         INIT_CONNECTION_DENSITY = 0.3; // 1 for fully connected!
         NN_ACTIVATION_FUNCTION = new ActivationClippedLinear();//new ActivationBiPolar();
@@ -29,7 +30,7 @@ public class HyperNEATParameters extends NEATParameters {
 
         // speciation
         MIN_PER_SPECIE = 10;
-        MAX_SPECIES = 15;//POP_SIZE / MIN_PER_SPECIE;
+        MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;
         MAX_GENS_SPECIES = 50;
         INIT_COMPAT_THRESHOLD = 8;
 
@@ -37,6 +38,7 @@ public class HyperNEATParameters extends NEATParameters {
         ADD_CONN_PROB = 0.5;
         ADD_NEURON_PROB = 0.9;
         REMOVE_CONN_PROB = 0.1;
+        REMOVE_NEURON_PROB = 0.0;
         PERTURB_PROB = 0.5;
 
         WEIGHT_MUT_TYPE = WeightMutType.PROPORTIONAL;

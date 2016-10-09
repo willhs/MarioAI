@@ -16,17 +16,17 @@ import java.util.logging.Logger;
 public abstract class AbstractMarioFitnessFunction<N> {
 
     public static final String LEVEL = FastOpts.LEVEL_06_GOOMBA;
-    public static final String TIME_LIMIT = " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 60";
+    public static final String TIME_LIMIT = " " + MarioOptions.IntOption.SIMULATION_TIME_LIMIT.getParam() + " 120";
     public static final String DIFFICULTY = FastOpts.L_DIFFICULTY(0);
     public static final String MARIO_TYPE = FastOpts.S_MARIO_SMALL;
-    public static final String LEVEL_LENGTH = FastOpts.L_LENGTH_256;
+    public static final String LEVEL_LENGTH = FastOpts.L_LENGTH_1024;
 
     public static final String RECEPTIVE_FIELD_WIDTH = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_WIDTH.getParam() + " 13";
     public static final String RECEPTIVE_FIELD_HEIGHT = " " + MarioOptions.IntOption.AI_RECEPTIVE_FIELD_HEIGHT.getParam() + " 13";
     public static final String RECEPTIVE_FIELD_MARIO_ROW = " " + MarioOptions.IntOption.AI_MARIO_EGO_ROW.getParam() + " 6";
     public static final String RECEPTIVE_FIELD_MARIO_COL = " " + MarioOptions.IntOption.AI_MARIO_EGO_COLUMN.getParam() + " 6";
 
-    public final static String DEFAULT_SIM_OPTIONS = ""
+    public static final String DEFAULT_SIM_OPTIONS = ""
             + FastOpts.VIS_OFF
             + LEVEL
             + DIFFICULTY
@@ -40,6 +40,8 @@ public abstract class AbstractMarioFitnessFunction<N> {
             + RECEPTIVE_FIELD_MARIO_COL
             ;
 
+    private String simOptions = DEFAULT_SIM_OPTIONS;
+
     protected final int TRIALS = 1;
 
     public static boolean headless = true;
@@ -49,9 +51,19 @@ public abstract class AbstractMarioFitnessFunction<N> {
     public AbstractMarioFitnessFunction(boolean runningPSO) {
         if (runningPSO) {
             headless = true;
-            Logger.getGlobal().setLevel(Level.OFF);
-            LogManager.getLogManager().reset();
+            disableLogging();
         }
+    }
+
+    public AbstractMarioFitnessFunction(String simOptions) {
+        this.simOptions = simOptions;
+        this.headless = true;
+        disableLogging();
+    }
+
+    private void disableLogging() {
+        Logger.getGlobal().setLevel(Level.OFF);
+        LogManager.getLogManager().reset();
     }
 
     public AbstractMarioFitnessFunction() { }
@@ -111,7 +123,7 @@ public abstract class AbstractMarioFitnessFunction<N> {
     }
 
     protected String getSimOptions(int seed) {
-        return DEFAULT_SIM_OPTIONS
+        return simOptions
                 + " " + MarioOptions.IntOption.LEVEL_RANDOM_SEED.getParam() + " " + seed;
     }
 

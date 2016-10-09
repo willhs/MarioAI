@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by Will on 14/07/2016.
  */
-public class StandardHoldActionStrat extends AbstractHoldActionStrat{
+public class StandardHoldStrat extends AbstractHoldActionStrat{
 
     private Map<MarioKey, Integer> toHold = new HashMap<>();
 
@@ -18,9 +18,9 @@ public class StandardHoldActionStrat extends AbstractHoldActionStrat{
     private boolean enableCancellation = false;
     protected double cancelThreshold = -0.5;
 
-    public StandardHoldActionStrat() {}
+    public StandardHoldStrat() {}
 
-    public StandardHoldActionStrat(boolean enableCancel) {
+    public StandardHoldStrat(boolean enableCancel) {
         this.enableCancellation = enableCancel;
     }
 

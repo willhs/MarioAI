@@ -1,4 +1,4 @@
-package will.neat.encog;
+package will.neat.encog.experiment;
 
 import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
@@ -10,9 +10,12 @@ import org.encog.neural.neat.training.opp.*;
 import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
+import will.neat.encog.EncogMarioFitnessFunction;
+import will.neat.encog.MutatePerturbOrResetLinkWeight;
 import will.neat.encog.substrate.MultiHiddenLayerSubstrate;
 import will.neat.encog.substrate.SimpleMarioSubstrate;
 import will.neat.params.HyperNEATParameters;
+import will.neat.params.HyperNEATParametersPSO;
 
 /**
  * Created by Will on 2/09/2016.
@@ -20,7 +23,7 @@ import will.neat.params.HyperNEATParameters;
 public class HyperNEATEvolver {
 
     private TrainEA neat;
-    private HyperNEATParameters params = new HyperNEATParameters();
+    private HyperNEATParameters params = new HyperNEATParametersPSO();
 
     public HyperNEATEvolver() {
         Substrate substrate = new MultiHiddenLayerSubstrate().makeSubstrate();

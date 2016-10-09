@@ -1,4 +1,4 @@
-package will.neat.encog;
+package will.neat.encog.experiment;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.encog.Encog;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
@@ -18,6 +19,9 @@ import org.encog.neural.neat.training.opp.links.SelectFixed;
 import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 import will.neat.AbstractMarioFitnessFunction;
+import will.neat.encog.EncogMarioFitnessFunction;
+import will.neat.encog.MutatePerturbOrResetLinkWeight;
+import will.neat.encog.PhasedSearch;
 import will.neat.encog.gui.HyperNEATGUI;
 import will.neat.params.HyperNEATParameters;
 import will.neat.params.NEATParameters;
@@ -28,7 +32,7 @@ import java.util.logging.Logger;
 /**
  * Created by Will on 4/08/2016.
  */
-public class EncogNEATEvolver extends Application {
+public class EncogNEATEvolverGUI extends Application {
     // io
     private static Logger logger = Logger.getLogger(HyperNEATGUI.class
             .getSimpleName());
@@ -39,7 +43,9 @@ public class EncogNEATEvolver extends Application {
 
     private NEATParameters params = new SpikeyNEATParameters();
 
-    public EncogNEATEvolver() {
+    private String level;
+
+    public EncogNEATEvolverGUI() {
     }
 
     @Override
@@ -108,11 +114,11 @@ public class EncogNEATEvolver extends Application {
         logger.info("Generation:\t" + neat.getIteration());
         logger.info("Best fitness:\t" + bestFitness);
         logger.info("Num species:\t" + numSpecies);
-        logger.info("Ave CPPN conns:\t" + averageLinks);
-        logger.info("Ave CPPN nodes:\t" + averageNodes);
+        logger.info("Ave conns:\t" + averageLinks);
+        logger.info("Ave nodes:\t" + averageNodes);
     }
 
-    private TrainEA setupNEAT() {
+    protected TrainEA setupNEAT() {
         NEATPopulation population = new NEATPopulation(NUM_INPUTS, NUM_OUTPUTS, POP_SIZE);
         population.setActivationCycles(params.ACTIVATION_CYCLES);
         population.setInitialConnectionDensity(params.INIT_CONNECTION_DENSITY);
@@ -146,12 +152,28 @@ public class EncogNEATEvolver extends Application {
 
         neat.addOperation(params.CROSSOVER_PROB, new NEATCrossover());
         neat.addOperation(params.PERTURB_PROB, weightMutation);
-        neat.addOperation(params.ADD_NEURON_PROB, new NEATMutateAddNode());
-        neat.addOperation(params.ADD_CONN_PROB, new NEATMutateAddLink());
-        neat.addOperation(params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
         neat.getOperators().finalizeStructure();
+
+        // phased search (each phase has unique set of mutations)
+        PhasedSearch phasedSearch = new PhasedSearch(10);
+/*        neat.addStrategy(phasedSearch);
+
+        // additive mutations
+        phasedSearch.addPhaseOp(0, params.ADD_CONN_PROB, new NEATMutateAddLink());
+        phasedSearch.addPhaseOp(0, params.ADD_NEURON_PROB, new NEATMutateAddNode());
+
+        // subtractive mutations
+        phasedSearch.addPhaseOp(1, params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
+        phasedSearch.addPhaseOp(1, params.REMOVE_NEURON_PROB, new NEATMutateRemoveNeuron());*/
+
+        neat.addOperation(params.ADD_CONN_PROB, new NEATMutateAddLink());
+        neat.addOperation(params.ADD_NEURON_PROB, new NEATMutateAddNode());
+        neat.addOperation(params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
+        neat.addOperation(params.REMOVE_NEURON_PROB, new NEATMutateRemoveNeuron());
+
         neat.setThreadCount(1);
 
+        // ?
         neat.addStrategy(new EndIterationsStrategy(1500));
 
         return neat;

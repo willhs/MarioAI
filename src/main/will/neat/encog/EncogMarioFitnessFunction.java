@@ -8,11 +8,14 @@ import org.encog.ml.CalculateScore;
 import org.encog.ml.MLMethod;
 import org.encog.neural.neat.NEATNetwork;
 import will.mario.agent.NEATAgent;
+import will.mario.agent.encog.AgentFactory;
 import will.mario.agent.encog.EncogAgent;
 import will.neat.AbstractMarioFitnessFunction;
 import will.neat.neuroph.Visualiser;
 
 import java.util.Arrays;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 /**
@@ -26,6 +29,9 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
     private static double total = 0;
     private static int runs = 0;
 
+    private final AgentFactory DEFAULT_AGENT_SUPPLIER = network -> new EncogAgent(network);
+    private AgentFactory agentFactory = DEFAULT_AGENT_SUPPLIER;
+
     public EncogMarioFitnessFunction() {
         super();
     }
@@ -34,12 +40,18 @@ public class EncogMarioFitnessFunction extends AbstractMarioFitnessFunction<NEAT
         super(pso);
     }
 
+    public EncogMarioFitnessFunction(String marioOptions, AgentFactory agentFactory) {
+        super(marioOptions);
+        this.agentFactory = agentFactory;
+    }
+
+
     @Override
     public double calculateScore(MLMethod mlMethod) {
         NEATNetwork nn = (NEATNetwork) mlMethod;
 //        System.out.println(nn == null);
 
-        NEATAgent agent = new EncogAgent(nn);
+        NEATAgent agent = agentFactory.create(nn);
 
         double score = evaluate(agent, nn, logger);
         runs++;

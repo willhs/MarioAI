@@ -399,5 +399,11 @@ public class FastOpts {
 	 */
 	public static final String LEVEL_07_SPIKY = L_BLOCKS_OFF + L_CANNONS_OFF + L_COINS_OFF + L_DEAD_ENDS_OFF + L_GAPS_OFF + L_HIDDEN_BLOCKS_OFF
 			     										    + L_PLATFORMS_OFF + L_LADDERS_OFF + L_TUBES_OFF + L_ENEMY(Enemy.SPIKY);
-	
+
+	public static final String LEVEL_08_FLY_SPIKY = L_BLOCKS_OFF + L_CANNONS_OFF + L_COINS_OFF + L_DEAD_ENDS_OFF + L_GAPS_OFF + L_HIDDEN_BLOCKS_OFF
+			+ L_PLATFORMS_OFF + L_LADDERS_OFF + L_TUBES_OFF + L_ENEMY(Enemy.SPIKY_WINGED);
+
+	public static final String LEVEL_09 = L_BLOCKS_OFF + L_CANNONS_OFF + L_COINS_OFF + L_DEAD_ENDS_OFF + L_GAPS_ON + L_HIDDEN_BLOCKS_OFF
+                                                            + L_PLATFORMS_OFF + L_LADDERS_OFF + L_TUBES_OFF + L_DIFFICULTY(2);
+
 }

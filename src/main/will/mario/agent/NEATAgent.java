@@ -4,9 +4,9 @@ import ch.idsia.agents.AgentOptions;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.engine.input.MarioKey;
 import will.rf.action.ActionStrategy;
+import will.rf.action.ActionStratFactory;
 import will.rf.action.StandardActionStrat;
-import will.rf.action.StandardHoldActionStrat;
-import will.rf.action.TimedActionToggle;
+import will.rf.action.StandardHoldStrat;
 import will.rf.environment.EnvEnemyGrid;
 import will.rf.environment.GameEnvironment;
 
@@ -29,7 +29,14 @@ public abstract class NEATAgent extends MarioAIBase2 {
     private boolean shouldPrint = false;
     private double[] lastFrame;
 
+    private final ActionStratFactory DEFAULT_ACTION_STRAT_FACTORY = () -> new StandardHoldStrat();
+    private ActionStratFactory actionStratFactory = DEFAULT_ACTION_STRAT_FACTORY;
+
     public NEATAgent(){}
+
+    public NEATAgent(ActionStratFactory factory) {
+        this.actionStratFactory = factory;
+    }
 
     public NEATAgent(boolean shouldPrint) {
         this.shouldPrint = shouldPrint;
@@ -55,9 +62,11 @@ public abstract class NEATAgent extends MarioAIBase2 {
         updateActionsHeld();
         double[] environment = env.asInputNeurons(this.environment, lastInput);
 
+        double[] networkInput = selectFeatures(environment);
+
         // put tiles through the neural network to receive game inputs
         // 1 or 0 for each of the game inputs: [left,right,down,jump,speed/attack,up(useless)]
-        double[] networkOutput = activateNetwork(environment);
+        double[] networkOutput = activateNetwork(networkInput);
         lastFrame = environment;
 
         if (shouldPrint) {
@@ -79,8 +88,12 @@ public abstract class NEATAgent extends MarioAIBase2 {
         return action;
     }
 
+    protected double[] selectFeatures(double[] environment) {
+        return environment;
+    }
+
     private MarioInput mapNeuronsToAction(double[] outputNeurons) {
-        ActionStrategy actionStrat = new StandardHoldActionStrat();//new StandardHoldActionStrat();
+        ActionStrategy actionStrat = actionStratFactory.create();
         MarioInput action = actionStrat.makeAction(outputNeurons, lastInput, keysHeld);
 
         return action;

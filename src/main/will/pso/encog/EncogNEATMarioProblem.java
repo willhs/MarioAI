@@ -14,6 +14,7 @@ import org.encog.neural.neat.training.opp.links.SelectProportion;
 import org.encog.neural.neat.training.species.OriginalNEATSpeciation;
 import will.neat.encog.EncogMarioFitnessFunction;
 import will.neat.encog.MutatePerturbOrResetLinkWeight;
+import will.neat.encog.PhasedSearch;
 import will.pso.Feature;
 import will.pso.WillProblem;
 
@@ -30,21 +31,21 @@ import static will.pso.encog.EncogNEATMarioProblem.PARAMS.*;
 public class EncogNEATMarioProblem extends WillProblem {
 
     // evolution
-    public static final int POP_SIZE = 200;
+    public static final int POP_SIZE = 100;
     public static final int MAX_GENERATIONS = 150;
 
     // species
     private static final int MIN_INDIVIDUAL_PER_SPECIE = 10;
     private static final double COMPAT_THRESHOLD = 8;
     private static final int INPUT_NEURONS = 169;
-    private static final int OUTPUT_NEURONS = 5;
+    private static final int OUTPUT_NEURONS = 4;
 
     // variable parameters
     public enum PARAMS {
         MAX_SPECIES, MAX_SPECIE_GENS, SURVIVAL_RATIO, ADD_CONN_PROB, REMOVE_CONN_PROB,
         REMOVE_NEURON_PROB, ADD_NEURON_PROB, PERTURB_PROP, PERTURB_SD, RESET_WEIGHT_PROB,
         ELITE_RATE, CROSSOVER_PROB, NN_WEIGHT_RANGE, INITIAL_CONNECTION_DENSITY,
-        ACTIVATION_CYCLES, SELECTION_PROP, WEIGHT_MUT_TYPE, ACTIVATION_TYPE
+        ACTIVATION_CYCLES, SELECTION_PROP, WEIGHT_MUT_TYPE, ACTIVATION_TYPE, PHASE_LENGTH
     }
 
     public EncogNEATMarioProblem() {
@@ -103,11 +104,21 @@ public class EncogNEATMarioProblem extends WillProblem {
 
         neat.addOperation(features.get(CROSSOVER_PROB.name()), new NEATCrossover());
         neat.addOperation(features.get(PERTURB_PROP.name()), weightMutation);
-        neat.addOperation(features.get(ADD_NEURON_PROB.name()), new NEATMutateAddNode());
+
+        // non-phased search
+/*        neat.addOperation(features.get(ADD_NEURON_PROB.name()), new NEATMutateAddNode());
         neat.addOperation(features.get(ADD_CONN_PROB.name()), new NEATMutateAddLink());
         neat.addOperation(features.get(REMOVE_CONN_PROB.name()), new NEATMutateRemoveLink());
-//        neat.addOperation(features.get(REMOVE_NEURON_PROB.name(), new NEATRemoveNode())); // not implemented yet
+        neat.addOperation(features.get(REMOVE_NEURON_PROB.name()), new NEATMutateRemoveNeuron());*/
         neat.getOperators().finalizeStructure();
+
+        PhasedSearch phasedSearch = new PhasedSearch((int)(double)features.get(PHASE_LENGTH.name()));
+        neat.addStrategy(phasedSearch);
+        phasedSearch.addPhaseOp(0, features.get(ADD_CONN_PROB.name()), new NEATMutateAddLink());
+        phasedSearch.addPhaseOp(0, features.get(ADD_NEURON_PROB.name()), new NEATMutateAddNode());
+        phasedSearch.addPhaseOp(1, features.get(REMOVE_CONN_PROB.name()), new NEATMutateRemoveLink());
+        phasedSearch.addPhaseOp(1, features.get(REMOVE_NEURON_PROB.name()), new NEATMutateRemoveNeuron());
+
         neat.setThreadCount(1);
 
         // end after some number of generations
@@ -137,14 +148,17 @@ public class EncogNEATMarioProblem extends WillProblem {
         double maxSpeciesDropoff = MAX_GENERATIONS / 2;
 
         // muts
-        features.add(new Feature(ADD_CONN_PROB.name(), 0, 1));
-        features.add(new Feature(ADD_NEURON_PROB.name(), 0, 1));
-//        features.add(new Feature(REMOVE_NEURON_PROB.name(), 0, 1)); // not implemented yet
-        features.add(new Feature(REMOVE_CONN_PROB.name(), 0, 1));
         features.add(new Feature(WEIGHT_MUT_TYPE.name(), 0, 1));
         features.add(new Feature(PERTURB_SD.name(), 0, 1)); // scales with max weight
         features.add(new Feature(PERTURB_PROP.name(), 0, 1));
         features.add(new Feature(RESET_WEIGHT_PROB.name(), 0, 1));
+        features.add(new Feature(PHASE_LENGTH.name(), 1, 50));
+
+        features.add(new Feature(ADD_CONN_PROB.name(), 0, 1));
+        features.add(new Feature(ADD_NEURON_PROB.name(), 0, 1));
+
+        features.add(new Feature(REMOVE_NEURON_PROB.name(), 0, 1)); // not implemented yet
+        features.add(new Feature(REMOVE_CONN_PROB.name(), 0, 1));
 
         // species
         features.add(new Feature(MAX_SPECIES.name(), 1, maxSpecies));

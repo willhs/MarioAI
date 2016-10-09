@@ -3,6 +3,7 @@ package will.neat.encog.substrate;
 import org.encog.neural.hyperneat.substrate.Substrate;
 import org.encog.neural.hyperneat.substrate.SubstrateNode;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -13,7 +14,7 @@ import java.util.function.Supplier;
  */
 public class SimpleMarioSubstrate implements SubstrateFactory {
 
-    private static final double HYPERCUBE_LENGTH = 2;
+    public static final double HYPERCUBE_LENGTH = 2;
 
     @Override
     public Substrate makeSubstrate() {
@@ -101,4 +102,5 @@ public class SimpleMarioSubstrate implements SubstrateFactory {
         }
         return nodes;
     }
+
 }

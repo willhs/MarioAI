@@ -11,9 +11,9 @@ import java.util.List;
 public class MultiHiddenLayerSubstrate extends SimpleMarioSubstrate {
     @Override
     protected List<SubstrateNode> hidden(Substrate substrate, List<SubstrateNode> input) {
-        List<SubstrateNode> first = layer(substrate, () -> substrate.createHiddenNode(), input, 6, 6, -0.5);
-        List<SubstrateNode> second = layer(substrate, () -> substrate.createHiddenNode(), first, 6, 6, 0);
-        List<SubstrateNode> last = layer(substrate, () -> substrate.createHiddenNode(), second, 6, 6, 0.5);
+        List<SubstrateNode> first = layer(substrate, () -> substrate.createHiddenNode(), input, 5, 5, -0.5);
+        List<SubstrateNode> second = layer(substrate, () -> substrate.createHiddenNode(), first, 5, 5, 0);
+        List<SubstrateNode> last = layer(substrate, () -> substrate.createHiddenNode(), second, 5, 5, 0.5);
         return last;
     }
 }

@@ -79,7 +79,7 @@ public abstract class MarioAIBase2 extends MarioAgentBase {
 			highestFitness = fitness;
 		}
 
-		// if this agent shows no promise at this stage, acknowledge that it sucks
+		// if this agent shows no promise, acknowledge that it sucks
 		if (doesSuck()) {
 			sucks = true;
 		}

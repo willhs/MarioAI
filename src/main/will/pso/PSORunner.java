@@ -1,6 +1,7 @@
 package will.pso;
 
 import will.pso.encog.EncogHyperMarioProblem;
+import will.pso.encog.EncogNEATMarioProblem;
 import will.pso.io.PSOIO;
 
 import javax.swing.*;
@@ -73,7 +74,6 @@ public class PSORunner {
                 // loading specific run
                 prevSwarmFilename = args[0];
             }
-            // // TODO: 8/09/2016  
         } else if (args.length == 2) {
             if (args[0].equals("-o")) {
                 // specifying the output directory
@@ -95,7 +95,7 @@ public class PSORunner {
         if (prevSwarmFilename == null) {
             // start new PSO run
             swarm = new WillSwarm(
-                    new EncogHyperMarioProblem(),
+                    new EncogNEATMarioProblem(),
                     numParticles,
                     c1,
                     c2,

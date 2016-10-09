@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Will on 28/08/2016.
  */
-public class TimedActionToggle extends AbstractHoldActionStrat {
+public class SharedHoldStrat extends AbstractHoldActionStrat {
 
     protected double pressThreshold = 0.5;
 
