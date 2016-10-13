@@ -9,6 +9,7 @@ import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.agents.IAgent;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
 
+import static will.neat.AbstractMarioFitnessFunction.DIFFICULTY;
 import static will.neat.AbstractMarioFitnessFunction.LEVEL;
 import static will.neat.AbstractMarioFitnessFunction.DEFAULT_SIM_OPTIONS;
 
@@ -41,8 +42,10 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 	public static void main(String[] args) {
 		// IMPLEMENTS END-LESS RUNS
 		while (true) {
-			String options = DEFAULT_SIM_OPTIONS.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X)
-					.replace(LEVEL, FastOpts.LEVEL_09)
+			String options = DEFAULT_SIM_OPTIONS
+					.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X)
+					.replace(LEVEL, FastOpts.LEVEL_05_GAPS)
+                    .replace(DIFFICULTY, FastOpts.L_DIFFICULTY(1))
 //					+ FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID);
 					;
 

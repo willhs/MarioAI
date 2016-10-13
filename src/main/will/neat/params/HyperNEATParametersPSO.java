@@ -1,6 +1,5 @@
 package will.neat.params;
 
-import org.encog.engine.network.activation.ActivationClippedLinear;
 import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
 
 /**
@@ -24,12 +23,12 @@ public class HyperNEATParametersPSO extends HyperNEATParameters{
         // speciation
         MIN_PER_SPECIE = 9;
         MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;
-        MAX_GENS_SPECIES = 50;
+        SPECIES_DROPOFF = 50;
         INIT_COMPAT_THRESHOLD = 8;
 
         // mutation probs
-        ADD_CONN_PROB = 0.5; // varies from 0.26 - 0.84
-        ADD_NEURON_PROB = 0.4; // same as above, also diffs between conns and neurons vary
+        ADD_CONN_PROB = 0.8; // varies from 0.26 - 0.84
+        ADD_NEURON_PROB = 0.9; // same as above, also diff between conns and neurons vary
         REMOVE_CONN_PROB = 0.5; //
         REMOVE_NEURON_PROB = 0.3; // no data
         PERTURB_PROB = 0.5; //
@@ -38,5 +37,6 @@ public class HyperNEATParametersPSO extends HyperNEATParameters{
         WEIGHT_PERTURB_PROP = 0.3; // varies pretty wildly again
         PERTURB_SD = 0.5; // perturb standard deviation
         RESET_WEIGHT_PROB = 0.2; // varies wildy
+        PHASED_SEARCH = false;
     }
 }

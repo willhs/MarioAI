@@ -24,7 +24,7 @@ public class SpikeyHyperParams extends HyperNEATParameters {
         // speciation
         MIN_PER_SPECIE = 10;
         MAX_SPECIES = (int)(0.048*POP_SIZE);//POP_SIZE / MIN_PER_SPECIE;
-        MAX_GENS_SPECIES = 11;
+        SPECIES_DROPOFF = 11;
         INIT_COMPAT_THRESHOLD = 8;
 
         // mutation probs

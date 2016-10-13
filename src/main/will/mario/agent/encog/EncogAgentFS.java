@@ -26,7 +26,8 @@ public class EncogAgentFS extends EncogAgent {
             for (int i = 0; i < inputs.length; i++) {
                 Point input = inputs[i];
                 if (env == this.environment.getTileField()[0].length * input.y + input.x) {
-                    networkInput[inputIndex++] = (double)i;
+                    networkInput[inputIndex++] = environment[env];
+                    break;
                 }
             }
         }

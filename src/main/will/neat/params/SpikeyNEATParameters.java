@@ -20,7 +20,7 @@ public class SpikeyNEATParameters extends NEATParameters {
         // speciation
         MIN_PER_SPECIE = 10;
         MAX_SPECIES = (int)(POP_SIZE * 0.0959);
-        MAX_GENS_SPECIES = 44; // questionable
+        SPECIES_DROPOFF = 44; // questionable
         INIT_COMPAT_THRESHOLD = 10; // 6
 
         // mutation probs

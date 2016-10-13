@@ -1,6 +1,5 @@
 package will.neat.params;
 
-import org.encog.engine.network.activation.ActivationBiPolar;
 import org.encog.engine.network.activation.ActivationClippedLinear;
 
 /**
@@ -31,7 +30,7 @@ public class HyperNEATParameters extends NEATParameters {
         // speciation
         MIN_PER_SPECIE = 10;
         MAX_SPECIES = POP_SIZE / MIN_PER_SPECIE;
-        MAX_GENS_SPECIES = 50;
+        SPECIES_DROPOFF = 50;
         INIT_COMPAT_THRESHOLD = 8;
 
         // mutation probs

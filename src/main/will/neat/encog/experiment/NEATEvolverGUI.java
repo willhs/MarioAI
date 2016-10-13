@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.encog.Encog;
 import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.opp.selection.TruncationSelection;
 import org.encog.ml.ea.train.basic.TrainEA;
@@ -32,7 +31,7 @@ import java.util.logging.Logger;
 /**
  * Created by Will on 4/08/2016.
  */
-public class EncogNEATEvolverGUI extends Application {
+public class NEATEvolverGUI extends Application {
     // io
     private static Logger logger = Logger.getLogger(HyperNEATGUI.class
             .getSimpleName());
@@ -45,7 +44,7 @@ public class EncogNEATEvolverGUI extends Application {
 
     private String level;
 
-    public EncogNEATEvolverGUI() {
+    public NEATEvolverGUI() {
     }
 
     @Override
@@ -131,7 +130,7 @@ public class EncogNEATEvolverGUI extends Application {
         OriginalNEATSpeciation speciation = new OriginalNEATSpeciation();
         speciation.setCompatibilityThreshold(params.INIT_COMPAT_THRESHOLD);
         speciation.setMaxNumberOfSpecies(params.MAX_SPECIES);
-        speciation.setNumGensAllowedNoImprovement(params.MAX_GENS_SPECIES);
+        speciation.setNumGensAllowedNoImprovement(params.SPECIES_DROPOFF);
 
         final TrainEA neat = new TrainEA(population, fitnessFunction);
         neat.setSpeciation(speciation);
@@ -152,29 +151,32 @@ public class EncogNEATEvolverGUI extends Application {
 
         neat.addOperation(params.CROSSOVER_PROB, new NEATCrossover());
         neat.addOperation(params.PERTURB_PROB, weightMutation);
-        neat.getOperators().finalizeStructure();
 
         // phased search (each phase has unique set of mutations)
-        PhasedSearch phasedSearch = new PhasedSearch(10);
-/*        neat.addStrategy(phasedSearch);
+        if (params.PHASED_SEARCH) {
+            PhasedSearch phasedSearch = new PhasedSearch(
+                    params.PHASE_A_LENGTH, params.PHASE_B_LENGTH);
+            neat.addStrategy(phasedSearch);
 
-        // additive mutations
-        phasedSearch.addPhaseOp(0, params.ADD_CONN_PROB, new NEATMutateAddLink());
-        phasedSearch.addPhaseOp(0, params.ADD_NEURON_PROB, new NEATMutateAddNode());
+            // additive mutations
+            phasedSearch.addPhaseOp(0, params.ADD_CONN_PROB, new NEATMutateAddLink());
+            phasedSearch.addPhaseOp(0, params.ADD_NEURON_PROB, new NEATMutateAddNode());
 
-        // subtractive mutations
-        phasedSearch.addPhaseOp(1, params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
-        phasedSearch.addPhaseOp(1, params.REMOVE_NEURON_PROB, new NEATMutateRemoveNeuron());*/
-
-        neat.addOperation(params.ADD_CONN_PROB, new NEATMutateAddLink());
-        neat.addOperation(params.ADD_NEURON_PROB, new NEATMutateAddNode());
-        neat.addOperation(params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
-        neat.addOperation(params.REMOVE_NEURON_PROB, new NEATMutateRemoveNeuron());
+            // subtractive mutations
+            phasedSearch.addPhaseOp(1, params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
+            phasedSearch.addPhaseOp(1, params.REMOVE_NEURON_PROB, new NEATMutateRemoveNeuron());
+        } else { // blended search
+            neat.addOperation(params.ADD_CONN_PROB, new NEATMutateAddLink());
+            neat.addOperation(params.ADD_NEURON_PROB, new NEATMutateAddNode());
+            neat.addOperation(params.REMOVE_CONN_PROB, new NEATMutateRemoveLink());
+            neat.addOperation(params.REMOVE_NEURON_PROB, new NEATMutateRemoveNeuron());
+        }
+        neat.getOperators().finalizeStructure();
 
         neat.setThreadCount(1);
 
         // ?
-        neat.addStrategy(new EndIterationsStrategy(1500));
+        neat.addStrategy(new EndIterationsStrategy(params.MAX_GENERATIONS));
 
         return neat;
     }

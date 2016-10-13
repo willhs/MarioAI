@@ -25,7 +25,7 @@ import org.encog.neural.neat.NEATPopulation;
 import will.mario.agent.encog.EncogAgent;
 import will.neat.AbstractMarioFitnessFunction;
 import will.neat.encog.EncogMarioFitnessFunction;
-import will.neat.encog.experiment.HyperNEATEvolver;
+import will.neat.encog.experiment.HyperNEATOldEvolver;
 import will.neat.params.HyperNEATParameters;
 
 import java.util.logging.Logger;
@@ -60,8 +60,24 @@ public class HyperNEATGUI extends Application {
         primaryStage.setScene(scene);
 
         // define neat
-        HyperNEATEvolver evolver = new HyperNEATEvolver();
+        HyperNEATOldEvolver evolver = new HyperNEATOldEvolver();
         TrainEA neat = evolver.getNEAT();
+
+        // testing
+/*        HyperNEATParameters params = new HyperNEATParametersPSO();
+        HyperNEATMarioEvolverFS evolver = new HyperNEATMarioEvolverFS(params,
+                () -> new StandardActionStrat());
+
+        Point[] inputs = new Point[] {
+                new Point(7, 6), new Point(8,6), new Point(9,6), new Point(6, 7),
+                new Point(12,12), new Point(0, 8), new Point(0, 5)
+        };
+
+        evolver.setInputs(inputs);
+        TrainEA neat = evolver.setupNEAT(params,
+                AbstractMarioFitnessFunction.DEFAULT_SIM_OPTIONS,
+                (nn) -> new EncogAgentFS(nn, () -> new StandardActionStrat(), inputs));*/
+        // ---
 
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         root.setCenter(canvas);
@@ -77,6 +93,7 @@ public class HyperNEATGUI extends Application {
         VBox left = new VBox();
         left.setPadding(new Insets(PADDING));
         populateLeftPane(left, evolver.getParams());
+//        populateLeftPane(left, params);
         left.setPrefWidth(SCENE_WIDTH/4);
         root.setLeft(left);
 
@@ -188,7 +205,7 @@ public class HyperNEATGUI extends Application {
         left.getChildren().add(new Text("")); // spacing
         left.getChildren().add(new Text("-- Speciation -- ")); // spacing
         addTextField(left, "Max species", params.MAX_SPECIES);
-        addTextField(left, "No improve gens", params.MAX_GENS_SPECIES);
+        addTextField(left, "No improve gens", params.SPECIES_DROPOFF);
         addTextField(left, "Init compat thresh", params.INIT_COMPAT_THRESHOLD);
 
         left.getChildren().add(new Text("")); // spacing
