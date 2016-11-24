@@ -1,5 +1,6 @@
 package will.neat.params;
 
+import org.encog.engine.network.activation.ActivationClippedLinear;
 import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
 
 /**

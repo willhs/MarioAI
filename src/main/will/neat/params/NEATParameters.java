@@ -47,7 +47,7 @@ public class NEATParameters {
     public double RESET_WEIGHT_PROB = 0.2;
 
     // phased search
-    public boolean PHASED_SEARCH = false;
-    public int PHASE_A_LENGTH = 15;
-    public int PHASE_B_LENGTH = 10;
+    public boolean PHASED_SEARCH = true;
+    public int PHASE_A_LENGTH = 70;
+    public int PHASE_B_LENGTH = 70;
 }

@@ -42,24 +42,29 @@ public class MarioAIExperiment {
             DEFAULT_SIM_OPTIONS.replace(DEFAULT_LEVEL, FastOpts.LEVEL_07_SPIKY),
             DEFAULT_SIM_OPTIONS.replace(DEFAULT_LEVEL, FastOpts.LEVEL_08_FLY_SPIKY)
     };
-    private String outputDirName = "neat-output/";
+    private static String outputDirName = "neat-phased-output/";
+    private static String outputFilename = "results.csv";
 
     private boolean writeFile = true;
 
-    private static final String NEAT_EACH_FRAME = "neat-each-frame";
-    private static final String NEAT_STANDARD_HOLD = "neat-standard-hold";
-    private static final String NEAT_SHARED_HOLD = "neat-shared-hold";
-    private static final String NEAT_PHASED = "neat-phased";
-    private static final String HYPERNEAT = "hyperneat";
-    private static final String HYPERNEAT_PHASED = "hyperneat-phased";
+    public static final String NEAT_EACH_FRAME = "neat-each-frame";
+    public static final String NEAT_STANDARD_HOLD = "neat-standard-hold";
+    public static final String NEAT_SHARED_HOLD = "neat-shared-hold";
+    public static final String NEAT_PHASED = "neat-phased";
+    public static final String HYPERNEAT = "hyperneat";
+    public static final String HYPERNEAT_PHASED = "hyperneat-phased";
     private String experimentName;
 
     public static void main(String[] args) throws IOException{
 
         String arg = null;
         if (args.length < 1) {
-            arg = NEAT_STANDARD_HOLD;
+            arg = NEAT_PHASED;//NEAT_STANDARD_HOLD;
         } else arg = args[0];
+
+        if (args.length == 2) {
+            outputFilename = args[1];
+        }
 
         MarioAIExperiment ex = new MarioAIExperiment(arg);
         ex.run();
@@ -145,16 +150,16 @@ public class MarioAIExperiment {
 //        testOnLevels(hyperneat);
 //        testOnLevels(hyperneatPhased);
 
-/*        String level = levels[1];
+//        String level = levels[1];
 
-        NEATMarioEvolver evolver = new NEATMarioEvolver(neatParams,
-                () -> new StandardHoldStrat());
+//        evolver = new NEATMarioEvolver(neatPhasedParams,
+//                () -> new StandardHoldStrat());
 
-        NEATMarioEvolver evolver = new HyperNEATMarioEvolver(hyperParams,
-                () -> new StandardHoldStrat(), sb, "std hold");
+//        evolver = new HyperNEATMarioEvolver(hyperPhasedParams,
+//                () -> new StandardHoldStrat(), sb, "hyper");
 
-        evolver.setSimOptions(level);
-        evolver.run();*/
+//        evolver.setSimOptions(level);
+//        evolver.run();
 
         testOnLevels(evolver);
 
@@ -167,7 +172,7 @@ public class MarioAIExperiment {
 
             int numFiles = outputDir.listFiles().length;
 
-            String outputFilename = outputDirName + experimentName + "-" + numFiles + ".csv";
+//            String outputFilename = outputDirName + experimentName + "-" + numFiles + ".csv";
             Path output = Paths.get(outputFilename);
             // write string output to file
             try {

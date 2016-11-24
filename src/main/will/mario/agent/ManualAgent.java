@@ -3,6 +3,7 @@ package will.mario.agent;
 import ch.idsia.agents.AgentOptions;
 import ch.idsia.agents.controllers.MarioHijackAIBase;
 import ch.idsia.benchmark.mario.MarioSimulator;
+import ch.idsia.benchmark.mario.engine.SimulatorOptions;
 import ch.idsia.benchmark.mario.engine.input.MarioInput;
 import ch.idsia.benchmark.mario.options.FastOpts;
 import ch.idsia.tools.EvaluationInfo;
@@ -44,9 +45,11 @@ public class ManualAgent extends MarioHijackAIBase implements IAgent {
 		while (true) {
 			String options = DEFAULT_SIM_OPTIONS
 					.replace(FastOpts.VIS_OFF, FastOpts.VIS_ON_2X)
-					.replace(LEVEL, FastOpts.LEVEL_05_GAPS)
-                    .replace(DIFFICULTY, FastOpts.L_DIFFICULTY(1))
-//					+ FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID);
+					.replace(LEVEL, FastOpts.LEVEL_08_FLY_SPIKY)
+//                    .replace(DIFFICULTY, FastOpts.L_DIFFICULTY(1))
+//					+ FastOpts.VIS_FIELD(SimulatorOptions.ReceptiveFieldMode.GRID_ENTITIES)
+//					+ FastOpts.S_MARIO_LARGE
+                    + FastOpts.S_MARIO_INVULNERABLE
 					;
 
 			MarioSimulator simulator = new MarioSimulator(options);
